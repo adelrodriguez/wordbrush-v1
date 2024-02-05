@@ -18,10 +18,12 @@ module.exports = {
     browser: true,
     commonjs: true,
     es6: true,
+    node: true,
   },
 
   // Base config
-  extends: ["eslint:recommended"],
+  extends: ["eslint:recommended", "prettier"],
+  plugins: ["sort-keys-fix", "sort-destructure-keys"],
 
   overrides: [
     // React
@@ -80,4 +82,4 @@ module.exports = {
       },
     },
   ],
-};
+}
