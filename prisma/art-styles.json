@@ -1,0 +1,584 @@
+[
+  {
+    "category": "Abstract",
+    "description": "This 20th-century movement does not attempt to represent an accurate depiction of visual reality. Instead, it uses shapes, colors, forms, and gestural marks to achieve its effect. Think of artists like Wassily Kandinsky and Jackson Pollock. The artwork can be both spontaneous and deliberative, often leaving interpretation up to the viewer.",
+    "keywords": [
+      "Shapes",
+      "Colors",
+      "Non-representational",
+      "Dynamic",
+      "Patterns"
+    ],
+    "name": "Abstract Art"
+  },
+  {
+    "category": "Geometric",
+    "description": "Using geometric shapes, lines, and vibrant colors, this style creates compositions that can be both minimalistic and complex, often evoking emotions or concepts without a clear representational subject.",
+    "keywords": [
+      "Geometric",
+      "Non-representational",
+      "Triangles",
+      "Circles",
+      "Modern"
+    ],
+    "name": "Abstract Geometry"
+  },
+  {
+    "category": "Historical",
+    "description": "A visual arts design style from the 1920s and 1930s, known for its bold geometric forms and bright colors. It was influenced by the bold geometric works of Cubism; the bright colors of Fauvism and of the Ballets Russes; and the updated craftsmanship of the furniture.",
+    "keywords": ["Geometric", "Symmetry", "Radiant", "Bold", "1920s"],
+    "name": "Art Deco"
+  },
+  {
+    "category": "Historical",
+    "description": "This style emerged in the late 19th and early 20th centuries. It's characterized by intricate, flowing designs often inspired by natural forms. Think of plants, flowers, and curved lines. Alphonse Mucha is a notable figure from this movement. Art Nouveau also has a decorative aspect, often seen in architecture, jewelry, and furniture.",
+    "keywords": ["Flowing", "Floral", "Curvilinear", "Organic", "Dynamic"],
+    "name": "Art Nouveau"
+  },
+  {
+    "category": "Modern",
+    "description": "A revolutionary school of art, architecture, and design established in 1919 in Weimar, Germany. Bauhaus combined crafts and the fine arts and was famous for the approach to design that it publicized and taught.",
+    "keywords": [
+      "Geometric",
+      "Functional",
+      "Design",
+      "Minimalist",
+      "Modernist"
+    ],
+    "name": "Bauhaus"
+  },
+  {
+    "category": "Digital",
+    "description": "Derived from the Japanese word \"boke\" meaning \"blur\", this style emphasizes on soft, out-of-focus backgrounds with luminous spots. It creates a dreamy and ethereal atmosphere.",
+    "keywords": ["Soft focus", "Lights", "Dreamy", "Luminous", "Night"],
+    "name": "Bokeh Art"
+  },
+  {
+    "category": "Modern",
+    "description": "A style characterized by raw, unrefined surfaces, unusual shapes, and materials like concrete. It's more commonly seen in architecture, where it describes a type of building that's large, stark, and blocky.",
+    "keywords": ["Raw", "Concrete", "Blocky", "Unrefined", "Stark"],
+    "name": "Brutalism"
+  },
+  {
+    "category": "Historical",
+    "description": "Originating in the Eastern Roman Empire, this style is known for its distinctive icon painting which was used to convey religious themes. It's characterized by its lack of depth, bright color, and gold backgrounds.",
+    "keywords": ["Icons", "Gold", "Mosaic", "Religious", "Vibrant"],
+    "name": "Byzantine Art"
+  },
+  {
+    "category": "Traditional",
+    "description": "Indigenous to the British Isles, it's characterized by its intricate patterns, spirals, and knotwork. Often seen in metalwork and manuscripts from the early medieval period.",
+    "keywords": ["Knotwork", "Spirals", "Patterns", "Medieval", "Intricate"],
+    "name": "Celtic Art"
+  },
+  {
+    "category": "Illustrative",
+    "description": "Emulating traditional charcoal drawings, this style captures the rawness and texture of charcoal but with the flexibility of digital tools, allowing for both bold strokes and fine details.",
+    "keywords": ["Smudged", "Raw", "Textured", "Bold", "Fine details"],
+    "name": "Charcoal"
+  },
+  {
+    "category": "Traditional",
+    "description": "An ancient Chinese art form that uses ink and brush to create depictions of nature and wildlife. It's more than just a representation but aims to capture the spirit of the subject.",
+    "keywords": ["Ink", "Brush", "Nature", "Fluid", "Serene"],
+    "name": "Chinese Brush Painting"
+  },
+  {
+    "category": "Digital",
+    "description": "Inspired by the chiptune music genre, this style uses pixelated graphics and 8-bit visuals that harken back to early video game consoles.",
+    "keywords": ["Pixelated", "Retro", "Video game", "Colorful", "Nostalgic"],
+    "name": "Chiptune Visuals"
+  },
+  {
+    "category": "Illustrative",
+    "description": "Often used in the film and video game industry, this style provides visual representations of ideas, often portraying characters, scenes, or objects that might be included in the final product.",
+    "keywords": ["Visionary", "Pre-production", "Movies", "Games", "Detailed"],
+    "name": "Concept Art"
+  },
+  {
+    "category": "Geometric",
+    "description": "Originated in Russia in the early 20th century, it focused on art as a practice for social purposes. Artworks often used geometric shapes and were made from everyday materials to convey messages.",
+    "keywords": ["Geometric", "Bold", "Russia", "Social", "Everyday Materials"],
+    "name": "Constructivism"
+  },
+  {
+    "category": "Digital",
+    "description": "A blend of traditional folk elements with futuristic cyber aesthetics. Imagine folk patterns and symbols merged with digital textures and holographic effects.",
+    "keywords": [
+      "Traditional",
+      "Folklore",
+      "Futuristic",
+      "Digital symbols",
+      "Fusion"
+    ],
+    "name": "Cyber Folk"
+  },
+  {
+    "category": "Technological",
+    "description": "This style integrates elements of machinery and the human form, blending the boundaries between man and machine. It often portrays cyborgs, humanoid robots, and futuristic interfaces.",
+    "keywords": ["Futuristic", "Technology", "Humans", "Robots", "Interfaces"],
+    "name": "Cybernetic Art"
+  },
+  {
+    "category": "SciFi",
+    "description": "This style is heavily influenced by futuristic, dystopian themes. It often combines neon colors, urban landscapes, and advanced technology with a sense of decay or rebellion.",
+    "keywords": ["Futuristic", "Neon", "Technology", "Dystopian", "Cybernetic"],
+    "name": "Cyberpunk"
+  },
+  {
+    "category": "Historical",
+    "description": "An early 20th-century art movement that rejected logic and reason, embracing nonsense and irrationality. It arose in response to World War I and is characterized by its use of collage, photomontage, and absurdity.",
+    "keywords": ["Collage", "Absurd", "Irrational", "Nonsense", "Anti-art"],
+    "name": "Dadaism"
+  },
+  {
+    "category": "Digital",
+    "description": " A fusion of art and information, this style visually represents data or algorithms, transforming numbers and code into compelling visuals.",
+    "keywords": ["Data", "Visualizing", "Numbers", "Artistic", "Informative"],
+    "name": "Data Art"
+  },
+  {
+    "category": "Digital",
+    "description": "This style involves combining various digital images into a single piece. Artists use different photos, textures, and digital brushwork to create a cohesive and intriguing composition.",
+    "keywords": [
+      "Composite",
+      "Multiple images",
+      "Merged",
+      "New narrative",
+      "Digital"
+    ],
+    "name": "Digital Collage"
+  },
+  {
+    "category": "Digital",
+    "description": "Inspired by the Cubist art movement pioneered by Picasso and Braque, this style deconstructs objects and scenes into geometric shapes, offering multiple perspectives within a single composition.",
+    "keywords": [
+      "Geometric",
+      "Deconstructed",
+      "Multiple perspectives",
+      "Shapes",
+      "City"
+    ],
+    "name": "Digital Cubism"
+  },
+  {
+    "category": "Digital",
+    "description": "Inspired by the Impressionist art movement, this style captures the essence of a scene using digital brushstrokes that focus on light and mood rather than detail.",
+    "keywords": [
+      "Essence",
+      "Loose brushstrokes",
+      "Vibrancy",
+      "Mood",
+      "Town square"
+    ],
+    "name": "Digital Impressionism"
+  },
+  {
+    "category": "Digital",
+    "description": "This style emulates traditional painting techniques but is created using digital tools. Artists use graphic tablets and software to mimic the effects of brush strokes, blending, and layering, just like in traditional painting.",
+    "keywords": ["Digital", "Brushstrokes", "Canvas", "Traditional", "Texture"],
+    "name": "Digital Painting"
+  },
+  {
+    "category": "Modern",
+    "description": "This style blends two different images into a single frame, creating a surreal or abstract representation. Digital tools allow artists to achieve this effect with precision.",
+    "keywords": ["Merged", "Two images", "Juxtaposition", "Unique", "Contrast"],
+    "name": "Double Exposure"
+  },
+  {
+    "category": "Fantasy",
+    "description": "Characterized by its enchanting imagery, which includes mythical creatures, enchanted forests, and celestial bodies. The style creates a sense of wonder, escapism, and otherworldly beauty. The color palette often uses pastel colors, iridescent hues, and glowing effects. Details may incorporate floating elements, stars, or shimmering particles to enhance the dreamy atmosphere, transporting viewers to a magical realm.",
+    "keywords": [
+      "Ethereal creatures",
+      "Glowing",
+      "Whimsical",
+      "Forest",
+      "Magic"
+    ],
+    "name": "Dreamy Fantasy"
+  },
+  {
+    "category": "SciFi",
+    "description": "This style portrays post-apocalyptic, bleak, and often decaying worlds, highlighting the contrast between remnants of advanced technology and a regressed society.",
+    "keywords": ["Post-apocalyptic", "Ruined", "Nature", "Tech", "Dark future"],
+    "name": "Dystopian Art"
+  },
+  {
+    "category": "Traditional",
+    "description": "This style emulates traditional etching techniques where lines are carved onto a surface. Digitally, it captures the intricate line work and cross-hatching details.",
+    "keywords": [
+      "Intricate lines",
+      "Detailed",
+      "Traditional",
+      "Patterns",
+      "Structure"
+    ],
+    "name": "Etching"
+  },
+  {
+    "category": "Historical",
+    "description": "Originating in Germany in the early 20th century, this movement sought to present the world from a subjective perspective, distorting it for emotional effect. Think of artists like Edvard Munch.",
+    "keywords": ["Emotion", "Distorted", "Subjective", "Intense", "Vibrant"],
+    "name": "Expressionism"
+  },
+  {
+    "category": "Historical",
+    "description": "An early 20th-century movement led by artists like Henri Matisse. Known for its bold, undulating colors and simplified forms. The name 'Fauvism' comes from the French word 'fauve', meaning 'wild beast'.",
+    "keywords": ["Wild", "Bold Colors", "Simplified", "Intense", "Vibrant"],
+    "name": "Fauvism"
+  },
+  {
+    "category": "Modern",
+    "description": "Characterized by simplicity, this style uses flat colors without gradients, minimalistic illustrations, and simple typography. It's modern and often seen in web and mobile design.",
+    "keywords": ["Minimalistic", "Bold colors", "Clean", "Modern", "2D"],
+    "name": "Flat Design"
+  },
+  {
+    "category": "Geometric",
+    "description": "Generated mathematically, this style creates patterns that are self-replicating, either exactly or approximately. The patterns can be infinitely intricate, often resembling natural phenomena like clouds, trees, and coastlines.",
+    "keywords": [
+      "Mathematical",
+      "Patterns",
+      "Infinite",
+      "Vibrant",
+      "Intricate"
+    ],
+    "name": "Fractal Art"
+  },
+  {
+    "category": "Historical",
+    "description": "An early 20th-century Italian movement that emphasized and glorified themes associated with the future, including speed, technology, youth, and violence. It aimed to capture the dynamism and energy of the modern world.",
+    "keywords": ["Speed", "Dynamic", "Modern", "Technology", "Movement"],
+    "name": "Futurism"
+  },
+  {
+    "category": "Digital",
+    "description": "This style embraces the aesthetics of digital error. By intentionally corrupting digital data or manipulating it in unconventional ways, artists create unique visual distortions and artifacts.",
+    "keywords": ["Errors", "Distortions", "Digital", "Aesthetic", "Imperfect"],
+    "name": "Glitch Art"
+  },
+  {
+    "category": "Historical",
+    "description": "Originated in the 12th century, it's known for its intricate details, use of light, and pointed arches. Common in architecture, painting, and sculpture, especially in European cathedrals.",
+    "keywords": ["Architecture", "Detailed", "Pointed", "Grand", "European"],
+    "name": "Gothic Art"
+  },
+  {
+    "category": "Traditional",
+    "description": "Digital Gouache mimics the creamy consistency of gouache paint, often appearing flat and matte. The art style allows for both opaque and transparent layers, often with visible brush strokes. Commonly used for illustrations in children's books, editorial illustrations, and concept art, the technique is suitable for both detailed works and bolder, simplistic designs. The versatility of Digital Gouache makes it a favorite among illustrators and artists alike.",
+    "keywords": ["Opaque", "Vibrant", "Coastal", "Waves", "Sunset"],
+    "name": "Gouache"
+  },
+  {
+    "category": "Historical",
+    "description": "Artistic traditions of ancient Greece and Rome. Known for its emphasis on proportion, balance, and the depiction of the human body.",
+    "keywords": ["Proportion", "Balance", "Statues", "Ancient", "Human Body"],
+    "name": "Greco-Roman Art"
+  },
+  {
+    "category": "Historical",
+    "description": "Originating in the 19th century, this style was characterized by small, thin, yet visible brush strokes. The primary focus was on depicting the varying qualities of light. Artists like Claude Monet and Pierre-Auguste Renoir are well-known impressionists. The paintings often depict outdoor scenes with shifting light and shadows.",
+    "keywords": ["Essence", "Loose brushstrokes", "Light", "Mood", "Moment"],
+    "name": "Impressionism"
+  },
+  {
+    "category": "Traditional",
+    "description": "Drawing inspiration from traditional East Asian ink wash painting, this digital version captures the essence of brush strokes, gradations, and the harmony between nature and emptiness.",
+    "keywords": ["East Asian", "Ink wash", "Essence", "Spirit", "Flowy"],
+    "name": "Ink Wash"
+  },
+  {
+    "category": "Digital",
+    "description": "This style provides a 3D view without perspective. It uses parallel projection and fixed angles to create depth, often used in video games to provide an overhead view of the environment.",
+    "keywords": [
+      "3D in 2D",
+      "Parallel projection",
+      "Geometric",
+      "Perspective",
+      "Angles"
+    ],
+    "name": "Isometric Art"
+  },
+  {
+    "category": "Historical",
+    "description": "A genre of Japanese art which flourished from the 17th through 19th centuries. It's woodblock print art that often depicts kabuki actors, sumo wrestlers, and landscapes.",
+    "keywords": ["Woodblock", "Japanese", "Traditional", "Print", "Landscape"],
+    "name": "Japanese Ukiyo-e"
+  },
+  {
+    "category": "Digital",
+    "description": "This style involves the animation of text. Words or phrases can move, change, or animate in ways that visually represent their meaning.",
+    "keywords": [
+      "Moving text",
+      "Narrative",
+      "Expressive",
+      "Dynamic",
+      "Animation"
+    ],
+    "name": "Kinetic Typography"
+  },
+  {
+    "category": "Traditional",
+    "description": "A printing method in which the image to be printed is rendered on a flat surface, traditionally a limestone, treated to repel the ink except where it's required for printing.",
+    "keywords": ["Printing", "Stone", "Detailed", "Flat", "Design"],
+    "name": "Lithography"
+  },
+  {
+    "category": "Digital",
+    "description": "This style uses a minimal number of polygons to represent shapes and forms. It's a deliberate simplification, creating a stylized and abstract look, often seen in early 3D video games.",
+    "keywords": ["3D", "Limited polygons", "Geometric", "Simple", "Modern"],
+    "name": "Low Poly"
+  },
+  {
+    "category": "Fantasy",
+    "description": "Art that's fascinated by the dark, gruesome, and morbid side of life. It often explores themes of death, decay, and the grotesque.",
+    "keywords": ["Dark", "Death", "Grotesque", "Eerie", "Decay"],
+    "name": "Macabre Art"
+  },
+  {
+    "category": "Fantasy",
+    "description": "A style where magical elements appear in an otherwise realistic environment. It's been widely used in literature (like Gabriel García Márquez's works), but also has a presence in visual arts.",
+    "keywords": ["Magical", "Realistic", "Blend", "Unexpected", "Fantasy"],
+    "name": "Magic Realism"
+  },
+  {
+    "category": "Modern",
+    "description": "Originated in post–World War II Western art, it emphasizes simplicity through the use of limited colors, shapes, and materials. It seeks to expose the essence, essentials, or identity of a subject.",
+    "keywords": ["Simple", "Clean", "Geometric", "Limited", "Essence"],
+    "name": "Minimalism"
+  },
+  {
+    "category": "Historical",
+    "description": "A broad movement that developed in the late 19th and early 20th centuries. It's characterized by a deliberate rejection of traditional styles and exploration of new narrative forms.",
+    "keywords": ["Abstract", "New", "Rejection", "Bold", "Narrative"],
+    "name": "Modernism"
+  },
+  {
+    "category": "Illustrative",
+    "description": "The monogram style is characterized by its Art Deco influence, featuring clean lines, geometric shapes, and a sophisticated, modern elegance.",
+    "keywords": ["Geometric", "Elegant", "Modern", "Art Deco", "Sophisticated"],
+    "name": "Monogram"
+  },
+  {
+    "category": "Traditional",
+    "description": "Inspired by traditional mosaics made of tiny tiles, this digital version uses small pixel-like squares to create larger images, often with a shimmering or kaleidoscopic effect.",
+    "keywords": [
+      "Tiny pieces",
+      "Detailed",
+      "Patterns",
+      "Traditional",
+      "Square tiles"
+    ],
+    "name": "Mosaic"
+  },
+  {
+    "category": "Modern",
+    "description": "This style combines street art aesthetics with vibrant neon colors. It often feels rebellious, energetic, and urban.",
+    "keywords": ["Vibrant", "Neon colors", "Edgy", "Street art", "Wall"],
+    "name": "Neon Graffiti"
+  },
+  {
+    "category": "Modern",
+    "description": "Drawing inspiration from film noir aesthetics, this style combines dark and moody atmospheres with vibrant neon colors, often depicting rainy cityscapes, shadowy figures, and dramatic lighting.",
+    "keywords": ["Neon lights", "Dark", "Urban", "Mystery", "Retro-futuristic"],
+    "name": "Neon Noir"
+  },
+  {
+    "category": "Traditional",
+    "description": "Inspired by the traditional Japanese art of paper folding, this digital version portrays objects and creatures as if they were folded from virtual paper, with sharp creases and geometric facets.",
+    "keywords": ["Paper folding", "3D", "Crafted", "Colorful", "Bird"],
+    "name": "Origami"
+  },
+  {
+    "category": "Traditional",
+    "description": "This style mimics the look of cut-out pieces of paper. It often has layered 2D elements that move, creating a sense of depth and dynamic storytelling.",
+    "keywords": ["Layered", "Paper-like", "Depth", "Movement", "Animation"],
+    "name": "Papercut"
+  },
+  {
+    "category": "Digital",
+    "description": "Involves background images moving slower than foreground images, creating an illusion of depth in 2D scenes. This style is often seen in modern web designs and video games.",
+    "keywords": [
+      "Depth",
+      "Layers",
+      "Movement",
+      "Different speeds",
+      "3D illusion"
+    ],
+    "name": "Parallax Art"
+  },
+  {
+    "category": "Traditional",
+    "description": "Pastel Drawing often has a soft, grainy texture that mimics the chalky quality of real pastels. The style evokes calm, peaceful, and sometimes nostalgic feelings. Common subjects include landscapes, portraits, and still life. The technique typically employs layering and blending to achieve depth and tonality, creating a serene atmosphere in the artwork.",
+    "keywords": [
+      "Soft hues",
+      "Delicate strokes",
+      "Picturesque",
+      "Landscape",
+      "Traditional"
+    ],
+    "name": "Pastel Drawing"
+  },
+  {
+    "category": "Modern",
+    "description": "A movement that emerged in the US in the late 1960s, where scenes are painted in a style closely resembling photographs. Artists like Chuck Close are notable in this genre.",
+    "keywords": ["Detailed", "Lifelike", "Photograph", "Real", "Precise"],
+    "name": "Photorealism"
+  },
+  {
+    "category": "Digital",
+    "description": "This style uses tiny square pixels to craft detailed landscapes or scenes, reminiscent of older video game graphics but with a modern twist.",
+    "keywords": ["Pixelated", "Landscape", "Tranquil", "Sunset", "Detailed"],
+    "name": "Pixel Art"
+  },
+  {
+    "category": "Historical",
+    "description": "Drawing inspiration from the pointillism art movement, this style uses distinct dots of color to form an image. The digital rendition allows for more vibrant color combinations and precision.",
+    "keywords": [
+      "Individual dots",
+      "Detailed",
+      "Technique",
+      "Colorful",
+      "Market"
+    ],
+    "name": "Pointillism"
+  },
+  {
+    "category": "Geometric",
+    "description": "Made up of geometric shapes, especially polygons, to create figures or scenes. The simplicity of the shapes contrasts with the complexity of the overall image.",
+    "keywords": ["Geometric", "Polygons", "Unique", "Modern", "Aesthetic"],
+    "name": "Polyart"
+  },
+  {
+    "category": "Historical",
+    "description": "Derived from popular and mass culture, Pop Art draws inspiration from advertising, comic books, and mundane cultural objects. The style is distinctive for its use of repetition and patterns, sometimes with variations in color or content. The color palette features bold, vibrant colors and high contrast. Other notable details can include halftone dots, thick outlines, and speech bubbles, reminiscent of comic strips, adding a touch of satire and commentary on popular culture.",
+    "keywords": [
+      "Bold colors",
+      "High contrast",
+      "Iconic",
+      "Pop culture",
+      "Vibrant"
+    ],
+    "name": "Pop Art"
+  },
+  {
+    "category": "Modern",
+    "description": "Emerged from the 1960s counterculture. It's characterized by bright colors, swirling patterns, and distorted visuals that mimic the effects of hallucinogenic drugs.",
+    "keywords": ["Vibrant", "Swirling", "Trippy", "Hallucinogenic", "Bright"],
+    "name": "Psychedelic Art"
+  },
+  {
+    "category": "Historical",
+    "description": "This period was known for its focus on realism and emphasis on depicting the human form. Artists like Leonardo da Vinci and Michelangelo were prominent figures of this era. The artwork often contained religious as well as mythological themes, accompanied by deep, rich colors.",
+    "keywords": ["Ornate", "Realism", "Classicism", "Detailed", "Humanism"],
+    "name": "Rennaissance/Baroque"
+  },
+  {
+    "category": "Modern",
+    "description": "A nostalgic throwback to the '80s, this style is characterized by neon grids, sunsets, chrome, and synthwave music vibes.",
+    "keywords": ["80s", "Neon lights", "Synth vibes", "Chrome", "Radiant"],
+    "name": "Retro Wave"
+  },
+  {
+    "category": "Historical",
+    "description": "An 18th-century movement emphasizing emotion and individualism. It glorified nature, preferring the medieval rather than the classical. It was a reaction against the Industrial Revolution and the scientific rationalization of nature.",
+    "keywords": ["Emotion", "Nature", "Dramatic", "Individualism", "Medieval"],
+    "name": "Romanticism"
+  },
+  {
+    "category": "SciFi",
+    "description": "This genre fuses elements from both science fiction and fantasy, resulting in landscapes with floating islands, advanced civilizations, mythical creatures, and futuristic technology.",
+    "keywords": [
+      "Futuristic",
+      "Mythical",
+      "Advanced tech",
+      "Dragons",
+      "Civilizations"
+    ],
+    "name": "Sci-Fi Fantasy"
+  },
+  {
+    "category": "Traditional",
+    "description": "Drawing from the traditional scratchboard technique, this style involves scratching away a top layer to reveal a contrasting layer beneath. The digital version offers more flexibility and color variations.",
+    "keywords": ["Scratching", "Detailed", "Technique", "Layer", "Emergent"],
+    "name": "Scratchboard"
+  },
+  {
+    "category": "SciFi",
+    "description": "This style fuses Victorian-era aesthetics with retro-futuristic technology. Think brass, gears, goggles, and steam-powered machines set in an alternate history.",
+    "keywords": [
+      "Victorian",
+      "Retro-futuristic",
+      "Brass",
+      "Gears",
+      "Steam-powered"
+    ],
+    "name": "Steampunk"
+  },
+  {
+    "category": "Traditional",
+    "description": "This style emulates the technique of stippling, where images are created using small dots. The density and arrangement of the dots determine the tones and details, but with the precision of digital tools.",
+    "keywords": ["Tiny dots", "Detailed", "Technique", "Intricate", "Majestic"],
+    "name": "Stippling"
+  },
+  {
+    "category": "Historical",
+    "description": "Merging dreamlike scenarios with digital techniques, this style creates fantastical and often illogical scenes, echoing the surrealist movement of the 20th century.",
+    "keywords": ["Dreamlike", "Unreal", "Digital", "Unique", "Merged"],
+    "name": "Surrealism"
+  },
+  {
+    "category": "Historical",
+    "description": "Late 19th-century movement rejecting the direct representation of reality. Instead, artists expressed emotions through symbols.",
+    "keywords": ["Symbols", "Deep", "Emotions", "Mystical", "Meanings"],
+    "name": "Symbolism"
+  },
+  {
+    "category": "Traditional",
+    "description": "A technique that uses realistic imagery to create an optical illusion that the depicted objects exist in three dimensions. The name is French for \"deceive the eye\".",
+    "keywords": ["Illusion", "Depth", "Realistic", "Deceptive", "3D"],
+    "name": "Trompe-l'œil"
+  },
+  {
+    "category": "Modern",
+    "description": "A modern digital art style that's a visual manifestation of the vaporwave music genre. It incorporates nostalgic images from the '80s and '90s, pastel colors, and often features Greek statues, old computer graphics, and glitch effects.",
+    "keywords": ["Nostalgia", "'80s", "'90s", "Pastel", "Retro"],
+    "name": "Vaporwave"
+  },
+  {
+    "category": "Digital",
+    "description": "This is a clean and precise style made up of points, lines, and shapes based on mathematical expressions. Unlike raster graphics (like photographs), vector art doesn't pixelate when scaled up. It's often used for logos and illustrations.",
+    "keywords": ["Geometric", "Paths", "Scalable", "Sharp", "Clean"],
+    "name": "Vector Art"
+  },
+  {
+    "category": "Digital",
+    "description": "Think of it as 3D pixel art. This style uses three-dimensional cubes (voxels) to build scenes and characters, reminiscent of games like Minecraft.",
+    "keywords": [
+      "3D cubes",
+      "Pixel-like",
+      "Vibrant",
+      "Detailed",
+      "Construction"
+    ],
+    "name": "Voxel Art"
+  },
+  {
+    "category": "Traditional",
+    "description": "Mimicking the fluidity and spontaneity of traditional watercolor painting, this style uses digital tools to create soft washes, delicate blends, and luminous hues.",
+    "keywords": ["Soft", "Transparent", "Water-based", "Blending", "Delicate"],
+    "name": "Watercolor"
+  },
+  {
+    "category": "Traditional",
+    "description": "A technique involving carving an image on wood, applying ink, and pressing it onto paper. Especially prominent in East Asia, it's been used for centuries for both art and literature.",
+    "keywords": ["Carving", "Ink", "Texture", "Traditional", "Print"],
+    "name": "Woodblock Printing"
+  },
+  {
+    "category": "Abstract",
+    "description": "A form of artistic meditation that delivers clarity, relaxation, and satisfaction. It involves creating repetitive patterns and designs, often resulting in intricate artworks.",
+    "keywords": ["Patterns", "Meditation", "Intricate", "Relaxation", "Design"],
+    "name": "Zen Doodle"
+  }
+]

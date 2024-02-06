@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(uuid())
+  id    String @id @default(cuid())
   email String @unique
 
   createdAt DateTime @default(now())
@@ -28,11 +28,87 @@ model Password {
   userId String @unique
 }
 
-model Project {
-  id String @id @default(uuid())
+enum IntentedUse {
+  Personal
+  Blog
+  Newsletter
+  SocialMedia
+  BookCover
+  BookInterior
+  PodcastCover
+  PodcastEpisode
+  Other
+}
 
-  name String
+enum AspectRatio {
+  Square
+  Portrait
+  Landscape
+}
+
+enum ProjectStatus {
+  Draft
+  Submitted
+  Removed
+}
+
+model Project {
+  id String @id @default(cuid())
+
+  name   String
+  status ProjectStatus @default(Draft)
 
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String?
+
+  artStyle   ArtStyle? @relation(fields: [artStyleId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  artStyleId String?
+
+  aspectRation AspectRatio?
+  detail       Int?
+  exclude      String?
+  intentedUse  IntentedUse?
+  keyElements  String?
+  mood         String?
+
+  images Image[]
+}
+
+model Image {
+  id String @id @default(cuid())
+
+  url    String
+  prompt String
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  projectId String
+}
+
+enum Category {
+  Abstract
+  Digital
+  Fantasy
+  Geometric
+  Historical
+  Illustrative
+  Modern
+  Nature
+  SciFi
+  Technological
+  Traditional
+}
+
+model ArtStyle {
+  id String @id @default(cuid())
+
+  name        String  @unique
+  description String?
+  prompt      String
+
+  keywords String[]
+  category Category?
+
+  exampleImageUrl String?
+
+  Project Project[]
 }
