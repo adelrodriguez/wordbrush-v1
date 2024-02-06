@@ -2,17 +2,14 @@ import { z } from "zod"
 
 const EnvSchema = z.object({
   DATABASE_URL: z.string(),
-
-  REMIX_AUTH_SECRET: z.string(),
-
   OPENAI_API_KEY: z.string(),
   OPENAI_ORG_ID: z.string(),
+  SESSION_SECRET: z.string(),
 })
 
 const result = EnvSchema.safeParse(process.env)
 
 if (!result.success) {
-  // eslint-disable-next-line no-console
   console.error(
     "❌ Invalid environment variables:\n",
     ...Object.entries(result.error.format())

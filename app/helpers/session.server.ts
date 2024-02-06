@@ -11,7 +11,7 @@ const sessionStorage = createCookieSessionStorage({
     name: "wordbrush",
     path: "/",
     sameSite: "lax",
-    secrets: [env.REMIX_AUTH_SECRET],
+    secrets: [env.SESSION_SECRET],
     secure: isProduction,
   },
 })

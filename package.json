@@ -5,16 +5,17 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
+    "database:deploy": "prisma migrate deploy",
+    "database:generate": "prisma generate",
+    "database:migrate:create": "prisma migrate dev --name",
+    "database:migrate:reset": "prisma migrate reset",
+    "database:migrate": "prisma migrate dev",
+    "database:prototype": "prisma db push",
+    "database:seed": "prisma db seed",
     "dev": "remix dev --manual",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
-    "typecheck": "tsc",
-    "database:seed": "prisma db seed",
-    "database:generate": "prisma generate",
-    "database:migrate": "prisma migrate dev",
-    "database:migrate:reset": "prisma migrate reset",
-    "database:migrate:create": "prisma migrate dev --name",
-    "database:prototype": "prisma db push"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@conform-to/react": "1.0.0",
