@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "IntentedUse" AS ENUM ('Personal', 'Blog', 'Newsletter', 'SocialMedia', 'BookCover', 'BookInterior', 'PodcastCover', 'PodcastEpisode', 'Other');
+CREATE TYPE "IntendedUse" AS ENUM ('Personal', 'Blog', 'Newsletter', 'SocialMedia', 'BookCover', 'BookInterior', 'PodcastCover', 'PodcastEpisode', 'Other');
 
 -- CreateEnum
 CREATE TYPE "AspectRatio" AS ENUM ('Square', 'Portrait', 'Landscape');
@@ -9,7 +9,7 @@ ALTER TABLE "Project" ADD COLUMN     "artStyleId" TEXT,
 ADD COLUMN     "aspectRation" "AspectRatio",
 ADD COLUMN     "detail" INTEGER,
 ADD COLUMN     "exclude" TEXT,
-ADD COLUMN     "intentedUse" "IntentedUse",
+ADD COLUMN     "intendedUse" "IntendedUse",
 ADD COLUMN     "keyElements" TEXT,
 ADD COLUMN     "mood" TEXT;
 

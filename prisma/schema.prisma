@@ -28,7 +28,7 @@ model Password {
   userId String @unique
 }
 
-enum IntentedUse {
+enum IntendedUse {
   Personal
   Blog
   Newsletter
@@ -67,7 +67,7 @@ model Project {
   aspectRation AspectRatio?
   detail       Int?
   exclude      String?
-  intentedUse  IntentedUse?
+  intendedUse  IntendedUse?
   keyElements  String?
   mood         String?
 
