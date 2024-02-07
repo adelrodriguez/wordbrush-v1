@@ -1,13 +1,11 @@
-import { ArtStyle, AspectRatio, Project } from "@prisma/client"
+import { ArtStyle, AspectRatio, Project, Template } from "@prisma/client"
 
 export function generatePrompt(
   text: string,
   options: {
     artStyle: ArtStyle
-  } & Pick<
-    Project,
-    "intendedUse" | "detail" | "exclude" | "keyElements" | "mood"
-  >,
+  } & Pick<Template, "detail" | "exclude" | "keyElements" | "mood"> &
+    Pick<Project, "intendedUse">,
 ) {
   let prompt = `Your role is to help the user generate an image for DALL-E 3 from their provided text.
   1. The intended user of image will be is for ${options.intendedUse}; optimize it for this use case.

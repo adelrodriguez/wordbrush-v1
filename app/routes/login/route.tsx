@@ -47,8 +47,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   const submission = await parseWithZod(formData, {
-    schema: serverSchema,
     async: true,
+    schema: serverSchema,
   })
 
   if (submission.status !== "success") {
@@ -57,9 +57,9 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     return await auth.authenticate("email-password", request, {
+      context: { formData },
       successRedirect: "/create",
       throwOnError: true,
-      context: { formData },
     })
   } catch (error) {
     if (error instanceof Response) return error

@@ -1,8 +1,7 @@
 import { parseWithZod } from "@conform-to/zod"
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
+import { ActionFunctionArgs, json } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
-  ClientLoaderFunctionArgs,
   redirect,
   useLoaderData,
   useSubmit,
@@ -17,61 +16,29 @@ import db from "~/helpers/db.server"
 import ai from "~/services/openai.server"
 import { generatePrompt, getImageSize } from "~/utils/ai"
 import { notFound } from "~/utils/http.server"
-import { clearLocalProject, getLocalProject } from "~/utils/project"
+import { getSavedText, removeSavedText } from "~/utils/text"
 
 const schema = z.object({
   text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
 })
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
-  const { projectId } = zx.parseParams(
-    params,
-    z.object({ projectId: z.string() }),
-  )
+export async function clientLoader() {
+  const text = getSavedText()
 
-  const user = await auth.isAuthenticated(request, {
-    failureRedirect: route("/create/account"),
-  })
-
-  const project = await db.project.findUnique({
-    where: { id: projectId, userId: user.id },
-  })
-
-  if (!project) {
-    return notFound()
-  }
-
-  if (project.status !== "Draft") {
-    return redirect(route("/my/words/:projectId", { projectId }))
-  }
-
-  return null
-}
-
-export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
-  await serverLoader<typeof loader>()
-
-  const storedData = getLocalProject()
-
-  if (!storedData) {
+  // If the text was deleted from the client, the user must create a new project
+  if (!text) {
     throw redirect(route("/create"))
   }
 
-  return { storedData }
+  return { text }
 }
 
 clientLoader.hydrate = true
 
-export function clientAction({ serverAction }: ClientActionFunctionArgs) {
-  clearLocalProject()
-
-  return serverAction()
-}
-
 export async function action({ params, request }: ActionFunctionArgs) {
-  const { projectId } = zx.parseParams(
+  const { projectId, templateId } = zx.parseParams(
     params,
-    z.object({ projectId: z.string() }),
+    z.object({ projectId: z.string(), templateId: z.string() }),
   )
 
   const formData = await request.formData()
@@ -79,43 +46,57 @@ export async function action({ params, request }: ActionFunctionArgs) {
     schema,
   })
 
+  // TODO(adelrodriguez): Handle this error in the client
   if (submission.status !== "success") {
     return json({ error: "Text not found", success: false })
   }
 
   const user = await auth.isAuthenticated(request, {
-    failureRedirect: route("/create/account"),
+    failureRedirect: route("/login"),
   })
 
   const project = await db.project.findUnique({
-    include: { artStyle: true },
-    where: { artStyleId: { not: null }, id: projectId, userId: user.id },
+    where: { id: projectId, userId: user.id },
   })
 
   if (!project) {
-    return notFound()
+    throw notFound()
   }
 
-  if (!project.artStyle) {
+  const template = await db.template.findUnique({
+    include: { artStyle: true },
+    where: { id: templateId, projectId: project.id },
+  })
+
+  if (!template) {
+    throw notFound()
+  }
+
+  // TODO(adelrodriguez): Handle this error in the client
+  if (!template.artStyle) {
     return json({ error: "Art style not found", success: false })
   }
 
   const prompt = generatePrompt(submission.value.text, {
-    ...project,
-    artStyle: project.artStyle,
+    artStyle: template.artStyle,
+    detail: template.detail,
+    exclude: template.exclude,
+    intendedUse: project.intendedUse,
+    keyElements: template.keyElements,
+    mood: template.mood,
   })
 
   // TODO(adelrodriguez): Launch jobs for:
-  // Summarizing
-  // Generating art style recommendations
-  // Generating mood recommendations
+  // Summarizing (probably using GPT-3.5, better done when creating the project)
+  // Generating art style recommendations (done when creating the project)
+  // Generating mood recommendations (done when creating the project)
 
   const response = await ai.images.generate({
     model: "dall-e-3",
     prompt,
     quality: "standard",
     response_format: "url",
-    size: getImageSize(project.aspectRatio),
+    size: getImageSize(template.aspectRatio),
     user: user.id,
   })
 
@@ -126,6 +107,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
       data: {
         projectId: project.id,
         prompt: image.revised_prompt ?? prompt,
+        templateId: template.id,
         url: image.url ?? "",
       },
     })
@@ -139,13 +121,22 @@ export async function action({ params, request }: ActionFunctionArgs) {
   return redirect(route("/my/words/:projectId", { projectId }))
 }
 
+export function clientAction({ serverAction }: ClientActionFunctionArgs) {
+  // This removes the saved text from local storage. Since we are not passing a
+  // project key, this should remove the text from the draft project in case the
+  // user inputs text in the /create route before registering.
+  removeSavedText()
+
+  return serverAction()
+}
+
 export function HydrateFallback() {
   // TODO(adelrodriguez): Add a loading state
   return <div>Loading...</div>
 }
 
 export default function Route() {
-  const { storedData } = useLoaderData<typeof clientLoader>()
+  const { text } = useLoaderData<typeof clientLoader>()
   const submitting = useRef(false)
   const submit = useSubmit()
 
@@ -154,12 +145,12 @@ export default function Route() {
 
     submitting.current = true
 
-    submit({ text: storedData.text }, { method: "POST", replace: true })
+    submit({ text }, { method: "POST", replace: true })
 
     return () => {
       submitting.current = false
     }
-  }, [submit, storedData.text])
+  }, [submit, text])
 
   return <div>Creating your image...</div>
 }

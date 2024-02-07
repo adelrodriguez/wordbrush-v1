@@ -16,8 +16,8 @@ auth.use(
     const password = form.get("password") as string
 
     const user = await db.user.findUnique({
-      where: { email },
       include: { password: true },
+      where: { email },
     })
 
     if (!user) {

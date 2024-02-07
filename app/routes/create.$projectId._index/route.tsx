@@ -1,12 +1,12 @@
-import {
-  getCollectionProps,
-  getFormProps,
-  getInputProps,
-  useForm,
-} from "@conform-to/react"
+import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
-import { AspectRatio } from "@prisma/client"
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
+import { IntendedUse, ProjectStatus } from "@prisma/client"
+import {
+  LoaderFunctionArgs,
+  json,
+  redirect,
+  type ActionFunctionArgs,
+} from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
@@ -20,51 +20,63 @@ import { zx } from "zodix"
 
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import { notFound } from "~/utils/http.server"
-import { getLocalProject, storeProjectLocally } from "~/utils/project"
+import { forbidden } from "~/utils/http.server"
+import { getSavedText, saveText } from "~/utils/text"
 
-const clientSchema = z.object({
-  artStyleId: z.string(),
-  aspectRatio: z.nativeEnum(AspectRatio),
-  detail: z.number().optional(),
+const schema = z.object({
+  intendedUse: z.nativeEnum(IntendedUse),
+  name: z.string(),
+  text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
 })
 
-const serverSchema = z.object({
-  artStyleId: z.string().refine(async (value) => {
-    const artStyle = await db.artStyle.findUnique({ where: { id: value } })
-    return !!artStyle
-  }),
-  aspectRatio: z.nativeEnum(AspectRatio),
-  detail: z.number().optional(),
-})
-
-export async function loader() {
-  const artStyles = await db.artStyle.findMany({
-    select: {
-      description: true,
-      id: true,
-      name: true,
-    },
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  const { projectId } = zx.parseParams(
+    params,
+    z.object({ projectId: z.string() }),
+  )
+  const user = await auth.isAuthenticated(request, {
+    failureRedirect: route("/login"),
   })
 
-  return json({ artStyles })
+  const project = await db.project.findUnique({
+    where: { id: projectId, userId: user.id },
+  })
+
+  if (!project) {
+    return redirect(route("/my/words"))
+  }
+
+  if (project.status !== ProjectStatus.Draft) {
+    return redirect(route("/my/words/:projectId", { projectId: project.id }))
+  }
+
+  return json({ project })
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
-  const serverData = await serverLoader<typeof loader>()
-  const storedData = getLocalProject()
+  const { project } = await serverLoader<typeof loader>()
 
-  return { ...serverData, storedData }
+  return { project, text: getSavedText(project.id) }
 }
 
 clientLoader.hydrate = true
 
 export async function clientAction({
+  params,
   request,
   serverAction,
 }: ClientActionFunctionArgs) {
+  const { projectId } = zx.parseParams(
+    params,
+    z.object({ projectId: z.string() }),
+  )
+
   const formData = await request.clone().formData()
-  storeProjectLocally(formData)
+  const text = formData.get("text")
+
+  if (text && typeof text === "string") {
+    saveText(text, projectId)
+  }
 
   return serverAction()
 }
@@ -76,9 +88,8 @@ export async function action({ params, request }: ActionFunctionArgs) {
   )
 
   const formData = await request.formData()
-  const submission = await parseWithZod(formData, {
-    async: true,
-    schema: serverSchema,
+  const submission = parseWithZod(formData, {
+    schema,
   })
 
   if (submission.status !== "success") {
@@ -86,26 +97,35 @@ export async function action({ params, request }: ActionFunctionArgs) {
   }
 
   const user = await auth.isAuthenticated(request, {
-    failureRedirect: route("/create/account"),
+    failureRedirect: route("/login"),
   })
 
   try {
     await db.project.update({
       data: {
-        artStyleId: submission.value.artStyleId,
-        aspectRatio: submission.value.aspectRatio,
-        detail: submission.value.detail,
+        intendedUse: submission.value.intendedUse,
+        name: submission.value.name,
       },
-      where: {
-        id: projectId,
-        userId: user.id,
-      },
+      where: { id: projectId, userId: user.id },
     })
   } catch (error) {
-    throw notFound()
+    throw forbidden()
   }
 
-  return redirect(route("/create/:projectId/details", { projectId }))
+  let template = await db.template.findFirst({
+    where: { projectId },
+  })
+
+  if (!template) {
+    template = await db.template.create({ data: { projectId } })
+  }
+
+  return redirect(
+    route("/create/:projectId/brush/:templateId", {
+      projectId,
+      templateId: template.id,
+    }),
+  )
 }
 
 export function HydrateFallback() {
@@ -114,13 +134,16 @@ export function HydrateFallback() {
 }
 
 export default function Route() {
-  const { artStyles, storedData } = useLoaderData<typeof clientLoader>()
+  const { project, text } = useLoaderData<typeof clientLoader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
-    defaultValue: storedData,
+    defaultValue: {
+      intendedUse: project?.intendedUse,
+      name: project?.name || "",
+      text,
+    },
     lastResult,
-    onValidate: ({ formData }) =>
-      parseWithZod(formData, { schema: clientSchema }),
+    onValidate: ({ formData }) => parseWithZod(formData, { schema }),
   })
 
   return (
@@ -128,104 +151,86 @@ export default function Route() {
       {...getFormProps(form)}
       method="POST"
       className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
-      onBlur={(event) => storeProjectLocally(new FormData(event.currentTarget))}
     >
       <div className="text-center">
         <h1 className="font-gray-900 text-5xl font-black">
-          Choose your art style
+          Tell us about your writing
         </h1>
         <h2 className="mt-4 text-2xl font-light text-gray-600">
-          Choose one of the following art styles
+          We don&apos;t save your text; everything is stored locally on your
+          computer
         </h2>
       </div>
       <div>
         <label
-          className="text-base font-semibold text-gray-900"
-          htmlFor={fields.artStyleId.id}
-        >
-          Art Style
-        </label>
-        <p className="text-sm text-gray-500">What kind of style do you want?</p>
-        <fieldset className="mt-4">
-          <legend className="sr-only">Art Style</legend>
-          <div className="space-y-4">
-            {getCollectionProps(fields.artStyleId, {
-              options: artStyles.map((artStyle) => artStyle.id),
-              type: "radio",
-            }).map((collectionProps) => (
-              <div key={collectionProps.id} className="flex items-center">
-                <input
-                  {...collectionProps}
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  value={collectionProps.value}
-                />
-                <label
-                  className="ml-3 block text-sm font-medium leading-6 text-gray-900"
-                  htmlFor={collectionProps.id}
-                >
-                  {collectionProps.value}
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-        <div>{fields.artStyleId.errors}</div>
-      </div>
-      <div>
-        <label
-          className="text-base font-semibold text-gray-900"
-          htmlFor={fields.aspectRatio.id}
-        >
-          Aspect Ratio
-        </label>
-        <p className="text-sm text-gray-500">
-          What aspect ratio do you want to use?
-        </p>
-        <fieldset className="mt-4">
-          <legend className="sr-only">Resolution</legend>
-          <div className="space-y-4">
-            {getCollectionProps(fields.aspectRatio, {
-              options: Object.values(AspectRatio),
-              type: "radio",
-            }).map((collectionProps) => (
-              <div key={collectionProps.id} className="flex items-center">
-                <input
-                  {...collectionProps}
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                />
-                <label
-                  className="ml-3 block text-sm font-medium leading-6 text-gray-900"
-                  htmlFor={collectionProps.id}
-                >
-                  {collectionProps.value}
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-        <div>{fields.aspectRatio.errors}</div>
-      </div>
-      <div>
-        <label
-          htmlFor={fields.detail.id}
+          htmlFor={fields.name.id}
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          Level of detail
+          Name
         </label>
         <div className="mt-2">
           <input
-            {...getInputProps(fields.detail, { type: "number" })}
+            {...getInputProps(fields.name, { type: "text" })}
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            placeholder="1"
+            placeholder="Untitled"
           />
         </div>
+      </div>
+      <div className="rounded-xl bg-slate-800 p-6">
+        <label
+          htmlFor={fields.text.id}
+          className="block text-sm font-medium leading-6 text-white"
+        >
+          Add your text
+        </label>
+        <div className="mt-2">
+          <textarea
+            {...getInputProps(fields.text, { type: "text" })}
+            rows={4}
+            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+      <div>
+        <label
+          className="text-base font-semibold text-gray-900"
+          htmlFor={fields.intendedUse.id}
+        >
+          Intended Use
+        </label>
+        <p className="text-sm text-gray-500">
+          Where are you publishing this story?
+        </p>
+        <fieldset className="mt-4">
+          <legend className="sr-only">Intended use</legend>
+          <div className="space-y-4">
+            {Object.keys(IntendedUse).map((intendedUse) => (
+              <div key={intendedUse} className="flex items-center">
+                <input
+                  {...getInputProps(fields.intendedUse, {
+                    type: "radio",
+                    value: intendedUse,
+                  })}
+                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  defaultChecked={
+                    fields.intendedUse.initialValue === intendedUse
+                  }
+                />
+                <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                  {intendedUse}
+                </label>
+              </div>
+            ))}
+            <div>{fields.intendedUse.errors}</div>
+          </div>
+        </fieldset>
       </div>
 
       <button
         type="submit"
         className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
       >
-        Let&apos;s finalize the details
+        Choose an art style
       </button>
     </Form>
   )

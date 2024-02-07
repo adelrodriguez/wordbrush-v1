@@ -1,6 +1,11 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
-import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
 import { route } from "routes-gen"
 import { z } from "zod"
@@ -8,8 +13,7 @@ import { zx } from "zodix"
 
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import { notFound } from "~/utils/http.server"
-import { getLocalProject } from "~/utils/project"
+import { forbidden, notFound } from "~/utils/http.server"
 
 const schema = z.object({
   detail: z.number().optional(),
@@ -18,58 +22,82 @@ const schema = z.object({
   mood: z.string().optional(),
 })
 
-export async function clientLoader() {
-  return { storedData: getLocalProject() }
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { templateId } = zx.parseParams(
+    params,
+    z.object({ templateId: z.string() }),
+  )
+  const template = await db.template.findUnique({
+    select: {
+      exclude: true,
+      keyElements: true,
+      mood: true,
+    },
+    where: { id: templateId },
+  })
+
+  if (!template) {
+    throw notFound()
+  }
+
+  return json({ template })
 }
 
-clientLoader.hydrate = true
-
 export async function action({ params, request }: ActionFunctionArgs) {
-  const { projectId } = zx.parseParams(
+  const { projectId, templateId } = zx.parseParams(
     params,
-    z.object({ projectId: z.string() }),
+    z.object({ projectId: z.string(), templateId: z.string() }),
   )
 
   const formData = await request.formData()
-  const submission = parseWithZod(formData, {
-    schema,
-  })
+  const submission = await parseWithZod(formData, { schema })
 
   if (submission.status !== "success") {
     return json(submission.reply())
   }
 
+  // Check that the user is the owner of the project
   const user = await auth.isAuthenticated(request, {
-    failureRedirect: route("/create/account"),
+    failureRedirect: route("/login"),
   })
 
+  const project = await db.project.findFirst({
+    where: { id: projectId, userId: user.id },
+  })
+
+  if (!project) {
+    throw notFound()
+  }
+
   try {
-    await db.project.update({
+    await db.template.update({
       data: {
-        detail: submission.value.detail,
         exclude: submission.value.exclude,
         keyElements: submission.value.keyElements,
         mood: submission.value.mood,
       },
-      where: { id: projectId, userId: user.id },
+      where: {
+        id: templateId,
+        projectId,
+      },
     })
   } catch (error) {
-    throw notFound()
+    throw forbidden()
   }
 
-  return redirect(route("/create/:projectId/submit", { projectId }))
-}
-
-export function HydrateFallback() {
-  // TODO(adelrodriguez): Add a loading state
-  return <div>Loading...</div>
+  return redirect(
+    route("/create/:projectId/brush/:templateId/submit", {
+      projectId,
+      templateId,
+    }),
+  )
 }
 
 export default function Route() {
-  const { storedData } = useLoaderData<typeof clientLoader>()
+  const { template } = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
-    defaultValue: storedData,
+    defaultValue: template,
     lastResult,
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
   })

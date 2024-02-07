@@ -1,5 +1,7 @@
+import { ProjectStatus } from "@prisma/client"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
+import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -44,6 +46,11 @@ export default function Route() {
             <img src={image.url} alt={image.prompt} />
           </li>
         ))}
+        {project.status === ProjectStatus.Draft && (
+          <Link to={route("/create/:projectId", { projectId: project.id })}>
+            Continue
+          </Link>
+        )}
       </ul>
     </div>
   )

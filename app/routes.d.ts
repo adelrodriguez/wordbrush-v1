@@ -3,8 +3,9 @@ declare module "routes-gen" {
     "/": Record<string, never>;
     "/create": Record<string, never>;
     "/create/:projectId": { "projectId": string };
-    "/create/:projectId/details": { "projectId": string };
-    "/create/:projectId/submit": { "projectId": string };
+    "/create/:projectId/brush/:templateId": { "projectId": string, "templateId": string };
+    "/create/:projectId/brush/:templateId/details": { "projectId": string, "templateId": string };
+    "/create/:projectId/brush/:templateId/submit": { "projectId": string, "templateId": string };
     "/create/account": Record<string, never>;
     "/login": Record<string, never>;
     "/my": Record<string, never>;
@@ -17,8 +18,9 @@ declare module "routes-gen" {
       | ["/"]
       | ["/create"]
       | ["/create/:projectId", RouteParams["/create/:projectId"]]
-      | ["/create/:projectId/details", RouteParams["/create/:projectId/details"]]
-      | ["/create/:projectId/submit", RouteParams["/create/:projectId/submit"]]
+      | ["/create/:projectId/brush/:templateId", RouteParams["/create/:projectId/brush/:templateId"]]
+      | ["/create/:projectId/brush/:templateId/details", RouteParams["/create/:projectId/brush/:templateId/details"]]
+      | ["/create/:projectId/brush/:templateId/submit", RouteParams["/create/:projectId/brush/:templateId/submit"]]
       | ["/create/account"]
       | ["/login"]
       | ["/my"]
