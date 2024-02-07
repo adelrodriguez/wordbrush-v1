@@ -106,8 +106,8 @@ export default function Route() {
     <>
       <Form
         {...getFormProps(form)}
-        method="POST"
         className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
+        method="POST"
       >
         <div className="text-center">
           <h1 className="font-gray-900 text-5xl font-black">
@@ -125,8 +125,8 @@ export default function Route() {
         <div className="grid grid-cols-1 gap-x-2 md:grid-cols-3">
           <div>
             <label
-              htmlFor={fields.mood.id}
               className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor={fields.mood.id}
             >
               Mood
             </label>
@@ -140,8 +140,8 @@ export default function Route() {
           </div>
           <div>
             <label
-              htmlFor={fields.keyElements.id}
               className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor={fields.keyElements.id}
             >
               Key Elements
             </label>
@@ -157,8 +157,8 @@ export default function Route() {
 
           <div>
             <label
-              htmlFor={fields.exclude.id}
               className="block text-sm font-medium leading-6 text-gray-900"
+              htmlFor={fields.exclude.id}
             >
               Anything to exclude?
             </label>
@@ -173,8 +173,8 @@ export default function Route() {
           </div>
         </div>
         <button
-          type="submit"
           className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
+          type="submit"
         >
           Show me the art ✨
         </button>

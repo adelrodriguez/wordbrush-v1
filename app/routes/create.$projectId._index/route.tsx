@@ -149,8 +149,8 @@ export default function Route() {
   return (
     <Form
       {...getFormProps(form)}
-      method="POST"
       className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
+      method="POST"
     >
       <div className="text-center">
         <h1 className="font-gray-900 text-5xl font-black">
@@ -163,8 +163,8 @@ export default function Route() {
       </div>
       <div>
         <label
-          htmlFor={fields.name.id}
           className="block text-sm font-medium leading-6 text-gray-900"
+          htmlFor={fields.name.id}
         >
           Name
         </label>
@@ -178,16 +178,16 @@ export default function Route() {
       </div>
       <div className="rounded-xl bg-slate-800 p-6">
         <label
-          htmlFor={fields.text.id}
           className="block text-sm font-medium leading-6 text-white"
+          htmlFor={fields.text.id}
         >
           Add your text
         </label>
         <div className="mt-2">
           <textarea
             {...getInputProps(fields.text, { type: "text" })}
-            rows={4}
             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            rows={4}
           />
         </div>
       </div>
@@ -205,7 +205,7 @@ export default function Route() {
           <legend className="sr-only">Intended use</legend>
           <div className="space-y-4">
             {Object.keys(IntendedUse).map((intendedUse) => (
-              <div key={intendedUse} className="flex items-center">
+              <div className="flex items-center" key={intendedUse}>
                 <input
                   {...getInputProps(fields.intendedUse, {
                     type: "radio",
@@ -227,8 +227,8 @@ export default function Route() {
       </div>
 
       <button
-        type="submit"
         className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
+        type="submit"
       >
         Choose an art style
       </button>

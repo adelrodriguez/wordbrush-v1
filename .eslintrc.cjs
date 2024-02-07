@@ -84,6 +84,7 @@ module.exports = {
   root: true,
 
   rules: {
+    "react/jsx-sort-props": "error",
     "sort-destructure-keys/sort-destructure-keys": "warn",
     "sort-keys-fix/sort-keys-fix": "warn",
     "sort-vars": "warn",

@@ -131,8 +131,8 @@ export default function Route() {
   return (
     <Form
       {...getFormProps(form)}
-      method="POST"
       className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
+      method="POST"
     >
       <div className="text-center">
         <h1 className="font-gray-900 text-5xl font-black">
@@ -157,7 +157,7 @@ export default function Route() {
               options: artStyles.map((artStyle) => artStyle.id),
               type: "radio",
             }).map((collectionProps) => (
-              <div key={collectionProps.id} className="flex items-center">
+              <div className="flex items-center" key={collectionProps.id}>
                 <input
                   {...collectionProps}
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
@@ -192,7 +192,7 @@ export default function Route() {
               options: Object.values(AspectRatio),
               type: "radio",
             }).map((collectionProps) => (
-              <div key={collectionProps.id} className="flex items-center">
+              <div className="flex items-center" key={collectionProps.id}>
                 <input
                   {...collectionProps}
                   className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
@@ -211,8 +211,8 @@ export default function Route() {
       </div>
       <div>
         <label
-          htmlFor={fields.detail.id}
           className="block text-sm font-medium leading-6 text-gray-900"
+          htmlFor={fields.detail.id}
         >
           Level of detail
         </label>
@@ -226,8 +226,8 @@ export default function Route() {
       </div>
 
       <button
-        type="submit"
         className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
+        type="submit"
       >
         Let&apos;s finalize the details
       </button>

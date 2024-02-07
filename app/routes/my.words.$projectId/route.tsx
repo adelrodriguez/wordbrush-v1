@@ -43,7 +43,7 @@ export default function Route() {
       <ul>
         {project.images.map((image) => (
           <li key={image.id}>
-            <img src={image.url} alt={image.prompt} />
+            <img alt={image.prompt} src={image.url} />
           </li>
         ))}
         {project.status === ProjectStatus.Draft && (
