@@ -8,18 +8,19 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react"
+
 import stylesheet from "~/styles/index.css"
 import tailwind from "~/styles/tailwind.css"
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-  { rel: "stylesheet", href: tailwind },
-  { rel: "stylesheet", href: stylesheet },
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  ...(cssBundleHref ? [{ href: cssBundleHref, rel: "stylesheet" }] : []),
+  { href: tailwind, rel: "stylesheet" },
+  { href: stylesheet, rel: "stylesheet" },
+  { href: "https://fonts.googleapis.com", rel: "preconnect" },
   {
-    // Inter font
-    rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    // Inter
+    rel: "stylesheet",
   },
 ]
 

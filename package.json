@@ -13,6 +13,7 @@
     "database:prototype": "prisma db push",
     "database:seed": "prisma db seed",
     "dev": "remix dev --manual",
+    "generate:routes": "routes-gen -d @routes-gen/remix",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/index.js",
     "typecheck": "tsc"
@@ -34,10 +35,13 @@
     "react-dom": "18.2.0",
     "remix-auth": "3.6.0",
     "remix-auth-form": "1.4.0",
-    "zod": "3.22.4"
+    "routes-gen": "0.6.1",
+    "zod": "3.22.4",
+    "zodix": "^0.4.4"
   },
   "devDependencies": {
     "@remix-run/dev": "2.6.0",
+    "@routes-gen/remix": "0.3.7",
     "@tailwindcss/forms": "0.5.7",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/bcrypt": "5.0.2",

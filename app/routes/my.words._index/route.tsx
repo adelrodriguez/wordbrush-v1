@@ -1,9 +1,9 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, Outlet, useLoaderData } from "@remix-run/react"
 
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import { unauthorized } from "~/utils/http"
+import { unauthorized } from "~/utils/http.server"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await auth.isAuthenticated(request)
@@ -26,10 +26,15 @@ export default function Route() {
 
   return (
     <div>
-      {projects.map((project) => (
-        <li key={project.id}>{project.name}</li>
-      ))}
+      <ul className="ml-4 list-disc">
+        {projects.map((project) => (
+          <li key={project.id}>
+            <Link to={`/my/words/${project.id}`}>{project.name}</Link>
+          </li>
+        ))}
+      </ul>
       <Link to="/create">Create a new illustration</Link>
+      <Outlet />
     </div>
   )
 }

@@ -6,7 +6,7 @@ CREATE TYPE "AspectRatio" AS ENUM ('Square', 'Portrait', 'Landscape');
 
 -- AlterTable
 ALTER TABLE "Project" ADD COLUMN     "artStyleId" TEXT,
-ADD COLUMN     "aspectRation" "AspectRatio",
+ADD COLUMN     "aspectRatio" "AspectRatio",
 ADD COLUMN     "detail" INTEGER,
 ADD COLUMN     "exclude" TEXT,
 ADD COLUMN     "intendedUse" "IntendedUse",

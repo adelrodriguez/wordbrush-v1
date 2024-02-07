@@ -15,9 +15,12 @@ export default function Dashboard() {
   const { user } = useLoaderData<typeof loader>()
 
   return (
-    <main>
-      <h1>Logged in as: {user.email}</h1>
-      <Outlet />
-    </main>
+    <>
+      <header>Logged in as: {user.email}</header>
+      <main>
+        <Outlet />
+      </main>
+      <footer>Footer</footer>
+    </>
   )
 }
