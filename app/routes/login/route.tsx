@@ -8,6 +8,7 @@ import {
 } from "@remix-run/node"
 import { Form, Link, useActionData } from "@remix-run/react"
 import { AuthorizationError } from "remix-auth"
+import { route } from "routes-gen"
 import { z } from "zod"
 
 import auth from "~/helpers/auth.server"
@@ -35,6 +36,8 @@ const serverSchema = z.object({
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  // TODO(adelrodriguez): Check for error=true in the query string and display
+  // an error message
   const user = await auth.isAuthenticated(request)
 
   if (user) {
@@ -62,8 +65,6 @@ export async function action({ request }: ActionFunctionArgs) {
       throwOnError: true,
     })
   } catch (error) {
-    if (error instanceof Response) return error
-
     if (error instanceof AuthorizationError) {
       return json(
         submission.reply({
@@ -73,8 +74,9 @@ export async function action({ request }: ActionFunctionArgs) {
         }),
       )
     }
-    return null
   }
+
+  return redirect(route("/login") + "?error=true")
 }
 
 export default function Route() {

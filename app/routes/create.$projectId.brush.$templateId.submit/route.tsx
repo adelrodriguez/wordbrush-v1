@@ -29,7 +29,7 @@ const schema = z.object({
   text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
 })
 
-export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
+export function clientLoader({ params }: ClientLoaderFunctionArgs) {
   const { projectId } = zx.parseParams(
     params,
     z.object({ projectId: z.string() }),
@@ -114,7 +114,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const image = response.data[0]
   const filename = Date.now() + ".png"
 
-  if (image && image.b64_json) {
+  if (image?.b64_json) {
     const buffer = convertBase64StringToBuffer(image.b64_json)
     const url = await uploadBuffer(buffer, {
       contentType: "image/png",

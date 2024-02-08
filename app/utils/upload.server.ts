@@ -80,7 +80,7 @@ export function createS3UploadHandler({
     const stream = uploadStream({
       ContentDisposition: contentDisposition,
       ContentType: contentType,
-      Key: key || parseFilename(filename),
+      Key: key ? key : parseFilename(filename),
     })
 
     await writeAsyncIterableToWritable(data, stream.writeStream)

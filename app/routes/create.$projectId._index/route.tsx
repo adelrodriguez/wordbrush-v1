@@ -138,8 +138,8 @@ export default function Route() {
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     defaultValue: {
-      intendedUse: project?.intendedUse,
-      name: project?.name || "",
+      intendedUse: project.intendedUse,
+      name: project.name || "",
       text,
     },
     lastResult,

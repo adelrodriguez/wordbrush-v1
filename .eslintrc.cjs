@@ -44,13 +44,22 @@ module.exports = {
     // Typescript
     {
       extends: [
-        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/strict-type-checked",
+        "plugin:@typescript-eslint/stylistic-type-checked",
         "plugin:import/recommended",
         "plugin:import/typescript",
       ],
       files: ["**/*.{ts,tsx}"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+        tsconfigRootDir: __dirname,
+      },
       plugins: ["@typescript-eslint", "import"],
+      rules: {
+        "@typescript-eslint/no-throw-literal": "off",
+        "@typescript-eslint/prefer-promise-reject-errors": "off",
+      },
       settings: {
         "import/internal-regex": "^~/",
         "import/resolver": {

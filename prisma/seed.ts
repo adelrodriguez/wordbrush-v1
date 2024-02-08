@@ -24,7 +24,12 @@ async function generateUsers() {
 async function generateArtStyles() {
   const styles = JSON.parse(
     fs.readFileSync("./prisma/art-styles.json", "utf-8"),
-  )
+  ) as {
+    name: string
+    description: string
+    keywords: string[]
+    category: string
+  }[]
 
   await db.artStyle.createMany({
     data: styles.map(
