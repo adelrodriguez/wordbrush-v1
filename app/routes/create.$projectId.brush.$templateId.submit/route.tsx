@@ -1,7 +1,9 @@
 import { parseWithZod } from "@conform-to/zod"
+import { StorageService } from "@prisma/client"
 import { ActionFunctionArgs, json } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
+  ClientLoaderFunctionArgs,
   redirect,
   useLoaderData,
   useSubmit,
@@ -11,23 +13,32 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import env from "~/config/env.server"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import ai from "~/services/openai.server"
 import { generatePrompt, getImageSize } from "~/utils/ai"
 import { notFound } from "~/utils/http.server"
 import { getSavedText, removeSavedText } from "~/utils/text"
+import {
+  convertBase64StringToBuffer,
+  uploadBuffer,
+} from "~/utils/upload.server"
 
 const schema = z.object({
   text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
 })
 
-export async function clientLoader() {
-  const text = getSavedText()
+export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
+  const { projectId } = zx.parseParams(
+    params,
+    z.object({ projectId: z.string() }),
+  )
+  const text = getSavedText(projectId)
 
-  // If the text was deleted from the client, the user must create a new project
+  // If the text was deleted from the client, let's throw an error.
   if (!text) {
-    throw redirect(route("/create"))
+    throw new Error("Text not found")
   }
 
   return { text }
@@ -95,20 +106,30 @@ export async function action({ params, request }: ActionFunctionArgs) {
     model: "dall-e-3",
     prompt,
     quality: "standard",
-    response_format: "url",
+    response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
     user: user.id,
   })
 
   const image = response.data[0]
+  const filename = Date.now() + ".png"
 
-  if (image) {
+  if (image && image.b64_json) {
+    const buffer = convertBase64StringToBuffer(image.b64_json)
+    const url = await uploadBuffer(buffer, {
+      contentType: "image/png",
+      key: `${user.id}/${project.id}/${filename}`,
+    })
+
     await db.image.create({
       data: {
+        bucket: env.STORAGE_BUCKET,
         projectId: project.id,
         prompt: image.revised_prompt ?? prompt,
+        publicUrl: `${env.CLOUDFLARE_R2_PUBLIC_URL}/${user.id}/${project.id}/${filename}`,
+        service: StorageService.R2,
         templateId: template.id,
-        url: image.url ?? "",
+        url: url ?? "",
       },
     })
   }

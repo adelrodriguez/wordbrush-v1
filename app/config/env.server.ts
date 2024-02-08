@@ -1,10 +1,24 @@
 import { z } from "zod"
 
 const EnvSchema = z.object({
+  // Cloudflare
+  CLOUDFLARE_ACCOUNT_ID: z.string(),
+  CLOUDFLARE_R2_PUBLIC_URL: z.string(),
+
+  // Database
   DATABASE_URL: z.string(),
+
+  // OpenAI
   OPENAI_API_KEY: z.string(),
   OPENAI_ORG_ID: z.string(),
+
+  // Session
   SESSION_SECRET: z.string(),
+
+  // Storage Bucket
+  STORAGE_ACCESS_KEY: z.string(),
+  STORAGE_BUCKET: z.string(),
+  STORAGE_SECRET: z.string(),
 })
 
 const result = EnvSchema.safeParse(process.env)

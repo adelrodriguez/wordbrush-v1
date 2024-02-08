@@ -23,7 +23,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 
   const project = await db.project.findFirstOrThrow({
     include: {
-      images: true,
+      images: {
+        select: {
+          id: true,
+          publicUrl: true,
+        },
+      },
     },
     where: {
       id: projectId,
@@ -43,7 +48,7 @@ export default function Route() {
       <ul>
         {project.images.map((image) => (
           <li key={image.id}>
-            <img alt={image.prompt} src={image.url} />
+            <img alt="" src={image.publicUrl} />
           </li>
         ))}
         {project.status === ProjectStatus.Draft && (
