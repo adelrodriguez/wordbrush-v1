@@ -1,7 +1,7 @@
-import { Image } from "@prisma/client"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 
+import { GeneratedImage } from "~/components/GeneratedImage"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 
@@ -33,7 +33,7 @@ export default function Route() {
   const groupSize = Math.floor(Math.sqrt(images.length))
 
   const groupedImages = images.reduce(
-    (acc: Pick<Image, "id" | "publicUrl">[][], image, index) => {
+    (acc: (typeof images)[0][][], image, index) => {
       if (index % groupSize === 0) {
         acc.push([])
       }
@@ -58,13 +58,12 @@ export default function Route() {
           {images.map(
             (image) =>
               image.publicUrl && (
-                <div key={image.id}>
-                  <img
-                    alt=""
-                    className="h-auto max-w-full rounded-md shadow-inner transition-all duration-300 hover:scale-110 hover:shadow-lg"
-                    src={image.publicUrl}
-                  />
-                </div>
+                <GeneratedImage
+                  id={image.id}
+                  key={image.id}
+                  projectId={image.projectId}
+                  src={image.publicUrl}
+                />
               ),
           )}
         </div>

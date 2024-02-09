@@ -18,9 +18,9 @@ export default function Index() {
         </h1>
         <h2 className="mt-4 text-2xl font-light text-gray-300">
           Transform your writing into beautiful visuals to publish on your blog,
-          newsletter, book, or more.
+          your novel, and more.
         </h2>
-        <Link className="text-white" to={route("/create")}>
+        <Link className="background-animated text-white" to={route("/create")}>
           Create your first image 🪄
         </Link>
       </div>

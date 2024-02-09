@@ -15,6 +15,7 @@ declare module "routes-gen" {
     "/my/settings": Record<string, never>;
     "/my/words": Record<string, never>;
     "/my/words/:projectId": { "projectId": string };
+    "/my/words/:projectId/images/:imageId": { "projectId": string, "imageId": string };
   };
 
   export function route<
@@ -34,5 +35,6 @@ declare module "routes-gen" {
       | ["/my/settings"]
       | ["/my/words"]
       | ["/my/words/:projectId", RouteParams["/my/words/:projectId"]]
+      | ["/my/words/:projectId/images/:imageId", RouteParams["/my/words/:projectId/images/:imageId"]]
   >(...args: T): typeof args[0];
 }
