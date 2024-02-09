@@ -4,7 +4,7 @@ import { Queue, Worker } from "bullmq"
 
 import redis from "~/helpers/redis.server"
 
-export interface RegisteredQueue {
+export type RegisteredQueue = {
   queue: Queue
   worker: Worker
 }

@@ -60,7 +60,7 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     await auth.authenticate("email-password", request, {
       context: { formData },
-      successRedirect: "/create",
+      successRedirect: "/my/words",
       throwOnError: true,
     })
   } catch (error) {

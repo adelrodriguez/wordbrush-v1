@@ -28,6 +28,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const project = await db.project.findFirstOrThrow({
     include: {
       images: {
+        orderBy: { createdAt: "desc" },
         select: {
           id: true,
           publicUrl: true,

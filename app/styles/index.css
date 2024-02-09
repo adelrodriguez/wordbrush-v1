@@ -13,3 +13,37 @@ body {
     "Helvetica Neue",
     sans-serif;
 }
+
+.background-animated {
+  animation: animated-background 6s ease infinite reverse;
+  background: -webkit-linear-gradient(60deg, #680aca, #ff897e);
+  background: linear-gradient(
+    60deg,
+    #f79533,
+    #f37055,
+    #ef4e7b,
+    #a166ab,
+    #5073b8,
+    #1098ad,
+    #07b39b,
+    #6fba82
+  );
+  background-position: 0% 0%;
+  background-size: 240% 240%;
+}
+
+@keyframes animated-background {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.background-animated:hover {
+  animation-duration: 2s;
+}
