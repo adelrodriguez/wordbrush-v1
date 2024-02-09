@@ -16,14 +16,10 @@ import { zx } from "zodix"
 import env from "~/config/env.server"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import ai from "~/services/openai.server"
-import { generatePrompt, getImageSize } from "~/utils/ai"
+import createDalle3ImageQueue from "~/helpers/queues/create-dalle-3-image.server"
+import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
 import { getSavedText, removeSavedText } from "~/utils/text"
-import {
-  convertBase64StringToBuffer,
-  uploadBuffer,
-} from "~/utils/upload.server"
 
 const schema = z.object({
   text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
@@ -101,38 +97,26 @@ export async function action({ params, request }: ActionFunctionArgs) {
   // Summarizing (probably using GPT-3.5, better done when creating the project)
   // Generating art style recommendations (done when creating the project)
   // Generating mood recommendations (done when creating the project)
-
-  const response = await ai.images.generate({
-    model: "dall-e-3",
-    prompt,
-    quality: "standard",
-    response_format: "b64_json",
-    size: getImageSize(template.aspectRatio),
-    user: user.id,
+  const image = await db.image.create({
+    data: {
+      bucket: env.STORAGE_BUCKET,
+      projectId: project.id,
+      service: StorageService.R2,
+      templateId: template.id,
+    },
   })
 
-  const image = response.data[0]
-  const filename = Date.now() + ".png"
+  const job = await createDalle3ImageQueue.add(image.id, {
+    imageId: image.id,
+    prompt,
+    templateId: template.id,
+    userId: user.id,
+  })
 
-  if (image?.b64_json) {
-    const buffer = convertBase64StringToBuffer(image.b64_json)
-    const url = await uploadBuffer(buffer, {
-      contentType: "image/png",
-      key: `${user.id}/${project.id}/${filename}`,
-    })
-
-    await db.image.create({
-      data: {
-        bucket: env.STORAGE_BUCKET,
-        projectId: project.id,
-        prompt: image.revised_prompt ?? prompt,
-        publicUrl: `${env.CLOUDFLARE_R2_PUBLIC_URL}/${user.id}/${project.id}/${filename}`,
-        service: StorageService.R2,
-        templateId: template.id,
-        url: url ?? "",
-      },
-    })
-  }
+  await db.image.update({
+    data: { jobId: job.id },
+    where: { id: image.id },
+  })
 
   await db.project.update({
     data: { status: "Submitted" },

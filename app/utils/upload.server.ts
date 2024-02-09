@@ -1,16 +1,11 @@
 import { PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
 import { UploadHandler, writeAsyncIterableToWritable } from "@remix-run/node"
-import { Buffer } from "node:buffer"
 import { PassThrough } from "node:stream"
 
 import env from "~/config/env.server"
 import s3 from "~/services/s3.server"
 import { parseFilename } from "~/utils/file"
-
-export function convertBase64StringToBuffer(s: string): Buffer {
-  return Buffer.from(s, "base64")
-}
 
 export async function uploadBuffer(
   b: Buffer,

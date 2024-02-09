@@ -12,6 +12,9 @@ const EnvSchema = z.object({
   OPENAI_API_KEY: z.string(),
   OPENAI_ORG_ID: z.string(),
 
+  // Redis
+  REDIS_URL: z.string(),
+
   // Session
   SESSION_SECRET: z.string(),
 

@@ -8,7 +8,6 @@ import {
 } from "@remix-run/node"
 import { Form, Link, useActionData } from "@remix-run/react"
 import { AuthorizationError } from "remix-auth"
-import { route } from "routes-gen"
 import { z } from "zod"
 
 import auth from "~/helpers/auth.server"
@@ -59,12 +58,18 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   try {
-    return await auth.authenticate("email-password", request, {
+    await auth.authenticate("email-password", request, {
       context: { formData },
       successRedirect: "/create",
       throwOnError: true,
     })
   } catch (error) {
+    // Because redirects work by throwing a Response, you need to check if the
+    // caught error is a response and return it or throw it again
+    if (error instanceof Response) throw error
+
+    // This is an authorization error, which means the user's credentials were
+    // invalid
     if (error instanceof AuthorizationError) {
       return json(
         submission.reply({
@@ -76,7 +81,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
   }
 
-  return redirect(route("/login") + "?error=true")
+  return null
 }
 
 export default function Route() {

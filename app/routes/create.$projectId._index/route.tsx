@@ -139,7 +139,6 @@ export default function Route() {
   const [form, fields] = useForm({
     defaultValue: {
       intendedUse: project.intendedUse,
-      name: project.name || "",
       text,
     },
     lastResult,
@@ -175,6 +174,7 @@ export default function Route() {
             placeholder="Untitled"
           />
         </div>
+        {fields.name.errors}
       </div>
       <div className="rounded-xl bg-slate-800 p-6">
         <label

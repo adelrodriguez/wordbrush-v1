@@ -57,6 +57,7 @@ module.exports = {
       },
       plugins: ["@typescript-eslint", "import"],
       rules: {
+        "@typescript-eslint/consistent-type-definitions": ["error", "type"],
         "@typescript-eslint/no-throw-literal": "off",
         "@typescript-eslint/prefer-promise-reject-errors": "off",
       },

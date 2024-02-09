@@ -9,3 +9,6 @@ node_modules
 /prisma/dev.db-journal
 
 .DS_Store
+
+/postgres-data
+/redis-data
