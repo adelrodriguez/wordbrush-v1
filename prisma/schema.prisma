@@ -32,8 +32,8 @@ model Password {
 }
 
 enum IntendedUse {
-  Personal
-  Blog
+  PersonalBlog
+  CompanyBlog
   Newsletter
   SocialMedia
   BookCover

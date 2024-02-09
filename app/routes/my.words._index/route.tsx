@@ -9,7 +9,7 @@ import { zx } from "zodix"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { unauthorized } from "~/utils/http.server"
-import { getIntendedUseIcon } from "~/utils/project"
+import { getIntendedUseIcon, getIntendedUseLabel } from "~/utils/project"
 import { RouteHandle } from "~/utils/remix"
 
 export const handle: RouteHandle = {
@@ -100,7 +100,7 @@ export default function Route() {
                         project.intendedUse,
                         "mr-1 inline-block h-4 w-4",
                       )}
-                      <span>{project.intendedUse}</span>
+                      <span>{getIntendedUseLabel(project.intendedUse)}</span>
                     </div>
                     <div className="text-xs font-light">
                       {project._count.images === 0 ? null : (

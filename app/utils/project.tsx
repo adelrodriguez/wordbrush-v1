@@ -16,9 +16,9 @@ export function getIntendedUseIcon(
   className?: string,
 ) {
   switch (intendedUse) {
-    case IntendedUse.Personal:
+    case IntendedUse.PersonalBlog:
       return <PencilIcon className={className} />
-    case IntendedUse.Blog:
+    case IntendedUse.CompanyBlog:
       return <BuildingOfficeIcon className={className} />
     case IntendedUse.BookCover:
       return <BookOpenIcon className={className} />
@@ -36,5 +36,30 @@ export function getIntendedUseIcon(
       return <PhotoIcon className={className} />
     default:
       return null
+  }
+}
+
+export function getIntendedUseLabel(intendedUse: IntendedUse) {
+  switch (intendedUse) {
+    case IntendedUse.PersonalBlog:
+      return "Personal Blog"
+    case IntendedUse.CompanyBlog:
+      return "Company Blog"
+    case IntendedUse.BookCover:
+      return "Book Cover"
+    case IntendedUse.BookInterior:
+      return "Book Interior"
+    case IntendedUse.SocialMedia:
+      return "Social Media"
+    case IntendedUse.Newsletter:
+      return "Newsletter"
+    case IntendedUse.PodcastCover:
+      return "Podcast Cover"
+    case IntendedUse.PodcastEpisode:
+      return "Podcast Episode"
+    case IntendedUse.Other:
+      return "Other"
+    default:
+      return "Unknown"
   }
 }

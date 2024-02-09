@@ -21,6 +21,7 @@ import { zx } from "zodix"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden } from "~/utils/http.server"
+import { getIntendedUseLabel } from "~/utils/project"
 import { getSavedText, saveText } from "~/utils/text"
 
 const schema = z.object({
@@ -217,7 +218,7 @@ export default function Route() {
                   }
                 />
                 <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                  {intendedUse}
+                  {getIntendedUseLabel(intendedUse as IntendedUse)}
                 </label>
               </div>
             ))}

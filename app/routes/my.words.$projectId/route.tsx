@@ -1,5 +1,5 @@
 import { ProjectStatus } from "@prisma/client"
-import { LoaderFunctionArgs, defer, json } from "@remix-run/node"
+import { LoaderFunctionArgs, defer, json, redirect } from "@remix-run/node"
 import { Await, Link, useLoaderData } from "@remix-run/react"
 import { Suspense } from "react"
 import { route } from "routes-gen"
@@ -43,6 +43,10 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       user,
     },
   })
+
+  if (project.status === ProjectStatus.Draft) {
+    return redirect(route("/create/:projectId", { projectId }))
+  }
 
   // Fetch the pending image. We only fetch the first image since it's unlikely
   // that a user might have more than one image, since it will be created by AI

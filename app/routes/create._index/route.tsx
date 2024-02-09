@@ -1,3 +1,4 @@
+import { IntendedUse } from "@prisma/client"
 import { LoaderFunctionArgs, redirect } from "@remix-run/node"
 import { route } from "routes-gen"
 
@@ -16,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (user) {
     const project = await db.project.create({
       data: {
-        intendedUse: "Personal",
+        intendedUse: IntendedUse.PersonalBlog,
         name: "Untitled Project",
         userId: user.id,
       },
