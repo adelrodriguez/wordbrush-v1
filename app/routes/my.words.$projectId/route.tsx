@@ -8,7 +8,7 @@ import {
   useLoaderData,
 } from "@remix-run/react"
 import clsx from "clsx"
-import { Suspense, useState } from "react"
+import { Suspense } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -21,6 +21,8 @@ import { createDalle3ImageQueue } from "~/helpers/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
 import { getQueueEvents } from "~/utils/job.server"
 import { getSavedText } from "~/utils/text"
+
+import Text from "./Text"
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { projectId } = zx.parseParams(
@@ -190,108 +192,73 @@ export default function Route() {
   )
 
   return (
-    <div className="flex flex-col lg:block">
-      <div
-        className={clsx(
-          "inset relative flex flex-col gap-y-4 py-10 lg:px-10 lg:py-6",
-          "lg:fixed lg:bottom-0 lg:left-20 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-r lg:border-gray-200",
-        )}
-      >
-        <h1 className="text-3xl font-bold">{project.name}</h1>
-        <div>
-          <h2 className="mb-1 text-xs text-gray-500">Your text</h2>
-          <div className="text-sm">
-            <Text content={text} />
+    <>
+      <div className="flex flex-col lg:block">
+        <div
+          className={clsx(
+            "inset relative flex flex-col gap-y-4 py-10 lg:px-10 lg:py-6",
+            "lg:fixed lg:bottom-0 lg:left-20 lg:top-16 lg:w-96 lg:overflow-y-auto lg:border-r lg:border-gray-200",
+          )}
+        >
+          <h1 className="text-3xl font-bold">{project.name}</h1>
+          <div>
+            <h2 className="mb-1 text-xs text-gray-500">Your text</h2>
+            <div className="text-sm">
+              <Text content={text} />
+            </div>
           </div>
+
+          <Form className="flex justify-center" method="POST">
+            <button
+              className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full"
+              type="submit"
+            >
+              Create a new image ✨
+            </button>
+          </Form>
         </div>
 
-        <Form className="flex justify-center" method="POST">
-          <button
-            className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full"
-            type="submit"
-          >
-            Create a new image ✨
-          </button>
-        </Form>
-      </div>
-
-      <div className="lg:pl-96">
-        <ul className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-          {groupedImages.map((images, index) => (
-            <div className="flex flex-col gap-6" key={`group${index}`}>
-              {images.map(
-                (image) =>
-                  image.publicUrl && (
-                    <GeneratedImage
-                      id={image.id}
-                      key={image.id}
-                      projectId={project.id}
-                      src={image.publicUrl}
-                    />
-                  ),
-              )}
-            </div>
-          ))}
-
-          <Suspense
-            fallback={
-              <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
-                <Spinner className="h-5 w-5 text-gray-400" />
+        <div className="lg:pl-96">
+          <ul className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+            {groupedImages.map((images, index) => (
+              <div className="flex flex-col gap-6" key={`group${index}`}>
+                {images.map(
+                  (image) =>
+                    image.publicUrl && (
+                      <GeneratedImage
+                        id={image.id}
+                        key={image.id}
+                        projectId={project.id}
+                        src={image.publicUrl}
+                      />
+                    ),
+                )}
               </div>
-            }
-          >
-            <Await resolve={pendingImage}>
-              {(resolved) =>
-                resolved?.image.publicUrl && (
-                  <GeneratedImage
-                    id={resolved.image.id}
-                    projectId={project.id}
-                    src={resolved.image.publicUrl}
-                  />
-                )
+            ))}
+
+            <Suspense
+              fallback={
+                <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
+                  <Spinner className="h-5 w-5 text-gray-400" />
+                </div>
               }
-            </Await>
-          </Suspense>
-        </ul>
+            >
+              <Await resolve={pendingImage}>
+                {(resolved) =>
+                  resolved?.image.publicUrl && (
+                    <GeneratedImage
+                      id={resolved.image.id}
+                      projectId={project.id}
+                      src={resolved.image.publicUrl}
+                    />
+                  )
+                }
+              </Await>
+            </Suspense>
+          </ul>
+        </div>
       </div>
       <Outlet />
-    </div>
-  )
-}
-
-function Text({ content }: { content: string | null }) {
-  const [collapsed, setCollapsed] = useState(true)
-
-  if (!content) {
-    return (
-      <div className="py-10 text-center text-red-500">
-        No text available. This might happen if you have cleared your browser
-        storage.
-      </div>
-    )
-  }
-
-  const isCollapsible = content.length > 200
-  const displayContent = collapsed ? content.slice(0, 200) : content
-
-  return (
-    <div className="text-">
-      {displayContent.split("\n").map((t, i) => (
-        <p className="mb-2" key={i}>
-          {t}
-        </p>
-      ))}
-      {isCollapsible && collapsed && <p>...</p>}
-      {isCollapsible && (
-        <button
-          className={"text-xs hover:underline"}
-          onClick={() => {
-            setCollapsed(!collapsed)
-          }}
-        >
-          {collapsed ? "Show more" : "Show less"}
-        </button>
-      )}
-    </div>
+    </>
   )
 }

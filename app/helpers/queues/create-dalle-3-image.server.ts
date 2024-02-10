@@ -50,6 +50,7 @@ const processor: Processor<QueueData> = async (job) => {
 
   const buffer = Buffer.from(image.b64_json, "base64")
   const url = await uploadBuffer(buffer, {
+    contentDisposition: "attachment; filename=" + filename,
     contentType: "image/png",
     key: `${userId}/${template.projectId}/${filename}`,
   })
