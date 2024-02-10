@@ -4,13 +4,19 @@ import {
   DocumentDuplicateIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline"
-import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node"
 import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react"
 import { Fragment, useState } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { notFound } from "~/utils/http.server"
 
@@ -43,6 +49,53 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   return json({ image })
+}
+
+export async function action({ params, request }: ActionFunctionArgs) {
+  const { imageId, projectId } = zx.parseParams(
+    params,
+    z.object({ imageId: z.string(), projectId: z.string() }),
+  )
+
+  const user = await auth.isAuthenticated(request, {
+    failureRedirect: "/login",
+  })
+
+  const project = await db.project.findUnique({
+    where: { id: projectId, userId: user.id },
+  })
+
+  if (!project) {
+    throw notFound()
+  }
+
+  const image = await db.image.findUnique({
+    select: { template: true },
+    where: { id: imageId, projectId },
+  })
+
+  if (!image) {
+    throw notFound()
+  }
+
+  const template = await db.template.create({
+    data: {
+      artStyleId: image.template.artStyleId,
+      aspectRatio: image.template.aspectRatio,
+      detail: image.template.detail,
+      exclude: image.template.exclude,
+      keyElements: image.template.keyElements,
+      mood: image.template.mood,
+      projectId,
+    },
+  })
+
+  return redirect(
+    route("/create/:projectId/brush/:templateId", {
+      projectId,
+      templateId: template.id,
+    }),
+  )
 }
 
 export default function Route() {
@@ -106,36 +159,38 @@ export default function Route() {
                   src={image.publicUrl ?? undefined}
                 />
 
-                <div className="flex items-center justify-between p-6">
-                  <div>
-                    <h2 className="mb-1 text-lg font-semibold text-gray-600">
+                <div className="flex items-start justify-between p-6">
+                  <div className="flex flex-col gap-y-0.5">
+                    <h2 className="pb-1 text-lg font-semibold text-gray-600">
                       {image.template.artStyle?.name}
                     </h2>
                     <p className="text-sm text-gray-500">
-                      <span className="font-bold">Aspect Ratio: </span>
+                      <span className="font-semibold">Aspect Ratio: </span>
                       {image.template.aspectRatio} •{" "}
-                      <span className="font-bold">Detail Level:</span>{" "}
+                      <span className="font-semibold">Detail Level:</span>{" "}
                       {image.template.detail}
                       {image.template.mood && (
                         <>
                           {" "}
-                          • <span className="font-bold">Mood:</span>{" "}
+                          • <span className="font-semibold">Mood:</span>{" "}
                           {image.template.mood}
                         </>
                       )}
                     </p>
                     {image.template.keyElements && (
-                      <p className="text-sm font-bold text-gray-500">
-                        Key Elements: {image.template.keyElements}
+                      <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Key Elements:</span>{" "}
+                        {image.template.keyElements}
                       </p>
                     )}
                     {image.template.exclude && (
-                      <p className="text-sm font-bold text-gray-500">
-                        Exclude: {image.template.exclude}
+                      <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Exclude:</span>{" "}
+                        {image.template.exclude}
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center gap-x-4">
+                  <div className="flex gap-x-4">
                     <Form className="flex items-center" method="POST">
                       <button
                         className="rounded-md bg-gray-600 p-2 hover:bg-gray-500"
