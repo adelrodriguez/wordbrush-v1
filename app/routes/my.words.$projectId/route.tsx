@@ -135,7 +135,17 @@ export async function action({ params, request }: LoaderFunctionArgs) {
     throw forbidden()
   }
 
-  const template = await db.template.create({ data: { projectId } })
+  // Find any unused templates
+  let template = await db.template.findFirst({
+    where: {
+      images: { none: {} },
+      projectId,
+    },
+  })
+
+  if (!template) {
+    template = await db.template.create({ data: { projectId } })
+  }
 
   return redirect(
     route("/create/:projectId/brush/:templateId", {
@@ -230,22 +240,6 @@ export default function Route() {
 
         <div className="lg:pl-96">
           <ul className="grid grid-cols-2 gap-6 lg:grid-cols-4">
-            {groupedImages.map((images, index) => (
-              <div className="flex flex-col gap-6" key={`group${index}`}>
-                {images.map(
-                  (image) =>
-                    image.publicUrl && (
-                      <GeneratedImage
-                        id={image.id}
-                        key={image.id}
-                        projectId={project.id}
-                        src={image.publicUrl}
-                      />
-                    ),
-                )}
-              </div>
-            ))}
-
             <Suspense
               fallback={
                 <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
@@ -265,6 +259,22 @@ export default function Route() {
                 }
               </Await>
             </Suspense>
+
+            {groupedImages.map((images, index) => (
+              <div className="flex flex-col gap-6" key={`group${index}`}>
+                {images.map(
+                  (image) =>
+                    image.publicUrl && (
+                      <GeneratedImage
+                        id={image.id}
+                        key={image.id}
+                        projectId={project.id}
+                        src={image.publicUrl}
+                      />
+                    ),
+                )}
+              </div>
+            ))}
           </ul>
         </div>
       </div>
