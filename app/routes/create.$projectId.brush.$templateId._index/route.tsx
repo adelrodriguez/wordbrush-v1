@@ -21,17 +21,8 @@ import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden, notFound } from "~/utils/http.server"
 
-const clientSchema = z.object({
+const schema = z.object({
   artStyleId: z.string(),
-  aspectRatio: z.nativeEnum(AspectRatio),
-  detail: z.number().optional(),
-})
-
-const serverSchema = z.object({
-  artStyleId: z.string().refine(async (value) => {
-    const artStyle = await db.artStyle.count({ where: { id: value } })
-    return artStyle > 0
-  }),
   aspectRatio: z.nativeEnum(AspectRatio),
   detail: z.number().optional(),
 })
@@ -74,7 +65,19 @@ export async function action({ params, request }: ActionFunctionArgs) {
   const formData = await request.formData()
   const submission = await parseWithZod(formData, {
     async: true,
-    schema: serverSchema,
+    schema: schema.superRefine(async (value, context) => {
+      const artStyle = await db.artStyle.count({
+        where: { id: value.artStyleId },
+      })
+
+      if (artStyle === 0) {
+        context.addIssue({
+          code: "custom",
+          message: "Art style not found",
+          path: ["artStyleId"],
+        })
+      }
+    }),
   })
 
   if (submission.status !== "success") {
@@ -124,8 +127,7 @@ export default function Route() {
   const [form, fields] = useForm({
     defaultValue: template,
     lastResult,
-    onValidate: ({ formData }) =>
-      parseWithZod(formData, { schema: clientSchema }),
+    onValidate: ({ formData }) => parseWithZod(formData, { schema: schema }),
   })
 
   return (

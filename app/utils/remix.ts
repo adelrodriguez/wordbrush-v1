@@ -1,3 +1,5 @@
+import { UIMatch } from "@remix-run/react"
+
 /**
  * Used to define the handle for a route.
  */
@@ -12,3 +14,5 @@ export type RouteHandle = {
    */
   search?: boolean
 }
+
+export type Match = UIMatch<unknown, RouteHandle | undefined>

@@ -13,7 +13,6 @@ import {
   Link,
   NavLink,
   Outlet,
-  UIMatch,
   useLoaderData,
   useMatches,
 } from "@remix-run/react"
@@ -23,7 +22,7 @@ import { useDebounceSubmit } from "remix-utils/use-debounce-submit"
 import { route } from "routes-gen"
 
 import auth from "~/helpers/auth.server"
-import { RouteHandle } from "~/utils/remix"
+import { Match } from "~/utils/remix"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await auth.isAuthenticated(request, {
@@ -51,8 +50,6 @@ const userNavigation = [
   { href: route("/my/profile"), name: "Your profile" },
   { href: route("/logout"), name: "Sign out" },
 ]
-
-type Match = UIMatch<unknown, RouteHandle | undefined>
 
 export default function Route() {
   const { user } = useLoaderData<typeof loader>()
@@ -280,7 +277,7 @@ export default function Route() {
                     {userNavigation.map((item) => (
                       <Menu.Item key={item.name}>
                         <Link
-                          className="ui-active:bg-gray-50 block px-3 py-1 text-sm leading-6 text-gray-900"
+                          className="block px-3 py-1 text-sm leading-6 text-gray-900 ui-active:bg-gray-50"
                           to={item.href}
                         >
                           {item.name}

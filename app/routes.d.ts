@@ -16,6 +16,8 @@ declare module "routes-gen" {
     "/my/words": Record<string, never>;
     "/my/words/:projectId": { "projectId": string };
     "/my/words/:projectId/images/:imageId": { "projectId": string, "imageId": string };
+    "/register": Record<string, never>;
+    "/verify": Record<string, never>;
   };
 
   export function route<
@@ -36,5 +38,7 @@ declare module "routes-gen" {
       | ["/my/words"]
       | ["/my/words/:projectId", RouteParams["/my/words/:projectId"]]
       | ["/my/words/:projectId/images/:imageId", RouteParams["/my/words/:projectId/images/:imageId"]]
+      | ["/register"]
+      | ["/verify"]
   >(...args: T): typeof args[0];
 }

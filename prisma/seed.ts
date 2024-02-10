@@ -1,6 +1,7 @@
 import { Category, PrismaClient } from "@prisma/client"
-import bcrypt from "bcrypt"
 import fs from "node:fs"
+
+import { hashPassword } from "~/utils/auth.server"
 
 const db = new PrismaClient()
 
@@ -14,7 +15,7 @@ async function generateUsers() {
       email: "hello@adelrodriguez.com",
       password: {
         create: {
-          hash: await bcrypt.hash("password", 10),
+          hash: await hashPassword("password"),
         },
       },
     },
