@@ -208,14 +208,24 @@ export default function Route() {
             </div>
           </div>
 
-          <Form className="flex justify-center" method="POST">
+          {text ? (
+            <Form className="flex justify-center" method="POST">
+              <button
+                className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full"
+                type="submit"
+              >
+                Create a new image ✨
+              </button>
+            </Form>
+          ) : (
             <button
-              className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full"
+              className="w-full max-w-96 rounded-md bg-gray-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white hover:bg-gray-300 lg:w-full"
+              disabled
               type="submit"
             >
-              Create a new image ✨
+              Can&apos;t create a new image without text
             </button>
-          </Form>
+          )}
         </div>
 
         <div className="lg:pl-96">
