@@ -1,8 +1,6 @@
 import { Category, PrismaClient } from "@prisma/client"
 import fs from "node:fs"
 
-import { hashPassword } from "~/utils/auth.server"
-
 const db = new PrismaClient()
 
 async function seed() {
@@ -13,11 +11,6 @@ async function generateUsers() {
   await db.user.create({
     data: {
       email: "hello@adelrodriguez.com",
-      password: {
-        create: {
-          hash: await hashPassword("password"),
-        },
-      },
     },
   })
 }

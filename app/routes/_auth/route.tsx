@@ -1,11 +1,6 @@
-import { Outlet, useMatches } from "@remix-run/react"
-
-import { Match } from "~/utils/remix"
+import { Outlet } from "@remix-run/react"
 
 export default function Route() {
-  const matches = useMatches() as Match[]
-  const currentMatch = matches[matches.length - 1]
-
   return (
     <>
       <div className="flex min-h-full flex-1">
@@ -18,9 +13,7 @@ export default function Route() {
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               />
               <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                {currentMatch?.pathname === "/login"
-                  ? "Sign in to your account"
-                  : "Create an account"}{" "}
+                Sign in to your account
               </h2>
             </div>
 

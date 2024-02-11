@@ -3,10 +3,12 @@ import { z } from "zod"
 const EnvSchema = z.object({
   // Cloudflare
   CLOUDFLARE_ACCOUNT_ID: z.string(),
-  CLOUDFLARE_R2_PUBLIC_URL: z.string(),
 
+  CLOUDFLARE_R2_PUBLIC_URL: z.string(),
   // Database
   DATABASE_URL: z.string(),
+
+  ENCRYPTION_SECRET: z.string(),
 
   // OpenAI
   OPENAI_API_KEY: z.string(),
@@ -14,6 +16,9 @@ const EnvSchema = z.object({
 
   // Redis
   REDIS_URL: z.string(),
+
+  // Resend
+  RESEND_API_KEY: z.string(),
 
   // Session
   SESSION_SECRET: z.string(),

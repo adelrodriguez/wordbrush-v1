@@ -1,39 +1,43 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  json,
-  redirect,
-} from "@remix-run/node"
-import { Form, Link, useActionData } from "@remix-run/react"
-import { AuthorizationError } from "remix-auth"
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
+import { Form, useActionData, useLoaderData } from "@remix-run/react"
+import clsx from "clsx"
 import { route } from "routes-gen"
 import { z } from "zod"
 
+import Alert from "~/components/Alert"
 import auth from "~/helpers/auth.server"
+import { commitSession, getSession } from "~/helpers/session.server"
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  email: z.string().email("Please enter a valid email address."),
 })
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // TODO(adelrodriguez): Check for error=true in the query string and display
-  // an error message
-  const user = await auth.isAuthenticated(request)
+  await auth.isAuthenticated(request, {
+    successRedirect: route("/my"),
+  })
 
-  if (user) {
-    return redirect("/my")
-  }
+  const cookie = await getSession(request.headers.get("Cookie"))
+  const authEmail = cookie.get("auth:email") as string
+  const authError = cookie.get(auth.sessionErrorKey) as {
+    message: string
+  } | null
 
-  return null
+  return json(
+    { authEmail, authError },
+    {
+      headers: {
+        "set-cookie": await commitSession(cookie),
+      },
+    },
+  )
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData()
-  const submission = await parseWithZod(formData, {
-    async: true,
+  const formData = await request.clone().formData()
+  const submission = parseWithZod(formData, {
     schema,
   })
 
@@ -41,43 +45,31 @@ export async function action({ request }: ActionFunctionArgs) {
     return json(submission.reply())
   }
 
-  try {
-    await auth.authenticate("email-password", request, {
-      context: { formData },
-      successRedirect: "/my/words",
-      throwOnError: true,
-    })
-  } catch (error) {
-    // Because redirects work by throwing a Response, you need to check if the
-    // caught error is a response and return it or throw it again
-    if (error instanceof Response) throw error
-
-    // This is an authorization error, which means the user's credentials were
-    // invalid
-    if (error instanceof AuthorizationError) {
-      return json(
-        submission.reply({
-          fieldErrors: {
-            password: ["The email or password you entered is incorrect."],
-          },
-        }),
-      )
-    }
-  }
-
-  return null
+  return await auth.authenticate("TOTP", request, {
+    context: { formData },
+    failureRedirect: route("/login"),
+    successRedirect: route("/verify"),
+  })
 }
 
 export default function Route() {
+  const { authEmail, authError } = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
+    defaultValue: { email: authEmail },
     lastResult,
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
     shouldRevalidate: "onBlur",
   })
 
+  // TODO(adelrodriguez): Add alert component
   return (
-    <>
+    <div className="flex flex-col gap-y-2">
+      {authError && (
+        <Alert title="There was an error" type="error">
+          {authError.message}
+        </Alert>
+      )}
       <Form
         {...getFormProps(form)}
         action="#"
@@ -98,39 +90,16 @@ export default function Route() {
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               required
             />
-            <div className="mt-2 text-xs text-red-500">
-              {fields.email.errors}
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between">
-            <label
-              className="block text-sm font-medium leading-6 text-gray-900"
-              htmlFor="password"
+            <p
+              className={clsx(
+                "mt-2 text-sm ",
+                fields.email.errors ? "text-red-500" : "text-gray-500",
+              )}
             >
-              Password
-            </label>
-            <div className="text-sm">
-              <Link
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-                to="#"
-              >
-                Forgot password?
-              </Link>
-            </div>
-          </div>
-          <div className="mt-2">
-            <input
-              {...getInputProps(fields.password, { type: "password" })}
-              autoComplete="current-password"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              required
-            />
-            <div className="mt-2 text-xs text-red-500">
-              {fields.password.errors}
-            </div>
+              {fields.email.errors
+                ? fields.email.errors
+                : "We'll send a code to this email address to verify your identity."}
+            </p>
           </div>
         </div>
 
@@ -143,16 +112,6 @@ export default function Route() {
           </button>
         </div>
       </Form>
-
-      <p className="mt-10 text-center text-sm text-gray-500">
-        Not a member?{" "}
-        <Link
-          className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          to={route("/register")}
-        >
-          Register now
-        </Link>
-      </p>
-    </>
+    </div>
   )
 }

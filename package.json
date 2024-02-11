@@ -32,7 +32,6 @@
     "@remix-run/node": "2.6.0",
     "@remix-run/react": "2.6.0",
     "@remix-run/serve": "2.6.0",
-    "bcrypt": "5.1.1",
     "bullmq": "5.1.9",
     "clsx": "^2.1.0",
     "date-fns": "3.3.1",
@@ -43,8 +42,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "remix-auth": "3.6.0",
-    "remix-auth-form": "1.4.0",
+    "remix-auth-totp": "2.0.0",
     "remix-utils": "^7.5.0",
+    "resend": "3.1.0",
     "routes-gen": "0.6.1",
     "zod": "3.22.4",
     "zodix": "^0.4.4"

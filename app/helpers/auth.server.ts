@@ -1,42 +1,54 @@
 import { User } from "@prisma/client"
-import bcrypt from "bcrypt"
 import { Authenticator } from "remix-auth"
-import { FormStrategy } from "remix-auth-form"
+import { TOTPStrategy } from "remix-auth-totp"
 
+import env from "~/config/env.server"
 import db from "~/helpers/db.server"
 import sessionStorage from "~/helpers/session.server"
+import resend from "~/services/resend.server"
 
 const auth = new Authenticator<User>(sessionStorage)
 
 auth.use(
-  new FormStrategy(async ({ form }) => {
-    // We assume the email and the password have already been validated
+  new TOTPStrategy(
+    {
+      createTOTP: async (data, expiresAt) => {
+        await db.totp.create({ data: { ...data, expiresAt } })
+        // TODO(adelrodriguez): Remove expired TOTPs
+      },
+      readTOTP: async (hash) => {
+        return db.totp.findUnique({ where: { hash } })
+      },
+      secret: env.ENCRYPTION_SECRET,
+      sendTOTP: async ({ code, email, magicLink }) => {
+        await resend.emails.send({
+          from: "no-reply@wordbrush.art",
+          html: `<a href="${magicLink}">Click here to sign in</a>. Your code is: ${code}`,
+          subject: "Sign in to Wordbrush 🎨",
+          to: email,
+        })
+      },
+      updateTOTP: async (hash, data, expiresAt) => {
+        await db.totp.update({ data: { ...data, expiresAt }, where: { hash } })
+      },
+    },
+    async ({ email }) => {
+      const user = await db.user.upsert({
+        create: {
+          email,
+          isVerified: true,
+          lastLoginAt: new Date(),
+        },
+        update: {
+          lastLoginAt: new Date(),
+        },
+        where: { email },
+      })
 
-    const email = form.get("email") as string
-    const password = form.get("password") as string
-
-    const user = await db.user.findUnique({
-      include: { password: true },
-      where: { email },
-    })
-
-    if (!user) {
-      throw new Error("User not found")
-    }
-
-    if (!user.password) {
-      throw new Error("Password not found")
-    }
-
-    const passwordMatch = await bcrypt.compare(password, user.password.hash)
-
-    if (!passwordMatch) {
-      throw new Error("Password does not match")
-    }
-
-    return user
-  }),
-  "email-password",
+      return user
+    },
+  ),
+  "TOTP",
 )
 
 export default auth
