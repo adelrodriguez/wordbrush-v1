@@ -18,10 +18,10 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import IntendedUsePicker from "~/components/IntendedUserPicker"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden } from "~/utils/http.server"
-import { getIntendedUseLabel } from "~/utils/project"
 import { getSavedText, saveText } from "~/utils/text"
 
 const schema = z.object({
@@ -140,6 +140,7 @@ export default function Route() {
   const [form, fields] = useForm({
     defaultValue: {
       intendedUse: project.intendedUse,
+      name: project.name === "Untitled Project" ? "" : project.name,
       text,
     },
     lastResult,
@@ -193,38 +194,9 @@ export default function Route() {
         </div>
       </div>
       <div>
-        <label
-          className="text-base font-semibold text-gray-900"
-          htmlFor={fields.intendedUse.id}
-        >
-          Intended Use
-        </label>
-        <p className="text-sm text-gray-500">
-          Where are you publishing this story?
-        </p>
-        <fieldset className="mt-4">
-          <legend className="sr-only">Intended use</legend>
-          <div className="space-y-4">
-            {Object.keys(IntendedUse).map((intendedUse) => (
-              <div className="flex items-center" key={intendedUse}>
-                <input
-                  {...getInputProps(fields.intendedUse, {
-                    type: "radio",
-                    value: intendedUse,
-                  })}
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  defaultChecked={
-                    fields.intendedUse.initialValue === intendedUse
-                  }
-                />
-                <label className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                  {getIntendedUseLabel(intendedUse as IntendedUse)}
-                </label>
-              </div>
-            ))}
-            <div>{fields.intendedUse.errors}</div>
-          </div>
-        </fieldset>
+        <IntendedUsePicker
+          {...getInputProps(fields.intendedUse, { type: "text" })}
+        />
       </div>
 
       <button
