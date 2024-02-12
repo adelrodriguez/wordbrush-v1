@@ -1,6 +1,7 @@
 import { RadioGroup, Tab } from "@headlessui/react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
+import { Tooltip } from "@nextui-org/react"
 import { ArtStyle, Category } from "@prisma/client"
 import { ComponentPropsWithoutRef } from "react"
 
@@ -82,8 +83,17 @@ export default function ArtStylePicker({
                               className="block text-sm font-medium text-gray-900"
                             >
                               {option.name}
+
+                              <Tooltip
+                                content={option.description}
+                                showArrow
+                                size="sm"
+                                placement="bottom"
+                                className="w-56 bg-gray-700 p-4 text-white"
+                              >
+                                <InformationCircleIcon className="ml-1 inline-block h-4 w-4 text-gray-900" />
+                              </Tooltip>
                             </RadioGroup.Label>
-                            <InformationCircleIcon className="ml-1 h-4 w-4 text-gray-900" />
                           </span>
                         </span>
                         <CheckCircleIcon
