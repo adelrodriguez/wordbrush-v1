@@ -7,7 +7,7 @@ export default function Spinner({
 }) {
   return (
     <svg
-      className={clsx("-ml-1 mr-3 animate-spin", className)}
+      className={clsx("animate-spin", className)}
       fill="none"
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"

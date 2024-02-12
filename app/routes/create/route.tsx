@@ -8,7 +8,7 @@ export const meta: MetaFunction = () => [
 
 export default function Route() {
   return (
-    <main className="mx-auto max-w-2xl">
+    <main className="mx-auto flex max-w-2xl justify-start">
       <Outlet />
     </main>
   )

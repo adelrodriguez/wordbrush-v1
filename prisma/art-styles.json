@@ -580,5 +580,71 @@
     "description": "A form of artistic meditation that delivers clarity, relaxation, and satisfaction. It involves creating repetitive patterns and designs, often resulting in intricate artworks.",
     "keywords": ["Patterns", "Meditation", "Intricate", "Relaxation", "Design"],
     "name": "Zen Doodle"
+  },
+  {
+    "category": "Nature",
+    "description": "Focuses on capturing the beauty of natural landscapes, emphasizing light, composition, and scale to present the environment in its grandeur.",
+    "keywords": ["Light", "Composition", "Scale", "Environment", "Grandeur"],
+    "name": "Landscape Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "Dedicated to photographing animals in their natural habitats, aiming to capture the essence and behavior of wildlife, highlighting the planet's biodiversity.",
+    "keywords": [
+      "Animals",
+      "Natural Habitats",
+      "Essence",
+      "Behavior",
+      "Biodiversity"
+    ],
+    "name": "Wildlife Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "Involves taking close-up pictures that reveal details not visible to the naked eye, focusing on the intricate details of plants, insects, and small organisms.",
+    "keywords": ["Close-Up", "Details", "Plants", "Insects", "Organisms"],
+    "name": "Macro Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "Utilizes drones and high-altitude photography to offer new perspectives on landscapes, revealing patterns, textures, and features of the Earth not visible from the ground.",
+    "keywords": ["Drones", "High-Altitude", "Patterns", "Textures", "Earth"],
+    "name": "Aerial Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "Focuses on photographing the aquatic environment, including marine wildlife, coral reefs, and underwater landscapes, showcasing the beauty and diversity of life beneath water surfaces.",
+    "keywords": [
+      "Aquatic",
+      "Marine Wildlife",
+      "Coral Reefs",
+      "Underwater",
+      "Diversity"
+    ],
+    "name": "Underwater Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "A specialized branch capturing celestial events and objects in the night sky, highlighting the relationship between the Earth and the broader universe.",
+    "keywords": ["Celestial", "Night Sky", "Stars", "Planets", "Universe"],
+    "name": "Astrophotography"
+  },
+  {
+    "category": "Nature",
+    "description": "Mission-driven style aiming to highlight environmental issues and promote conservation, using images as a tool for advocacy and education.",
+    "keywords": [
+      "Environmental Issues",
+      "Conservation",
+      "Advocacy",
+      "Education",
+      "Images"
+    ],
+    "name": "Conservation Photography"
+  },
+  {
+    "category": "Nature",
+    "description": "Capturing the changing seasons to showcase the dynamic nature of landscapes through the cycle of life, death, and rebirth, each bringing its own color palette and mood.",
+    "keywords": ["Seasons", "Dynamic", "Cycle", "Color Palette", "Mood"],
+    "name": "Seasonal Photography"
   }
 ]

@@ -17,6 +17,7 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import ArtStylePicker from "~/components/ArtStylePicker"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden, notFound } from "~/utils/http.server"
@@ -47,10 +48,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const artStyles = await db.artStyle.findMany({
     select: {
+      category: true,
       description: true,
+      exampleUrl: true,
       id: true,
       name: true,
     },
+    where: { show: true },
   })
 
   return json({ artStyles, template })
@@ -133,7 +137,7 @@ export default function Route() {
   return (
     <Form
       {...getFormProps(form)}
-      className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
+      className="flex flex-col justify-center gap-y-4 py-16"
       method="POST"
     >
       <div className="text-center">
@@ -144,39 +148,14 @@ export default function Route() {
           Choose one of the following art styles
         </h2>
       </div>
-      <div>
-        <label
-          className="text-base font-semibold text-gray-900"
-          htmlFor={fields.artStyleId.id}
-        >
-          Art Style
-        </label>
-        <p className="text-sm text-gray-500">What kind of style do you want?</p>
-        <fieldset className="mt-4">
-          <legend className="sr-only">Art Style</legend>
-          <div className="space-y-4">
-            {getCollectionProps(fields.artStyleId, {
-              options: artStyles.map((artStyle) => artStyle.id),
-              type: "radio",
-            }).map((collectionProps) => (
-              <div className="flex items-center" key={collectionProps.id}>
-                <input
-                  {...collectionProps}
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                  value={collectionProps.value}
-                />
-                <label
-                  className="ml-3 block text-sm font-medium leading-6 text-gray-900"
-                  htmlFor={collectionProps.id}
-                >
-                  {collectionProps.value}
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-        <div>{fields.artStyleId.errors}</div>
+
+      <div className="py-8">
+        <ArtStylePicker
+          options={artStyles}
+          {...getInputProps(fields.artStyleId, { type: "text" })}
+        />
       </div>
+
       <div>
         <label
           className="text-base font-semibold text-gray-900"

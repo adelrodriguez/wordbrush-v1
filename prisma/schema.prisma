@@ -152,6 +152,8 @@ model ArtStyle {
 
   exampleUrl String?
 
+  show Boolean @default(true) // Whether the art style should be shown to users
+
   templates Template[]
 
   updatedAt DateTime @updatedAt

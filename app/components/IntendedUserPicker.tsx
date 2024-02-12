@@ -1,7 +1,6 @@
 import { RadioGroup } from "@headlessui/react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { IntendedUse } from "@prisma/client"
-import clsx from "clsx"
 import { ComponentPropsWithoutRef } from "react"
 
 import { getIntendedUseIcon, getIntendedUseLabel } from "~/utils/project"
@@ -37,14 +36,7 @@ export default function IntendedUsePicker({
       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
         {Object.values(IntendedUse).map((intendedUse) => (
           <RadioGroup.Option
-            className={({ active }) =>
-              clsx(
-                active
-                  ? "border-indigo-600 ring-2 ring-indigo-600"
-                  : "border-gray-300",
-                "relative flex cursor-pointer rounded-lg border bg-white p-4 shadow-sm focus:outline-none",
-              )
-            }
+            className="relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none ui-active:border-gray-600 ui-active:ring-2 ui-active:ring-gray-600"
             key={intendedUse}
             value={intendedUse}
           >
@@ -67,11 +59,11 @@ export default function IntendedUsePicker({
             </span>
             <CheckCircleIcon
               aria-hidden="true"
-              className="h-5 w-5 text-indigo-600 ui-not-checked:invisible"
+              className="h-5 w-5 text-gray-600 ui-not-checked:invisible"
             />
             <span
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent ui-checked:border-indigo-600 ui-active:border"
+              className="pointer-events-none absolute -inset-px rounded-lg border-2 border-transparent ui-checked:border-gray-600 ui-active:border"
             />
           </RadioGroup.Option>
         ))}
