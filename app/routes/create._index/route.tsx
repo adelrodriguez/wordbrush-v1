@@ -150,7 +150,7 @@ export default function Route() {
   //         />
   //       </div>
   //     </div>
-  //     <div className="rounded-xl bg-slate-800 p-6">
+  //     <div className="rounded-xl bg-gray-800 p-6">
   //       <label
   //         htmlFor={fields.text.id}
   //         className="block text-sm font-medium leading-6 text-white"
@@ -202,7 +202,7 @@ export default function Route() {
 
   //     <button
   //       type="submit"
-  //       className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
+  //       className="mt-4 rounded-lg bg-gray-900 p-4 text-white hover:bg-gray-700"
   //     >
   //       Choose an art style
   //     </button>

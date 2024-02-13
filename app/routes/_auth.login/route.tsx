@@ -1,8 +1,8 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
+import { Button, Input } from "@nextui-org/react"
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
-import clsx from "clsx"
 import { route } from "routes-gen"
 import { z } from "zod"
 
@@ -62,7 +62,6 @@ export default function Route() {
     shouldRevalidate: "onBlur",
   })
 
-  // TODO(adelrodriguez): Add alert component
   return (
     <div className="flex flex-col gap-y-2">
       {authError && (
@@ -76,41 +75,27 @@ export default function Route() {
         className="space-y-6"
         method="POST"
       >
-        <div>
-          <label
-            className="block text-sm font-medium leading-6 text-gray-900"
-            htmlFor="email"
-          >
-            Email address
-          </label>
-          <div className="mt-2">
-            <input
-              {...getInputProps(fields.email, { type: "email" })}
-              autoComplete="email"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              required
-            />
-            <p
-              className={clsx(
-                "mt-2 text-sm ",
-                fields.email.errors ? "text-red-500" : "text-gray-500",
-              )}
-            >
-              {fields.email.errors
-                ? fields.email.errors
-                : "We'll send a code to this email address to verify your identity."}
-            </p>
-          </div>
+        <div className="mt-2">
+          <Input
+            {...getInputProps(fields.email, { type: "email" })}
+            autoComplete="email"
+            required
+            label="Email"
+            errorMessage={fields.email.errors}
+            isInvalid={!!fields.email.errors}
+            variant="bordered"
+            description="If you don't have an account, we'll create one for you."
+          />
         </div>
 
-        <div>
-          <button
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            type="submit"
-          >
-            Sign in
-          </button>
-        </div>
+        <Button
+          fullWidth
+          className="bg-gray-900 text-white hover:bg-gray-800"
+          type="submit"
+          size="md"
+        >
+          Sign in
+        </Button>
       </Form>
     </div>
   )

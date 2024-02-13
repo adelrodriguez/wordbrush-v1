@@ -217,7 +217,7 @@ export default function Route() {
         <div className="mt-8">
           <Button
             size="lg"
-            className="bg-slate-900 p-8 text-white hover:bg-slate-800"
+            className="bg-gray-900 p-8 text-white hover:bg-gray-800"
             fullWidth
             type="submit"
           >

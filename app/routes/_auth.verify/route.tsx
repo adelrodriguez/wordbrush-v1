@@ -1,5 +1,6 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
+import { Button, Input } from "@nextui-org/react"
 import {
   json,
   redirect,
@@ -59,7 +60,6 @@ export default function Route() {
     shouldRevalidate: "onBlur",
   })
 
-  // TODO(adelrodriguez): Add alert component
   return (
     <div className="flex flex-col gap-y-4">
       {authError ? (
@@ -77,34 +77,24 @@ export default function Route() {
         className="space-y-6"
         method="POST"
       >
-        <div>
-          <label
-            className="block text-sm font-medium leading-6 text-gray-900"
-            htmlFor="email"
-          >
-            Code
-          </label>
-          <div className="mt-2">
-            <input
-              {...getInputProps(fields.code, { type: "text" })}
-              autoComplete="email"
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              required
-            />
-            <div className="mt-2 text-xs text-red-500">
-              {fields.code.errors}
-            </div>
-          </div>
-        </div>
+        <Input
+          {...getInputProps(fields.code, { type: "text" })}
+          required
+          label="Code"
+          autoComplete="one-time-code"
+          errorMessage={fields.code.errors}
+          isInvalid={!!fields.code.errors}
+          variant="bordered"
+        />
 
-        <div>
-          <button
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            type="submit"
-          >
-            Sign in
-          </button>
-        </div>
+        <Button
+          fullWidth
+          className="bg-gray-900 text-white hover:bg-gray-800"
+          type="submit"
+          size="md"
+        >
+          Sign in
+        </Button>
       </Form>
 
       <Form
@@ -112,13 +102,13 @@ export default function Route() {
         className="flex w-full flex-col gap-2"
         method="POST"
       >
-        <button
-          // className="flex h-10 items-center justify-center rounded-md bg-gray-200 text-sm font-semibold text-black"
-          className="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+        <Button
+          fullWidth
+          className="bg-gray-200 hover:bg-gray-300"
           type="submit"
         >
-          Request New Code
-        </button>
+          Request a new code
+        </Button>
       </Form>
     </div>
   )
