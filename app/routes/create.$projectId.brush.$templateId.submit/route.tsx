@@ -1,10 +1,13 @@
 import { parseWithZod } from "@conform-to/zod"
+import { Progress } from "@nextui-org/react"
 import { StorageService } from "@prisma/client"
 import { ActionFunctionArgs, json } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
+  Link,
   redirect,
+  useActionData,
   useLoaderData,
   useSubmit,
 } from "@remix-run/react"
@@ -16,7 +19,7 @@ import { zx } from "zodix"
 import env from "~/config/env.server"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import createDalle3ImageQueue from "~/helpers/queues/create-dalle-3-image.server"
+import { createDalle3ImageQueue } from "~/helpers/queues"
 import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
 import { getSavedText, removeSavedText } from "~/utils/text"
@@ -81,7 +84,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
   // TODO(adelrodriguez): Handle this error in the client
   if (!template.artStyle) {
-    return json({ error: "Art style not found", success: false })
+    return json({ error: "Art style not found", success: false } as const)
   }
 
   const prompt = generatePrompt(submission.value.text, {
@@ -123,6 +126,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
     where: { id: projectId, userId: user.id },
   })
 
+  // Artificial delay to give the user a chance to see the loading state
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+
   return redirect(route("/my/words/:projectId", { projectId }))
 }
 
@@ -136,14 +142,14 @@ export function clientAction({ serverAction }: ClientActionFunctionArgs) {
 }
 
 export function HydrateFallback() {
-  // TODO(adelrodriguez): Add a loading state
-  return <div>Loading...</div>
+  return null
 }
 
 export default function Route() {
   const { text } = useLoaderData<typeof clientLoader>()
   const submitting = useRef(false)
   const submit = useSubmit()
+  const data = useActionData<typeof action>()
 
   useEffect(() => {
     if (submitting.current) return
@@ -157,5 +163,36 @@ export default function Route() {
     }
   }, [submit, text])
 
-  return <div>Creating your image...</div>
+  if (data && !data.success) {
+    return (
+      <div className="flex h-full min-h-screen w-full items-center justify-center">
+        <div className="text-center">
+          <h1 className="mb-4 text-3xl font-semibold">Error</h1>
+          <p className="mb-4">{data?.error}</p>
+          <Link
+            to={route("/create/:projectId/brush/:templateId/details", {
+              projectId: "projectId",
+              templateId: "templateId",
+            })}
+            className="text-blue-500"
+          >
+            Go back
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex h-full min-h-screen w-full items-center justify-center">
+      <Progress
+        isIndeterminate
+        label="Generating your image..."
+        classNames={{
+          label: "text-center w-full",
+          indicator: "bg-gradient-to-r from-orange-300 to-blue-500",
+        }}
+      />
+    </div>
+  )
 }
