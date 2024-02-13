@@ -1,3 +1,4 @@
+import { Button, Chip, Spinner } from "@nextui-org/react"
 import { Image, ProjectStatus } from "@prisma/client"
 import { LoaderFunctionArgs, defer, json, redirect } from "@remix-run/node"
 import {
@@ -14,12 +15,12 @@ import { z } from "zod"
 import { zx } from "zodix"
 
 import { GeneratedImage } from "~/components/GeneratedImage"
-import Spinner from "~/components/Spinner"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { createDalle3ImageQueue } from "~/helpers/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
 import { getQueueEvents } from "~/utils/job.server"
+import { getIntendedUseLabel } from "~/utils/project"
 import { getSavedText } from "~/utils/text"
 
 import Text from "./Text"
@@ -211,6 +212,7 @@ export default function Route() {
           )}
         >
           <h1 className="text-3xl font-bold">{project.name}</h1>
+          <Chip size="sm">{getIntendedUseLabel(project.intendedUse)}</Chip>
           <div>
             <h2 className="mb-1 text-xs text-gray-500">Your text</h2>
             <div className="text-sm">
@@ -220,21 +222,21 @@ export default function Route() {
 
           {text ? (
             <Form className="flex justify-center" method="POST">
-              <button
-                className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full"
+              <Button
+                className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 lg:w-full"
                 type="submit"
               >
                 Create a new image ✨
-              </button>
+              </Button>
             </Form>
           ) : (
-            <button
+            <Button
               className="w-full max-w-96 rounded-md bg-gray-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white hover:bg-gray-300 lg:w-full"
               disabled
               type="submit"
             >
               Can&apos;t create a new image without text
-            </button>
+            </Button>
           )}
         </div>
 
@@ -243,7 +245,7 @@ export default function Route() {
             <Suspense
               fallback={
                 <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
-                  <Spinner className="h-5 w-5 text-gray-400" />
+                  <Spinner color="white" />
                 </div>
               }
             >

@@ -1,5 +1,7 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
+import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline"
+import { Button } from "@nextui-org/react"
 import { AspectRatio } from "@prisma/client"
 import {
   ActionFunctionArgs,
@@ -16,6 +18,7 @@ import {
   ArtStylePicker,
   AspectRatioPicker,
   DetailSlider,
+  FieldTitle,
   WorkflowBreadcrumbs,
 } from "~/components/create"
 import auth from "~/helpers/auth.server"
@@ -146,40 +149,54 @@ export default function Route() {
       </div>
       <Form
         {...getFormProps(form)}
-        className="flex flex-col justify-center gap-y-4 pb-16 pt-8"
+        className="flex flex-col justify-start gap-y-4 pb-16 pt-8"
         method="POST"
       >
         <div className="text-center">
           <h1 className="font-gray-900 text-5xl font-black">
-            Choose your art style
+            Stylize your words
           </h1>
           <h2 className="mt-4 text-2xl font-light text-gray-600">
-            Choose one of the following art styles
+            Choose a style, level of detail, and aspect ratio for your brush
           </h2>
         </div>
 
-        <div className="py-8">
+        <div className="mt-8 flex flex-col gap-y-4">
+          <FieldTitle description="Don't know what to pick? We've chosen some suggestions for you.">
+            Choose an art style
+          </FieldTitle>
           <ArtStylePicker
             options={artStyles}
             {...getInputProps(fields.artStyleId, { type: "text" })}
           />
         </div>
 
-        <div>
+        <div className="mt-8 flex flex-col gap-y-4">
+          <FieldTitle>Choose an aspect ratio</FieldTitle>
           <AspectRatioPicker
             {...getInputProps(fields.aspectRatio, { type: "text" })}
           />
         </div>
-        <div>
+
+        <div className="mt-8 flex flex-col gap-y-4">
+          <FieldTitle description="To the left and the image will be minimalist and abstract; to the right and the image will be highly-detailed and realistic.">
+            Choose the level of detail
+          </FieldTitle>
+
           <DetailSlider {...getInputProps(fields.detail, { type: "number" })} />
         </div>
 
-        <button
-          className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
-          type="submit"
-        >
-          Let&apos;s finalize the details
-        </button>
+        <div className="mt-8">
+          <Button
+            size="lg"
+            className="bg-slate-900 p-8 text-white hover:bg-slate-800"
+            fullWidth
+            type="submit"
+          >
+            <AdjustmentsHorizontalIcon className="h-5 w-5" />
+            Let's finalize the details
+          </Button>
+        </div>
       </Form>
     </>
   )

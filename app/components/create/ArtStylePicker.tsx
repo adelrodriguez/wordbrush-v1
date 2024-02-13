@@ -81,7 +81,7 @@ export default function ArtStylePicker({
                           <span className="flex items-center">
                             <RadioGroup.Label
                               as="span"
-                              className="block text-sm font-medium text-gray-900"
+                              className="block align-middle text-sm font-medium leading-4 text-gray-900"
                             >
                               {option.name}
 
@@ -90,7 +90,7 @@ export default function ArtStylePicker({
                                 showArrow
                                 size="sm"
                                 placement="bottom"
-                                className="w-56 bg-gray-700 p-4 text-white"
+                                className="w-56 bg-white p-4 text-gray-700"
                               >
                                 <InformationCircleIcon className="ml-1 inline-block h-4 w-4 text-gray-900" />
                               </Tooltip>

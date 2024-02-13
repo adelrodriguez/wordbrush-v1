@@ -1,5 +1,5 @@
 import {
-  EyeIcon,
+  AdjustmentsHorizontalIcon,
   PaintBrushIcon,
   PencilSquareIcon,
 } from "@heroicons/react/20/solid"
@@ -47,7 +47,7 @@ export default function WorkflowBreadcrumbs({
         isCurrent={location.pathname === thirdRoute}
         isDisabled={!templateId}
       >
-        <EyeIcon className="h-5 w-5" />
+        <AdjustmentsHorizontalIcon className="h-5 w-5" />
         Choose the details
       </BreadcrumbItem>
     </Breadcrumbs>

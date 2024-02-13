@@ -1,5 +1,7 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
+import { PaintBrushIcon } from "@heroicons/react/24/outline"
+import { Button, Input, Textarea } from "@nextui-org/react"
 import { IntendedUse, ProjectStatus } from "@prisma/client"
 import {
   LoaderFunctionArgs,
@@ -18,7 +20,11 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { IntendedUsePicker, WorkflowBreadcrumbs } from "~/components/create"
+import {
+  FieldTitle,
+  IntendedUsePicker,
+  WorkflowBreadcrumbs,
+} from "~/components/create"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden } from "~/utils/http.server"
@@ -150,11 +156,12 @@ export default function Route() {
     },
     lastResult,
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
+    shouldRevalidate: "onBlur",
   })
 
   return (
     <>
-      <div className="flex items-center justify-center pt-8">
+      <div className="flex items-center justify-start pt-8">
         <WorkflowBreadcrumbs projectId={project.id} templateId={template?.id} />
       </div>
       <Form
@@ -171,49 +178,53 @@ export default function Route() {
             computer
           </h2>
         </div>
-        <div>
-          <label
-            className="block text-sm font-medium leading-6 text-gray-900"
-            htmlFor={fields.name.id}
-          >
-            Name
-          </label>
-          <div className="mt-2">
-            <input
-              {...getInputProps(fields.name, { type: "text" })}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="Untitled"
-            />
-          </div>
-          {fields.name.errors}
+
+        <div className="mt-8">
+          <Textarea
+            {...getInputProps(fields.text, { type: "text" })}
+            placeholder="Enter your book, article, or story here"
+            className="w-full"
+            variant="bordered"
+            errorMessage={fields.text.errors}
+            isInvalid={!!fields.text.errors}
+            size="lg"
+          />
         </div>
-        <div className="rounded-xl bg-slate-800 p-6">
-          <label
-            className="block text-sm font-medium leading-6 text-white"
-            htmlFor={fields.text.id}
-          >
-            Add your text
-          </label>
-          <div className="mt-2">
-            <textarea
-              {...getInputProps(fields.text, { type: "text" })}
-              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              rows={4}
-            />
-          </div>
-        </div>
-        <div>
+
+        <div className="mt-8 flex flex-col gap-y-4">
+          <FieldTitle description="Where are you publishing your writing?">
+            Intended Use
+          </FieldTitle>
           <IntendedUsePicker
             {...getInputProps(fields.intendedUse, { type: "text" })}
           />
         </div>
 
-        <button
-          className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
-          type="submit"
-        >
-          Choose an art style
-        </button>
+        <div className="mt-8 flex flex-col gap-y-4">
+          <FieldTitle description="Maybe the title of your piece?">
+            Choose a name for this project
+          </FieldTitle>
+          <Input
+            {...getInputProps(fields.name, { type: "text" })}
+            placeholder="Untitled Project"
+            variant="bordered"
+            errorMessage={fields.name.errors}
+            isInvalid={!!fields.name.errors}
+            size="lg"
+          />
+        </div>
+
+        <div className="mt-8">
+          <Button
+            size="lg"
+            className="bg-slate-900 p-8 text-white hover:bg-slate-800"
+            fullWidth
+            type="submit"
+          >
+            <PaintBrushIcon className="h-5 w-5" />
+            Now let's choose an art style
+          </Button>
+        </div>
       </Form>
     </>
   )

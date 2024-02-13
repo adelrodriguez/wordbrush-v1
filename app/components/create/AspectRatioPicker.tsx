@@ -12,13 +12,6 @@ export default function AspectRatioPicker({
 }: ComponentPropsWithoutRef<"input">) {
   return (
     <RadioGroup defaultValue={defaultValue} id={id} name={name}>
-      <RadioGroup.Label className="mb-2 text-2xl font-bold leading-6 text-gray-900">
-        Intended Use
-      </RadioGroup.Label>
-      <RadioGroup.Description className="text-xl font-light text-gray-400">
-        Where are you publishing this story?
-      </RadioGroup.Description>
-
       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
         {Object.values(AspectRatio).map((aspectRatio) => (
           <RadioGroup.Option

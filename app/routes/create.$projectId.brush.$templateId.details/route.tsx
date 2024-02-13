@@ -1,5 +1,7 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
+import { LightBulbIcon } from "@heroicons/react/24/outline"
+import { Button, Input, Textarea } from "@nextui-org/react"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -116,7 +118,7 @@ export default function Route() {
 
       <Form
         {...getFormProps(form)}
-        className="flex min-h-screen flex-col justify-center gap-y-4 pb-16 pt-8"
+        className="flex h-full min-h-screen flex-col justify-start gap-y-4 pb-16 pt-8"
         method="POST"
       >
         <div className="text-center">
@@ -127,67 +129,53 @@ export default function Route() {
             Some final details to help us generate the best art for your writing
           </h2>
         </div>
-        <div className="rounded-xl bg-yellow-300 p-6">
-          Tip: You can leave any of these fields blank if you&apos;re not sure
-          what to put, but the more information you provide, the better we can
-          tailor the art to your writing.
+        <div className="mt-8 flex rounded-xl bg-yellow-300 p-6">
+          <p>
+            <span className="font-bold">
+              <LightBulbIcon className="mr-1 inline-block h-4 w-4" />
+              Tip:{" "}
+            </span>
+            You can leave any of these fields blank if you&apos;re not sure what
+            to put, but the more information you provide, the better we can
+            tailor the art to your writing.
+          </p>
         </div>
-        <div className="grid grid-cols-1 gap-x-2 md:grid-cols-3">
-          <div>
-            <label
-              className="block text-sm font-medium leading-6 text-gray-900"
-              htmlFor={fields.mood.id}
-            >
-              Mood
-            </label>
-            <div className="mt-2">
-              <input
-                {...getInputProps(fields.mood, { type: "text" })}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Feel free to leave this blank"
-              />
-            </div>
+        <div className="mt-8 flex flex-col gap-y-6">
+          <Input
+            {...getInputProps(fields.mood, { type: "text" })}
+            placeholder="Feel free to leave this blank"
+            variant="bordered"
+            label="Mood"
+            description="What mood are you trying to convey with your writing?"
+          />
+          <div className="flex gap-x-4">
+            <Textarea
+              {...getInputProps(fields.keyElements, { type: "text" })}
+              placeholder="Feel free to leave this blank"
+              variant="bordered"
+              label="Key Elements"
+              description="Anything you want to make sure we include in the art?"
+            />
+            <Textarea
+              {...getInputProps(fields.exclude, { type: "text" })}
+              placeholder="Feel free to leave this blank"
+              variant="bordered"
+              label="Exclude"
+              description="Anything you want to make sure we exclude from the art?"
+            />
           </div>
-          <div>
-            <label
-              className="block text-sm font-medium leading-6 text-gray-900"
-              htmlFor={fields.keyElements.id}
-            >
-              Key Elements
-            </label>
-            <div className="mt-2">
-              <textarea
-                {...getInputProps(fields.keyElements, { type: "text" })}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Feel free to leave this blank"
-                rows={4}
-              />
-            </div>
-          </div>
+        </div>
 
-          <div>
-            <label
-              className="block text-sm font-medium leading-6 text-gray-900"
-              htmlFor={fields.exclude.id}
-            >
-              Anything to exclude?
-            </label>
-            <div className="mt-2">
-              <textarea
-                {...getInputProps(fields.exclude, { type: "text" })}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                placeholder="Feel free to leave this blank"
-                rows={4}
-              />
-            </div>
-          </div>
+        <div className="mt-8">
+          <Button
+            size="lg"
+            className="background-animated p-8 font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            fullWidth
+            type="submit"
+          >
+            Show me the art ✨
+          </Button>
         </div>
-        <button
-          className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
-          type="submit"
-        >
-          Show me the art ✨
-        </button>
       </Form>
     </>
   )

@@ -5,7 +5,7 @@ import { Buffer } from "node:buffer"
 import env from "~/config/env.server"
 import db from "~/helpers/db.server"
 import ai from "~/services/openai.server"
-import { getImageSize } from "~/utils/ai"
+import { getImageSize, getModeStyle } from "~/utils/ai"
 import { uploadBuffer } from "~/utils/upload.server"
 
 import { createQueue } from "../queue.server"
@@ -36,6 +36,7 @@ const processor: Processor<QueueData> = async (job) => {
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
     user: userId,
+    style: getModeStyle(template.mode),
   })
 
   const image = response.data[0]

@@ -7,29 +7,24 @@ export default function DetailSlider({
   "aria-label": ariaLabel,
 }: ComponentPropsWithoutRef<"input">) {
   return (
-    <div className="flex flex-col">
-      <div className="mb-2">
-        <h2 className="text-2xl font-bold leading-6 text-gray-900">
-          Art Style
-        </h2>
-        <p className="text-xl font-light text-gray-400">Choose an art style</p>
-      </div>
-
-      <Slider
-        aria-label="Level of detail"
-        name={name}
-        size="md"
-        startContent={<div>Abstract</div>}
-        endContent={<div>Realistic</div>}
-        classNames={{
-          base: "w-full",
-        }}
-        color="secondary"
-        defaultValue={Number(defaultValue)}
-        step={1}
-        minValue={1}
-        maxValue={5}
-      />
-    </div>
+    <Slider
+      aria-label="Level of detail"
+      name={name}
+      size="md"
+      startContent={
+        <div className="text-md font-light text-gray-700">Abstract</div>
+      }
+      endContent={
+        <div className="text-md font-light text-gray-700">Realistic</div>
+      }
+      classNames={{
+        base: "w-full",
+      }}
+      color="foreground"
+      defaultValue={Number(defaultValue)}
+      step={1}
+      minValue={1}
+      maxValue={5}
+    />
   )
 }

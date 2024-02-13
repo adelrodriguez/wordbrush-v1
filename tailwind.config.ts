@@ -8,7 +8,11 @@ export default {
     "./app/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  plugins: [FormsPlugin, HeadlessUIPlugin({ prefix: "ui" }), nextui()],
+  plugins: [
+    FormsPlugin({ strategy: "class" }),
+    HeadlessUIPlugin({ prefix: "ui" }),
+    nextui(),
+  ],
   theme: {
     extend: {},
   },

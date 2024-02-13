@@ -4,6 +4,7 @@ import {
   DocumentDuplicateIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline"
+import { Button } from "@nextui-org/react"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -87,6 +88,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
       keyElements: image.template.keyElements,
       mood: image.template.mood,
       projectId,
+      mode: image.template.mode,
     },
   })
 
@@ -192,13 +194,14 @@ export default function Route() {
                   </div>
                   <div className="flex gap-x-4">
                     <Form className="flex items-center" method="POST">
-                      <button
+                      <Button
                         className="rounded-md bg-gray-600 p-2 hover:bg-gray-500"
                         title="Duplicate this image style"
                         type="submit"
+                        isIconOnly
                       >
                         <DocumentDuplicateIcon className="h-6 w-6 text-white" />
-                      </button>
+                      </Button>
                     </Form>
                     <Link
                       className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
@@ -209,12 +212,6 @@ export default function Route() {
                     >
                       <ArrowDownTrayIcon className="h-6 w-6 text-white" />
                     </Link>
-                    {/* <Link
-                      className=" rounded-md bg-red-600 p-2 hover:bg-red-500"
-                      to={image.publicUrl ?? "#"}
-                    >
-                      <TrashIcon className="h-6 w-6 text-white" />
-                    </Link> */}
                   </div>
                 </div>
               </Dialog.Panel>
