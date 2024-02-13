@@ -11,6 +11,7 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import { WorkflowBreadcrumbs } from "~/components/create"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden, notFound } from "~/utils/http.server"
@@ -32,6 +33,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
       exclude: true,
       keyElements: true,
       mood: true,
+      id: true,
+      projectId: true,
     },
     where: { id: templateId },
   })
@@ -104,9 +107,16 @@ export default function Route() {
 
   return (
     <>
+      <div className="flex items-center justify-center pt-8">
+        <WorkflowBreadcrumbs
+          projectId={template.projectId}
+          templateId={template.id}
+        />
+      </div>
+
       <Form
         {...getFormProps(form)}
-        className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
+        className="flex min-h-screen flex-col justify-center gap-y-4 pb-16 pt-8"
         method="POST"
       >
         <div className="text-center">

@@ -26,7 +26,7 @@ export default function IntendedUsePicker({
 }: ComponentPropsWithoutRef<"input">) {
   return (
     <RadioGroup defaultValue={defaultValue} id={id} name={name}>
-      <RadioGroup.Label className="text-2xl font-bold leading-6 text-gray-900">
+      <RadioGroup.Label className="mb-2 text-2xl font-bold leading-6 text-gray-900">
         Intended Use
       </RadioGroup.Label>
       <RadioGroup.Description className="text-xl font-light text-gray-400">

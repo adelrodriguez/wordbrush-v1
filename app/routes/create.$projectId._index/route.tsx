@@ -18,7 +18,7 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import IntendedUsePicker from "~/components/IntendedUserPicker"
+import { IntendedUsePicker, WorkflowBreadcrumbs } from "~/components/create"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden } from "~/utils/http.server"
@@ -51,13 +51,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return redirect(route("/my/words/:projectId", { projectId: project.id }))
   }
 
-  return json({ project })
+  const template = await db.template.findFirst({
+    where: { projectId },
+    select: { id: true },
+  })
+
+  return json({ project, template })
 }
 
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
-  const { project } = await serverLoader<typeof loader>()
+  const { project, template } = await serverLoader<typeof loader>()
 
-  return { project, text: getSavedText(project.id) }
+  return { project, text: getSavedText(project.id), template }
 }
 
 clientLoader.hydrate = true
@@ -135,7 +140,7 @@ export function HydrateFallback() {
 }
 
 export default function Route() {
-  const { project, text } = useLoaderData<typeof clientLoader>()
+  const { project, text, template } = useLoaderData<typeof clientLoader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     defaultValue: {
@@ -148,63 +153,68 @@ export default function Route() {
   })
 
   return (
-    <Form
-      {...getFormProps(form)}
-      className="flex min-h-screen flex-col justify-center gap-y-4 py-16"
-      method="POST"
-    >
-      <div className="text-center">
-        <h1 className="font-gray-900 text-5xl font-black">
-          Tell us about your writing
-        </h1>
-        <h2 className="mt-4 text-2xl font-light text-gray-600">
-          We don&apos;t save your text; everything is stored locally on your
-          computer
-        </h2>
+    <>
+      <div className="flex items-center justify-center pt-8">
+        <WorkflowBreadcrumbs projectId={project.id} templateId={template?.id} />
       </div>
-      <div>
-        <label
-          className="block text-sm font-medium leading-6 text-gray-900"
-          htmlFor={fields.name.id}
-        >
-          Name
-        </label>
-        <div className="mt-2">
-          <input
-            {...getInputProps(fields.name, { type: "text" })}
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            placeholder="Untitled"
-          />
-        </div>
-        {fields.name.errors}
-      </div>
-      <div className="rounded-xl bg-slate-800 p-6">
-        <label
-          className="block text-sm font-medium leading-6 text-white"
-          htmlFor={fields.text.id}
-        >
-          Add your text
-        </label>
-        <div className="mt-2">
-          <textarea
-            {...getInputProps(fields.text, { type: "text" })}
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            rows={4}
-          />
-        </div>
-      </div>
-      <div>
-        <IntendedUsePicker
-          {...getInputProps(fields.intendedUse, { type: "text" })}
-        />
-      </div>
-
-      <button
-        className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
-        type="submit"
+      <Form
+        {...getFormProps(form)}
+        className="flex min-h-screen flex-col justify-center gap-y-4 pb-16 pt-8"
+        method="POST"
       >
-        Choose an art style
-      </button>
-    </Form>
+        <div className="text-center">
+          <h1 className="font-gray-900 text-5xl font-black">
+            Tell us about your writing
+          </h1>
+          <h2 className="mt-4 text-2xl font-light text-gray-600">
+            We don&apos;t save your text; everything is stored locally on your
+            computer
+          </h2>
+        </div>
+        <div>
+          <label
+            className="block text-sm font-medium leading-6 text-gray-900"
+            htmlFor={fields.name.id}
+          >
+            Name
+          </label>
+          <div className="mt-2">
+            <input
+              {...getInputProps(fields.name, { type: "text" })}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Untitled"
+            />
+          </div>
+          {fields.name.errors}
+        </div>
+        <div className="rounded-xl bg-slate-800 p-6">
+          <label
+            className="block text-sm font-medium leading-6 text-white"
+            htmlFor={fields.text.id}
+          >
+            Add your text
+          </label>
+          <div className="mt-2">
+            <textarea
+              {...getInputProps(fields.text, { type: "text" })}
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              rows={4}
+            />
+          </div>
+        </div>
+        <div>
+          <IntendedUsePicker
+            {...getInputProps(fields.intendedUse, { type: "text" })}
+          />
+        </div>
+
+        <button
+          className="mt-4 rounded-lg bg-slate-900 p-4 text-white hover:bg-slate-700"
+          type="submit"
+        >
+          Choose an art style
+        </button>
+      </Form>
+    </>
   )
 }

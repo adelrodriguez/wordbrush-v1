@@ -5,7 +5,7 @@ import { Buffer } from "node:buffer"
 import env from "~/config/env.server"
 import db from "~/helpers/db.server"
 import ai from "~/services/openai.server"
-import { getImageSize } from "~/utils/ai.server"
+import { getImageSize } from "~/utils/ai"
 import { uploadBuffer } from "~/utils/upload.server"
 
 import { createQueue } from "../queue.server"

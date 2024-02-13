@@ -8,6 +8,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useNavigate,
 } from "@remix-run/react"
 
 import stylesheet from "~/styles/index.css"
@@ -26,6 +27,8 @@ export const links: LinksFunction = () => [
 ]
 
 export default function App() {
+  const navigate = useNavigate()
+
   return (
     <html className="h-full bg-white" lang="en">
       <head>
@@ -35,7 +38,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <NextUIProvider>
+        <NextUIProvider navigate={navigate}>
           <Outlet />
         </NextUIProvider>
         <ScrollRestoration />

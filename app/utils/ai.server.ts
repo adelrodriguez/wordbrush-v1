@@ -1,4 +1,4 @@
-import { ArtStyle, AspectRatio, Project, Template } from "@prisma/client"
+import { ArtStyle, Project, Template } from "@prisma/client"
 
 export function generatePrompt(
   text: string,
@@ -33,16 +33,4 @@ export function generatePrompt(
   return `Prompt: ${prompt}.
   
   Text: ${text}.`
-}
-
-export function getImageSize(aspect?: AspectRatio | null) {
-  switch (aspect) {
-    case AspectRatio.Landscape:
-      return "1792x1024" as const
-    case AspectRatio.Portrait:
-      return "1024x1792" as const
-    case AspectRatio.Square:
-    default:
-      return "1024x1024" as const
-  }
 }

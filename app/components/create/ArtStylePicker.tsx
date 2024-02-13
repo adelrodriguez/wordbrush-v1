@@ -73,6 +73,7 @@ export default function ArtStylePicker({
                           alt=""
                           className="h-auto w-full rounded-t-lg object-fill"
                           src={option.exampleUrl ?? ""}
+                          loading="lazy"
                         />
                       </div>
                       <div className="flex p-4">
