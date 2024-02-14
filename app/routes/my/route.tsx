@@ -47,7 +47,7 @@ const navigation = [
 ]
 
 const userNavigation = [
-  { href: route("/my/profile"), name: "Your profile" },
+  // { href: route("/my/profile"), name: "Your profile" },
   { href: route("/logout"), name: "Sign out" },
 ]
 
