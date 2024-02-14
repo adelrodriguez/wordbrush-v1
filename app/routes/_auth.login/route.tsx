@@ -69,30 +69,25 @@ export default function Route() {
           {authError.message}
         </Alert>
       )}
-      <Form
-        {...getFormProps(form)}
-        action="#"
-        className="space-y-6"
-        method="POST"
-      >
+      <Form {...getFormProps(form)} className="space-y-6" method="POST">
         <div className="mt-2">
           <Input
             {...getInputProps(fields.email, { type: "email" })}
             autoComplete="email"
-            required
-            label="Email"
+            description="If you don't have an account, we'll create one for you."
             errorMessage={fields.email.errors}
             isInvalid={!!fields.email.errors}
+            label="Email"
+            required
             variant="bordered"
-            description="If you don't have an account, we'll create one for you."
           />
         </div>
 
         <Button
-          fullWidth
           className="bg-gray-900 text-white hover:bg-gray-800"
-          type="submit"
+          fullWidth
           size="md"
+          type="submit"
         >
           Sign in
         </Button>

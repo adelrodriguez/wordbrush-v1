@@ -168,13 +168,13 @@ export default function Route() {
       <div className="flex h-full min-h-screen w-full items-center justify-center">
         <div className="text-center">
           <h1 className="mb-4 text-3xl font-semibold">Error</h1>
-          <p className="mb-4">{data?.error}</p>
+          <p className="mb-4">{data.error}</p>
           <Link
+            className="text-blue-500"
             to={route("/create/:projectId/brush/:templateId/details", {
               projectId: "projectId",
               templateId: "templateId",
             })}
-            className="text-blue-500"
           >
             Go back
           </Link>
@@ -186,12 +186,12 @@ export default function Route() {
   return (
     <div className="flex h-full min-h-screen w-full items-center justify-center">
       <Progress
+        classNames={{
+          indicator: "bg-gradient-to-r from-orange-300 to-blue-500",
+          label: "text-center w-full",
+        }}
         isIndeterminate
         label="Generating your image..."
-        classNames={{
-          label: "text-center w-full",
-          indicator: "bg-gradient-to-r from-orange-300 to-blue-500",
-        }}
       />
     </div>
   )

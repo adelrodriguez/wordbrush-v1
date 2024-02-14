@@ -58,8 +58,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
 
   const template = await db.template.findFirst({
-    where: { projectId },
     select: { id: true },
+    where: { projectId },
   })
 
   return json({ project, template })
@@ -68,7 +68,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { project, template } = await serverLoader<typeof loader>()
 
-  return { project, text: getSavedText(project.id), template }
+  return { project, template, text: getSavedText(project.id) }
 }
 
 clientLoader.hydrate = true
@@ -146,7 +146,7 @@ export function HydrateFallback() {
 }
 
 export default function Route() {
-  const { project, text, template } = useLoaderData<typeof clientLoader>()
+  const { project, template, text } = useLoaderData<typeof clientLoader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     defaultValue: {
@@ -170,7 +170,7 @@ export default function Route() {
         method="POST"
       >
         <div className="text-center">
-          <h1 className="font-gray-900 text-5xl font-black">
+          <h1 className="font-gray-900 text-5xl font-black tracking-tight">
             Tell us about your writing
           </h1>
           <h2 className="mt-4 text-2xl font-light text-gray-600">
@@ -182,12 +182,12 @@ export default function Route() {
         <div className="mt-8">
           <Textarea
             {...getInputProps(fields.text, { type: "text" })}
-            placeholder="Enter your book, article, or story here"
             className="w-full"
-            variant="bordered"
             errorMessage={fields.text.errors}
             isInvalid={!!fields.text.errors}
+            placeholder="Enter your book, article, or story here"
             size="lg"
+            variant="bordered"
           />
         </div>
 
@@ -206,23 +206,23 @@ export default function Route() {
           </FieldTitle>
           <Input
             {...getInputProps(fields.name, { type: "text" })}
-            placeholder="Untitled Project"
-            variant="bordered"
             errorMessage={fields.name.errors}
             isInvalid={!!fields.name.errors}
+            placeholder="Untitled Project"
             size="lg"
+            variant="bordered"
           />
         </div>
 
         <div className="mt-8">
           <Button
-            size="lg"
-            className="bg-gray-900 p-8 text-white hover:bg-gray-800"
+            className="rounded-2xl bg-gray-900 text-white hover:bg-gray-800"
             fullWidth
+            size="lg"
             type="submit"
           >
             <PaintBrushIcon className="h-5 w-5" />
-            Now let's choose an art style
+            Now let&apos;s choose an art style
           </Button>
         </div>
       </Form>

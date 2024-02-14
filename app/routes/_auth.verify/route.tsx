@@ -79,19 +79,19 @@ export default function Route() {
       >
         <Input
           {...getInputProps(fields.code, { type: "text" })}
-          required
-          label="Code"
           autoComplete="one-time-code"
           errorMessage={fields.code.errors}
           isInvalid={!!fields.code.errors}
+          label="Code"
+          required
           variant="bordered"
         />
 
         <Button
-          fullWidth
           className="bg-gray-900 text-white hover:bg-gray-800"
-          type="submit"
+          fullWidth
           size="md"
+          type="submit"
         >
           Sign in
         </Button>
@@ -103,8 +103,8 @@ export default function Route() {
         method="POST"
       >
         <Button
-          fullWidth
           className="bg-gray-200 hover:bg-gray-300"
+          fullWidth
           type="submit"
         >
           Request a new code

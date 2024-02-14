@@ -153,7 +153,7 @@ export default function Route() {
         method="POST"
       >
         <div className="text-center">
-          <h1 className="font-gray-900 text-5xl font-black">
+          <h1 className="font-gray-900 text-5xl font-black tracking-tight">
             Stylize your words
           </h1>
           <h2 className="mt-4 text-2xl font-light text-gray-600">
@@ -188,13 +188,13 @@ export default function Route() {
 
         <div className="mt-8">
           <Button
-            size="lg"
-            className="bg-gray-900 p-8 text-white hover:bg-gray-800"
+            className="rounded-2xl bg-gray-900 text-white hover:bg-gray-800"
             fullWidth
+            size="lg"
             type="submit"
           >
             <AdjustmentsHorizontalIcon className="h-5 w-5" />
-            Let's finalize the details
+            Let&apos;s finalize the details
           </Button>
         </div>
       </Form>

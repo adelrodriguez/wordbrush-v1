@@ -33,9 +33,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const template = await db.template.findUnique({
     select: {
       exclude: true,
+      id: true,
       keyElements: true,
       mood: true,
-      id: true,
       projectId: true,
     },
     where: { id: templateId },
@@ -122,7 +122,7 @@ export default function Route() {
         method="POST"
       >
         <div className="text-center">
-          <h1 className="font-gray-900 text-5xl font-black">
+          <h1 className="font-gray-900 text-5xl font-black tracking-tight">
             Finalize the details
           </h1>
           <h2 className="mt-4 text-2xl font-light text-gray-600">
@@ -143,37 +143,37 @@ export default function Route() {
         <div className="mt-8 flex flex-col gap-y-6">
           <Input
             {...getInputProps(fields.mood, { type: "text" })}
+            description="What mood are you trying to convey with your writing?"
+            label="Mood"
             placeholder="Feel free to leave this blank"
             variant="bordered"
-            label="Mood"
-            description="What mood are you trying to convey with your writing?"
           />
           <div className="flex gap-x-4">
             <Textarea
               {...getInputProps(fields.keyElements, { type: "text" })}
+              description="Anything you want to make sure we include in the art?"
+              label="Key Elements"
               placeholder="Feel free to leave this blank"
               variant="bordered"
-              label="Key Elements"
-              description="Anything you want to make sure we include in the art?"
             />
             <Textarea
               {...getInputProps(fields.exclude, { type: "text" })}
+              description="Anything you want to make sure we exclude from the art?"
+              label="Exclude"
               placeholder="Feel free to leave this blank"
               variant="bordered"
-              label="Exclude"
-              description="Anything you want to make sure we exclude from the art?"
             />
           </div>
         </div>
 
         <div className="mt-8">
           <Button
-            size="lg"
-            className="background-animated p-8 font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            className="background-animated font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
             fullWidth
+            size="lg"
             type="submit"
           >
-            Show me the art ✨
+            Generate my art ✨
           </Button>
         </div>
       </Form>
