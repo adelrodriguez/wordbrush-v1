@@ -39,6 +39,8 @@ async function createProducts() {
   await db.product.createMany({
     data: [
       {
+        checkoutUrl:
+          "https://store.wordbrush.art/checkout/buy/91f6b9ae-88ba-4595-bd27-73126d3650fb",
         creditAmount: 20,
         description: "$0.25 per credit",
         externalId: "191412",
@@ -46,6 +48,8 @@ async function createProducts() {
         price: 5,
       },
       {
+        checkoutUrl:
+          "https://store.wordbrush.art/checkout/buy/b4d2db08-1e74-45b5-bcb3-895e991681d4",
         creditAmount: 50,
         description: "$0.20 per credit",
         externalId: "191415",
@@ -53,6 +57,8 @@ async function createProducts() {
         price: 10,
       },
       {
+        checkoutUrl:
+          "https://store.wordbrush.art/checkout/buy/99cd7052-d62b-4c3b-9e52-3422236479ac",
         creditAmount: 120,
         description: "$0.16 per credit",
         externalId: "191942",
@@ -60,6 +66,8 @@ async function createProducts() {
         price: 20,
       },
       {
+        checkoutUrl:
+          "https://store.wordbrush.art/checkout/buy/643f2095-60de-4ecc-ba00-23cf518ed9e2",
         creditAmount: 1000,
         description: "$0.05 per credit",
         externalId: "191944",
