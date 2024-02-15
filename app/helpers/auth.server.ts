@@ -1,7 +1,8 @@
-import { User } from "@prisma/client"
+import { Plan, User } from "@prisma/client"
 import { Authenticator } from "remix-auth"
 import { TOTPStrategy } from "remix-auth-totp"
 
+import { TRIAL_CREDITS } from "~/config/consts"
 import env from "~/config/env.server"
 import db from "~/helpers/db.server"
 import sessionStorage from "~/helpers/session.server"
@@ -33,19 +34,40 @@ auth.use(
       },
     },
     async ({ email }) => {
-      const user = await db.user.upsert({
-        create: {
-          email,
-          isVerified: true,
-          lastLoginAt: new Date(),
-        },
-        update: {
-          lastLoginAt: new Date(),
-        },
-        where: { email },
-      })
+      try {
+        const user = await db.user.upsert({
+          create: {
+            email,
+            isVerified: true,
+            lastLoginAt: new Date(),
+            subscription: {
+              create: {
+                creditBalance: TRIAL_CREDITS,
+                creditTransactions: {
+                  create: {
+                    amount: TRIAL_CREDITS,
+                    balance: TRIAL_CREDITS,
+                    reason: "Trial credits",
+                  },
+                },
+                plan: Plan.Personal,
+                provider: null,
+              },
+            },
+          },
+          update: {
+            lastLoginAt: new Date(),
+          },
+          where: { email },
+        })
 
-      return user
+        return user
+      } catch (error) {
+        // TODO(adelrodriguez): Log the error
+        throw new Error(
+          "There was an error creating the user. Please try again.",
+        )
+      }
     },
   ),
   "TOTP",

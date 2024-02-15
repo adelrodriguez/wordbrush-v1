@@ -10,6 +10,8 @@ const EnvSchema = z.object({
 
   ENCRYPTION_SECRET: z.string(),
 
+  LEMONSQUEEZY_SIGNING_SECRET: z.string(),
+
   // OpenAI
   OPENAI_API_KEY: z.string(),
   OPENAI_ORG_ID: z.string(),

@@ -2,15 +2,15 @@ import { StorageService } from "@prisma/client"
 import { Processor } from "bullmq"
 import { Buffer } from "node:buffer"
 
+import { CREDIT_COST_PER_IMAGE } from "~/config/consts"
 import env from "~/config/env.server"
 import db from "~/helpers/db.server"
 import ai from "~/services/openai.server"
 import { getImageSize, getModeStyle } from "~/utils/ai"
 import { uploadBuffer } from "~/utils/upload.server"
 
+import { updateCreditBalanceQueue } from "."
 import { createQueue } from "../queue.server"
-
-const QUEUE_NAME = "CREATE_DALLE_3_IMAGE"
 
 type QueueData = {
   prompt: string
@@ -35,8 +35,8 @@ const processor: Processor<QueueData> = async (job) => {
     quality: "standard",
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
-    user: userId,
     style: getModeStyle(template.mode),
+    user: userId,
   })
 
   const image = response.data[0]
@@ -58,20 +58,25 @@ const processor: Processor<QueueData> = async (job) => {
 
   const publicUrl = `${env.CLOUDFLARE_R2_PUBLIC_URL}/${userId}/${template.projectId}/${filename}`
 
-  await db.image.update({
-    data: {
-      bucket: env.STORAGE_BUCKET,
-      projectId: template.projectId,
-      prompt: image.revised_prompt ?? prompt,
-      publicUrl,
-      service: StorageService.R2,
-      templateId: template.id,
-      url,
-    },
-    where: { id: imageId },
-  })
-
-  await job.log(`Created image ${imageId}`)
+  await Promise.all([
+    job.log(`Created image ${imageId}`),
+    db.image.create({
+      data: {
+        bucket: env.STORAGE_BUCKET,
+        projectId: template.projectId,
+        prompt: image.revised_prompt ?? prompt,
+        publicUrl,
+        service: StorageService.R2,
+        templateId: template.id,
+        url,
+      },
+    }),
+    updateCreditBalanceQueue.add(`Image ${imageId} created`, {
+      amount: -CREDIT_COST_PER_IMAGE,
+      reason: `Image ${imageId} created`,
+      userId,
+    }),
+  ])
 }
 
-export default createQueue(QUEUE_NAME, processor)
+export default createQueue("CREATE_DALLE_3_IMAGE", processor)

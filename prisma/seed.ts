@@ -4,18 +4,10 @@ import fs from "node:fs"
 const db = new PrismaClient()
 
 async function seed() {
-  await Promise.all([generateUsers(), generateArtStyles()])
+  await Promise.all([createArtStyles(), createProducts()])
 }
 
-async function generateUsers() {
-  await db.user.create({
-    data: {
-      email: "hello@adelrodriguez.com",
-    },
-  })
-}
-
-async function generateArtStyles() {
+async function createArtStyles() {
   const styles = JSON.parse(
     fs.readFileSync("./prisma/art-styles.json", "utf-8"),
   ) as {
@@ -40,6 +32,41 @@ async function generateArtStyles() {
         prompt: style.name,
       }),
     ),
+  })
+}
+
+async function createProducts() {
+  await db.product.createMany({
+    data: [
+      {
+        creditAmount: 20,
+        description: "$0.25 per credit",
+        externalId: "191412",
+        name: "20 credits",
+        price: 5,
+      },
+      {
+        creditAmount: 50,
+        description: "$0.20 per credit",
+        externalId: "191415",
+        name: "50 credits",
+        price: 10,
+      },
+      {
+        creditAmount: 120,
+        description: "$0.16 per credit",
+        externalId: "191942",
+        name: "120 credits",
+        price: 20,
+      },
+      {
+        creditAmount: 1000,
+        description: "$0.05 per credit",
+        externalId: "191944",
+        name: "1000 credits",
+        price: 50,
+      },
+    ],
   })
 }
 

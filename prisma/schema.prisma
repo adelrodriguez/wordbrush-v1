@@ -17,7 +17,8 @@ model User {
   isVerified  Boolean   @default(false)
   lastLoginAt DateTime?
 
-  projects Project[]
+  projects     Project[]
+  subscription Subscription?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -163,5 +164,91 @@ model ArtStyle {
 
   templates Template[]
 
+  updatedAt DateTime @updatedAt
+}
+
+enum Plan {
+  Trial
+  Personal
+  Professional
+  Publisher
+}
+
+enum SubscriptionProvider {
+  LemonSqueezy
+}
+
+model Subscription {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+
+  plan Plan
+
+  externalId         String? @unique
+  externalCustomerId String? @unique
+
+  provider SubscriptionProvider?
+
+  creditBalance Int @default(0)
+
+  creditTransactions CreditTransaction[]
+
+  @@index([externalId, userId])
+}
+
+model CreditTransaction {
+  id String @id @default(nanoid())
+
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subscriptionId String
+
+  amount  Int // Positive for adding credits, negative for using credits
+  balance Int // Current balance after the transaction
+
+  reason String? // Reason for the transaction
+
+  productId String? // The product that was purchased with the credits
+  product   Product? @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Webhook {
+  id        String   @id @default(nanoid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  service   WebhookService
+  webhookId String
+
+  event String
+
+  payload Json? @db.Json
+}
+
+enum WebhookService {
+  LemonSqueezy
+}
+
+model Product {
+  id String @id @default(nanoid())
+
+  name        String
+  description String?
+  price       Int
+
+  creditAmount Int
+
+  externalId  String? @unique
+  checkoutUrl String?
+
+  creditTransactions CreditTransaction[]
+
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

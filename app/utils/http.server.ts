@@ -2,6 +2,16 @@ import { json, redirect } from "@remix-run/node"
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
 
 /**
+ * 204 No Content
+ */
+export function noContent() {
+  return json(null, {
+    status: StatusCodes.NO_CONTENT,
+    statusText: ReasonPhrases.NO_CONTENT,
+  })
+}
+
+/**
  * 307 Temporary Redirect
  */
 export function temporaryRedirect(location: string) {
