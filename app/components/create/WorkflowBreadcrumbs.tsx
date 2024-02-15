@@ -15,36 +15,36 @@ export default function WorkflowBreadcrumbs({
   templateId?: string
 }) {
   const location = useLocation()
-  const firstRoute = route("/create/:projectId", { projectId })
-  const secondRoute = route("/create/:projectId/brush/:templateId", {
+  const projectRoute = route("/create/:projectId", { projectId })
+  const templateRoute = route("/create/:projectId/brush/:templateId", {
     projectId,
-    templateId: templateId || "",
+    templateId: templateId ?? "",
   })
-  const thirdRoute = route("/create/:projectId/brush/:templateId/details", {
+  const detailsRoute = route("/create/:projectId/brush/:templateId/details", {
     projectId,
-    templateId: templateId || "",
+    templateId: templateId ?? "",
   })
 
   return (
-    <Breadcrumbs size="lg" className="font-semibold">
+    <Breadcrumbs className="font-semibold" size="lg">
       <BreadcrumbItem
-        href={firstRoute}
-        isCurrent={location.pathname === firstRoute}
+        href={projectRoute}
+        isCurrent={location.pathname === projectRoute}
       >
         <PencilSquareIcon className="h-5 w-5" />
         Show us your writing
       </BreadcrumbItem>
       <BreadcrumbItem
-        href={secondRoute}
-        isCurrent={location.pathname === secondRoute}
+        href={templateRoute}
+        isCurrent={location.pathname === templateRoute}
         isDisabled={!templateId}
       >
         <PaintBrushIcon className="h-5 w-5" />
         Pick a style
       </BreadcrumbItem>
       <BreadcrumbItem
-        href={thirdRoute}
-        isCurrent={location.pathname === thirdRoute}
+        href={detailsRoute}
+        isCurrent={location.pathname === detailsRoute}
         isDisabled={!templateId}
       >
         <AdjustmentsHorizontalIcon className="h-5 w-5" />
