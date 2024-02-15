@@ -141,8 +141,17 @@ export async function action({ params, request }: ActionFunctionArgs) {
 }
 
 export function HydrateFallback() {
-  // TODO(adelrodriguez): Add a loading state
-  return <div>Loading...</div>
+  return (
+    <div className="flex w-full flex-col gap-y-2 pt-8">
+      <div className="h-4 animate-pulse rounded-md bg-gray-300" />
+
+      <div className="h-12 w-full animate-pulse rounded-md bg-gray-300" />
+      <div className="h-64 w-full animate-pulse rounded-md bg-gray-300" />
+      <div className="h-36 w-full animate-pulse rounded-md bg-gray-300" />
+      <div className="h-36 w-full animate-pulse rounded-md bg-gray-300" />
+      <div className="h-36 w-full animate-pulse rounded-md bg-gray-300" />
+    </div>
+  )
 }
 
 export default function Route() {
@@ -174,8 +183,8 @@ export default function Route() {
             Tell us about your writing
           </h1>
           <h2 className="mt-4 text-2xl font-light text-gray-600">
-            We don&apos;t save your text; everything is stored locally on your
-            computer
+            We don&apos;t save your text; it&apos;s stored locally on your
+            device
           </h2>
         </div>
 

@@ -55,7 +55,7 @@ export default function Route() {
     <div>
       <div className="flex justify-end pb-5">
         <Link
-          className="background-animated rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="background-animated rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
           to={route("/create")}
         >
           Create a new project ✨
