@@ -1,7 +1,7 @@
 import { parseWithZod } from "@conform-to/zod"
 import { Progress } from "@nextui-org/react"
 import { StorageService } from "@prisma/client"
-import { ActionFunctionArgs, json } from "@remix-run/node"
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
@@ -16,24 +16,57 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import { DRAFT_PROJECT_KEY, MAX_CHARACTER_LENGTH } from "~/config/consts"
 import env from "~/config/env.server"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { generateDalle3ImageQueue } from "~/helpers/queues"
 import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
-import { getSavedText, removeSavedText } from "~/utils/text"
 
 const schema = z.object({
-  text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
+  text: z.string().min(1).max(MAX_CHARACTER_LENGTH),
 })
 
-export function clientLoader({ params }: ClientLoaderFunctionArgs) {
-  const { projectId } = zx.parseParams(
+export async function loader({ params, request }: LoaderFunctionArgs) {
+  const { projectId, templateId } = zx.parseParams(
     params,
-    z.object({ projectId: z.string() }),
+    z.object({ projectId: z.string(), templateId: z.string() }),
   )
-  const text = getSavedText(projectId)
+
+  const user = await auth.isAuthenticated(request, {
+    failureRedirect: route("/login"),
+  })
+
+  const project = await db.project.findUnique({
+    select: { id: true },
+    where: { id: projectId, userId: user.id },
+  })
+
+  if (!project) {
+    throw notFound()
+  }
+
+  // Check that the user has available balance to submit the project
+  const subscription = await db.subscription.findUnique({
+    where: { userId: user.id },
+  })
+
+  if (!subscription || subscription.creditBalance < 1) {
+    throw redirect(
+      route("/create/:projectId/brush/:templateId/details", {
+        projectId,
+        templateId,
+      }),
+    )
+  }
+
+  return { project }
+}
+
+export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
+  const { project } = await serverLoader<typeof loader>()
+  const text = localStorage.getItem(project.id)
 
   // If the text was deleted from the client, let's throw an error.
   if (!text) {
@@ -87,6 +120,20 @@ export async function action({ params, request }: ActionFunctionArgs) {
     return json({ error: "Art style not found", success: false } as const)
   }
 
+  // Check that the user has available balance to submit the project
+  const subscription = await db.subscription.findUnique({
+    where: { userId: user.id },
+  })
+
+  if (!subscription || subscription.creditBalance < 1) {
+    throw redirect(
+      route("/create/:projectId/brush/:templateId/details", {
+        projectId,
+        templateId,
+      }),
+    )
+  }
+
   const prompt = generatePrompt(submission.value.text, {
     artStyle: template.artStyle,
     detail: template.detail,
@@ -136,7 +183,7 @@ export function clientAction({ serverAction }: ClientActionFunctionArgs) {
   // This removes the saved text from local storage. Since we are not passing a
   // project key, this should remove the text from the draft project in case the
   // user inputs text in the /create route before registering.
-  removeSavedText()
+  localStorage.removeItem(DRAFT_PROJECT_KEY)
 
   return serverAction()
 }

@@ -8,7 +8,12 @@ import {
   json,
   redirect,
 } from "@remix-run/node"
-import { Form, useActionData, useLoaderData } from "@remix-run/react"
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -19,17 +24,21 @@ import db from "~/helpers/db.server"
 import { forbidden, notFound } from "~/utils/http.server"
 
 const schema = z.object({
-  detail: z.number().optional(),
   exclude: z.string().optional(),
   keyElements: z.string().optional(),
   mood: z.string().optional(),
 })
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { templateId } = zx.parseParams(
     params,
     z.object({ templateId: z.string() }),
   )
+
+  const user = await auth.isAuthenticated(request, {
+    failureRedirect: route("/login"),
+  })
+
   const template = await db.template.findUnique({
     select: {
       exclude: true,
@@ -45,7 +54,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw notFound()
   }
 
-  return json({ template })
+  const subscription = await db.subscription.findUnique({
+    where: { userId: user.id },
+  })
+
+  const hasEnoughCredits = !!subscription && subscription.creditBalance > 0
+
+  return json({ hasEnoughCredits, template })
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -99,13 +114,14 @@ export async function action({ params, request }: ActionFunctionArgs) {
 }
 
 export default function Route() {
-  const { template } = useLoaderData<typeof loader>()
+  const { hasEnoughCredits, template } = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     defaultValue: template,
     lastResult,
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
   })
+  const navigate = useNavigate()
 
   return (
     <>
@@ -170,8 +186,18 @@ export default function Route() {
           <Button
             className="background-animated font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
             fullWidth
+            onClick={() => {
+              if (hasEnoughCredits) return
+              const confirmed = confirm(
+                "You don't have enough credits to generate this art. Purchase more?",
+              )
+
+              if (confirmed) {
+                navigate(route("/pricing"))
+              }
+            }}
             size="lg"
-            type="submit"
+            type={hasEnoughCredits ? "submit" : "button"}
           >
             Generate my art ✨
           </Button>

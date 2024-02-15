@@ -21,7 +21,6 @@ import { generateDalle3ImageQueue } from "~/helpers/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
 import { getQueueEvents } from "~/utils/job.server"
 import { getIntendedUseLabel } from "~/utils/project"
-import { getSavedText } from "~/utils/text"
 
 import Text from "./Text"
 
@@ -88,20 +87,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
 
   const pending = async () => {
-    try {
-      const events = getQueueEvents(generateDalle3ImageQueue.name)
-      await job.waitUntilFinished(events)
+    const events = getQueueEvents(generateDalle3ImageQueue.name)
+    await job.waitUntilFinished(events)
 
-      const image = await db.image.findUniqueOrThrow({
-        select: { id: true, publicUrl: true },
-        where: { id: pendingImage.id },
-      })
+    const image = await db.image.findUniqueOrThrow({
+      select: { id: true, publicUrl: true },
+      where: { id: pendingImage.id },
+    })
 
-      return { image }
-    } catch (error) {
-      // TODO(adelrodriguez): Log the error
-      return { image: null }
-    }
+    return { image }
   }
 
   return defer({ pendingImage: pending(), project })
@@ -116,7 +110,7 @@ export async function clientLoader({
     params,
     z.object({ projectId: z.string() }),
   )
-  const text = getSavedText(projectId)
+  const text = localStorage.getItem(projectId)
 
   return { ...serverData, text }
 }
@@ -180,6 +174,14 @@ export function HydrateFallback() {
       <div className="lg:pl-96">
         <div className="flex h-56 w-56 animate-pulse items-center justify-center rounded-md bg-gray-300 " />
       </div>
+    </div>
+  )
+}
+
+export function ErrorBoundary() {
+  return (
+    <div className="flex h-56 w-full items-center justify-center rounded-md bg-red-100/50 text-sm text-red-500">
+      Error loading images
     </div>
   )
 }
@@ -256,18 +258,12 @@ export default function Route() {
             >
               <Await resolve={pendingImage}>
                 {(resolved) =>
-                  !resolved?.image ? (
-                    <div className="flex h-56 w-full items-center justify-center rounded-md bg-red-100/50 text-sm text-red-500">
-                      Error creating image
-                    </div>
-                  ) : (
-                    resolved.image.publicUrl && (
-                      <GeneratedImage
-                        id={resolved.image.id}
-                        projectId={project.id}
-                        src={resolved.image.publicUrl}
-                      />
-                    )
+                  resolved?.image.publicUrl && (
+                    <GeneratedImage
+                      id={resolved.image.id}
+                      projectId={project.id}
+                      src={resolved.image.publicUrl}
+                    />
                   )
                 }
               </Await>

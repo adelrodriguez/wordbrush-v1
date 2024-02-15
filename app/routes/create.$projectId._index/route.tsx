@@ -25,15 +25,15 @@ import {
   IntendedUsePicker,
   WorkflowBreadcrumbs,
 } from "~/components/create"
+import { MAX_CHARACTER_LENGTH } from "~/config/consts"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
 import { forbidden } from "~/utils/http.server"
-import { getSavedText, saveText } from "~/utils/text"
 
 const schema = z.object({
   intendedUse: z.nativeEnum(IntendedUse),
   name: z.string(),
-  text: z.string().min(1).max(100000000), // TODO(adelrodriguez): Add a max length
+  text: z.string().min(1).max(MAX_CHARACTER_LENGTH),
 })
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
@@ -68,7 +68,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
   const { project, template } = await serverLoader<typeof loader>()
 
-  return { project, template, text: getSavedText(project.id) }
+  return { project, template, text: localStorage.getItem(project.id) }
 }
 
 clientLoader.hydrate = true
@@ -87,7 +87,7 @@ export async function clientAction({
   const text = formData.get("text")
 
   if (text && typeof text === "string") {
-    saveText(text, projectId)
+    localStorage.setItem(projectId, text)
   }
 
   return serverAction()

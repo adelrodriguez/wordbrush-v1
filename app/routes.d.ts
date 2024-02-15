@@ -7,6 +7,7 @@ declare module "routes-gen" {
     "/create/:projectId/brush/:templateId": { "projectId": string, "templateId": string };
     "/create/:projectId/brush/:templateId/details": { "projectId": string, "templateId": string };
     "/create/:projectId/brush/:templateId/submit": { "projectId": string, "templateId": string };
+    "/create/:projectId/brush/:templateId/submit/buy": { "projectId": string, "templateId": string };
     "/login": Record<string, never>;
     "/logout": Record<string, never>;
     "/magic-link": Record<string, never>;
@@ -30,6 +31,7 @@ declare module "routes-gen" {
       | ["/create/:projectId/brush/:templateId", RouteParams["/create/:projectId/brush/:templateId"]]
       | ["/create/:projectId/brush/:templateId/details", RouteParams["/create/:projectId/brush/:templateId/details"]]
       | ["/create/:projectId/brush/:templateId/submit", RouteParams["/create/:projectId/brush/:templateId/submit"]]
+      | ["/create/:projectId/brush/:templateId/submit/buy", RouteParams["/create/:projectId/brush/:templateId/submit/buy"]]
       | ["/login"]
       | ["/logout"]
       | ["/magic-link"]

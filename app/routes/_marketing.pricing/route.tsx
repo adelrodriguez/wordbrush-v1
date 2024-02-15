@@ -3,7 +3,7 @@ import { parseWithZod } from "@conform-to/zod"
 import { RadioGroup } from "@headlessui/react"
 import { Button } from "@nextui-org/react"
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
-import { Form, useLoaderData } from "@remix-run/react"
+import { Form, useLoaderData, useNavigation } from "@remix-run/react"
 import { z } from "zod"
 
 import db from "~/helpers/db.server"
@@ -16,6 +16,7 @@ const schema = z.object({
 export async function loader() {
   const products = await db.product.findMany({
     orderBy: { price: "asc" },
+    where: { checkoutUrl: { not: null } },
   })
 
   return json({ products })
@@ -49,6 +50,8 @@ export default function Route() {
     defaultValue: { productId: products[0]?.id },
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
   })
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === "submitting"
 
   return (
     <div className="px-6 py-24 sm:py-32 lg:px-8">
@@ -106,11 +109,13 @@ export default function Route() {
         </RadioGroup>
         <Button
           className="background-animated font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+          disabled={isSubmitting}
           fullWidth
+          isLoading={isSubmitting}
           size="lg"
           type="submit"
         >
-          Purchase
+          {isSubmitting ? "Processing..." : "Buy credits"}
         </Button>
       </Form>
     </div>
