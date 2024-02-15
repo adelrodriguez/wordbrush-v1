@@ -79,4 +79,4 @@ const processor: Processor<QueueData> = async (job) => {
   ])
 }
 
-export default createQueue("CREATE_DALLE_3_IMAGE", processor)
+export default createQueue("GENERATE_DALLE_3_IMAGE", processor)

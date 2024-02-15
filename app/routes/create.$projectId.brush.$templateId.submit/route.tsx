@@ -19,7 +19,7 @@ import { zx } from "zodix"
 import env from "~/config/env.server"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import { createDalle3ImageQueue } from "~/helpers/queues"
+import { generateDalle3ImageQueue } from "~/helpers/queues"
 import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
 import { getSavedText, removeSavedText } from "~/utils/text"
@@ -109,7 +109,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
     },
   })
 
-  const job = await createDalle3ImageQueue.add(image.id, {
+  const job = await generateDalle3ImageQueue.add(image.id, {
     imageId: image.id,
     prompt,
     templateId: template.id,

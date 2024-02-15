@@ -17,7 +17,7 @@ import { zx } from "zodix"
 import { GeneratedImage } from "~/components/GeneratedImage"
 import auth from "~/helpers/auth.server"
 import db from "~/helpers/db.server"
-import { createDalle3ImageQueue } from "~/helpers/queues"
+import { generateDalle3ImageQueue } from "~/helpers/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
 import { getQueueEvents } from "~/utils/job.server"
 import { getIntendedUseLabel } from "~/utils/project"
@@ -80,7 +80,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return json({ pendingImage: null, project })
   }
 
-  const job = await createDalle3ImageQueue.getJob(pendingImage.jobId)
+  const job = await generateDalle3ImageQueue.getJob(pendingImage.jobId)
   const isCompleted = await job?.isCompleted()
 
   if (!job?.id || isCompleted) {
@@ -88,15 +88,20 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
 
   const pending = async () => {
-    const events = getQueueEvents(createDalle3ImageQueue.name)
-    await job.waitUntilFinished(events)
+    try {
+      const events = getQueueEvents(generateDalle3ImageQueue.name)
+      await job.waitUntilFinished(events)
 
-    const image = await db.image.findUniqueOrThrow({
-      select: { id: true, publicUrl: true },
-      where: { id: pendingImage.id },
-    })
+      const image = await db.image.findUniqueOrThrow({
+        select: { id: true, publicUrl: true },
+        where: { id: pendingImage.id },
+      })
 
-    return { image }
+      return { image }
+    } catch (error) {
+      // TODO(adelrodriguez): Log the error
+      return { image: null }
+    }
   }
 
   return defer({ pendingImage: pending(), project })
@@ -251,12 +256,18 @@ export default function Route() {
             >
               <Await resolve={pendingImage}>
                 {(resolved) =>
-                  resolved?.image.publicUrl && (
-                    <GeneratedImage
-                      id={resolved.image.id}
-                      projectId={project.id}
-                      src={resolved.image.publicUrl}
-                    />
+                  !resolved?.image ? (
+                    <div className="flex h-56 w-full items-center justify-center rounded-md bg-red-100/50 text-sm text-red-500">
+                      Error creating image
+                    </div>
+                  ) : (
+                    resolved.image.publicUrl && (
+                      <GeneratedImage
+                        id={resolved.image.id}
+                        projectId={project.id}
+                        src={resolved.image.publicUrl}
+                      />
+                    )
                   )
                 }
               </Await>
