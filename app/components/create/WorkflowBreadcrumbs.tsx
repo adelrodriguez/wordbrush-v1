@@ -26,7 +26,7 @@ export default function WorkflowBreadcrumbs({
   })
 
   return (
-    <Breadcrumbs className="font-semibold" size="lg">
+    <Breadcrumbs className="hidden font-semibold md:block" size="lg">
       <BreadcrumbItem
         href={projectRoute}
         isCurrent={location.pathname === projectRoute}
