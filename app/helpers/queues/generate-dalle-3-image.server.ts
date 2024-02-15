@@ -1,4 +1,3 @@
-import { StorageService } from "@prisma/client"
 import { Processor } from "bullmq"
 import { Buffer } from "node:buffer"
 
@@ -60,16 +59,13 @@ const processor: Processor<QueueData> = async (job) => {
 
   await Promise.all([
     job.log(`Created image ${imageId}`),
-    db.image.create({
+    db.image.update({
       data: {
-        bucket: env.STORAGE_BUCKET,
-        projectId: template.projectId,
         prompt: image.revised_prompt ?? prompt,
         publicUrl,
-        service: StorageService.R2,
-        templateId: template.id,
         url,
       },
+      where: { id: imageId },
     }),
     updateCreditBalanceQueue.add(`Image ${imageId} created`, {
       amount: -CREDIT_COST_PER_IMAGE,
