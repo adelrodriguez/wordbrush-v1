@@ -28,6 +28,7 @@ import {
 import { MAX_CHARACTER_LENGTH } from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
+import { generateTextSummaryQueue } from "~/modules/queues"
 import { forbidden } from "~/utils/http.server"
 
 const schema = z.object({
@@ -113,13 +114,19 @@ export async function action({ params, request }: ActionFunctionArgs) {
   })
 
   try {
-    await db.project.update({
-      data: {
-        intendedUse: submission.value.intendedUse,
-        name: submission.value.name,
-      },
-      where: { id: projectId, userId: user.id },
-    })
+    await Promise.all([
+      db.project.update({
+        data: {
+          intendedUse: submission.value.intendedUse,
+          name: submission.value.name,
+        },
+        where: { id: projectId, userId: user.id },
+      }),
+      generateTextSummaryQueue.add(projectId, {
+        projectId,
+        text: submission.value.text,
+      }),
+    ])
   } catch (error) {
     throw forbidden()
   }

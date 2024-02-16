@@ -3,30 +3,65 @@ import { Buffer } from "node:buffer"
 
 import { CREDIT_COST_PER_IMAGE } from "~/config/consts"
 import env from "~/config/env.server"
+import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
+import { createQueue } from "~/modules/queue.server"
+import { updateCreditBalanceQueue } from "~/modules/queues"
 import ai from "~/services/openai.server"
 import { getImageSize, getModeStyle } from "~/utils/ai"
+import { generatePrompt } from "~/utils/ai.server"
 import { uploadBuffer } from "~/utils/upload.server"
 
-import { updateCreditBalanceQueue } from "."
-import { createQueue } from "../queue.server"
-
 type QueueData = {
-  prompt: string
   userId: string
   imageId: string
   templateId: string
+  projectId: string
 }
 
 const processor: Processor<QueueData> = async (job) => {
   const imageId = job.data.imageId
-  const prompt = job.data.prompt
   const templateId = job.data.templateId
   const userId = job.data.userId
+  const projectId = job.data.projectId
 
-  const template = await db.template.findUniqueOrThrow({
-    where: { id: templateId },
+  const cacheKey = `project:${projectId}:summary`
+
+  const [template, project, text] = await Promise.all([
+    db.template.findUnique({
+      include: { artStyle: true },
+      where: { id: templateId },
+    }),
+    db.project.findUniqueOrThrow({
+      where: { id: projectId },
+    }),
+    cache.get(cacheKey),
+  ])
+
+  if (!template) {
+    throw new Error("Template not found")
+  }
+
+  if (!template.artStyle) {
+    throw new Error("Art style not found")
+  }
+
+  if (!text) {
+    throw new Error("Summary not found")
+  }
+
+  await job.log(`Using summary from cache: ${text}`)
+
+  const prompt = generatePrompt(text, {
+    artStyle: template.artStyle,
+    detail: template.detail,
+    exclude: template.exclude,
+    intendedUse: project.intendedUse,
+    keyElements: template.keyElements,
+    mood: template.mood,
   })
+
+  await job.log(`Generated prompt: ${prompt}`)
 
   const response = await ai.images.generate({
     model: "dall-e-3",

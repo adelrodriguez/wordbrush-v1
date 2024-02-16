@@ -21,7 +21,6 @@ import env from "~/config/env.server"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 import { generateDalle3ImageQueue } from "~/modules/queues"
-import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
 
 const schema = z.object({
@@ -134,19 +133,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
     )
   }
 
-  const prompt = generatePrompt(submission.value.text, {
-    artStyle: template.artStyle,
-    detail: template.detail,
-    exclude: template.exclude,
-    intendedUse: project.intendedUse,
-    keyElements: template.keyElements,
-    mood: template.mood,
-  })
-
-  // TODO(adelrodriguez): Launch jobs for:
-  // Summarizing (probably using GPT-3.5, better done when creating the project)
-  // Generating art style recommendations (done when creating the project)
-  // Generating mood recommendations (done when creating the project)
   const image = await db.image.create({
     data: {
       bucket: env.STORAGE_BUCKET,
@@ -158,7 +144,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
   const job = await generateDalle3ImageQueue.add(image.id, {
     imageId: image.id,
-    prompt,
+    projectId: project.id,
     templateId: template.id,
     userId: user.id,
   })
