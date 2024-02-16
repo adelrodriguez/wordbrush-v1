@@ -1,13 +1,21 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { Button, Input } from "@nextui-org/react"
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
+import { HoneypotInputs } from "remix-utils/honeypot/react"
+import { SpamError } from "remix-utils/honeypot/server"
 import { route } from "routes-gen"
 import { z } from "zod"
 
 import Alert from "~/components/Alert"
 import auth from "~/modules/auth.server"
+import honeypot from "~/modules/honeypot.server"
 import { commitSession, getSession } from "~/modules/session.server"
 
 const schema = z.object({
@@ -37,6 +45,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.clone().formData()
+
+  try {
+    honeypot.check(formData)
+  } catch (error) {
+    if (error instanceof SpamError) {
+      // If they're a bot, send them to a Rick Astley video.
+      return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    }
+
+    throw error
+  }
+
   const submission = parseWithZod(formData, {
     schema,
   })
@@ -70,6 +90,7 @@ export default function Route() {
         </Alert>
       )}
       <Form {...getFormProps(form)} className="space-y-6" method="POST">
+        <HoneypotInputs label="Please leave this field blank" />
         <div className="mt-2">
           <Input
             {...getInputProps(fields.email, { type: "email" })}

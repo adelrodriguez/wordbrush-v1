@@ -8,9 +8,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  json,
+  useLoaderData,
   useNavigate,
 } from "@remix-run/react"
+import { HoneypotProvider } from "remix-utils/honeypot/react"
 
+import honeypot from "~/modules/honeypot.server"
 import stylesheet from "~/styles/index.css"
 import tailwind from "~/styles/tailwind.css"
 
@@ -26,7 +30,12 @@ export const links: LinksFunction = () => [
   },
 ]
 
+export function loader() {
+  return json({ honeypot: honeypot.getInputProps() })
+}
+
 export default function App() {
+  const { honeypot } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
 
   return (
@@ -39,7 +48,9 @@ export default function App() {
       </head>
       <body className="h-full">
         <NextUIProvider className="h-full" navigate={navigate}>
-          <Outlet />
+          <HoneypotProvider {...honeypot}>
+            <Outlet />
+          </HoneypotProvider>
         </NextUIProvider>
         <ScrollRestoration />
         <Scripts />
