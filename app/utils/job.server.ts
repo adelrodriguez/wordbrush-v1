@@ -1,9 +1,9 @@
 import { QueueEvents } from "bullmq"
 
-import redis from "~/modules/redis.server"
+import { connection } from "~/modules/queue.server"
 
 export function getQueueEvents(name: string): QueueEvents {
-  const queueEvents = new QueueEvents(name, { connection: redis })
+  const queueEvents = new QueueEvents(name, { connection })
 
   return queueEvents
 }
