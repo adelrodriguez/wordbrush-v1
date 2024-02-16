@@ -9,7 +9,7 @@ import {
   PhotoIcon,
   PlayIcon,
 } from "@heroicons/react/24/outline"
-import { IntendedUse } from "@prisma/client"
+import { Category, IntendedUse } from "@prisma/client"
 
 export function getIntendedUseIcon(
   intendedUse: IntendedUse,
@@ -61,5 +61,34 @@ export function getIntendedUseLabel(intendedUse: IntendedUse) {
       return "Other"
     default:
       return "Unknown"
+  }
+}
+
+export function getCategoryEmoji(category: Category): string {
+  switch (category) {
+    case Category.Abstract:
+      return "🎨"
+    case Category.Digital:
+      return "🖥️"
+    case Category.Fantasy:
+      return "🐉"
+    case Category.Geometric:
+      return "🔶"
+    case Category.Historical:
+      return "🏛️"
+    case Category.Illustrative:
+      return "🖌️"
+    case Category.Modern:
+      return "🏙️"
+    case Category.Nature:
+      return "🌿"
+    case Category.SciFi:
+      return "🚀"
+    case Category.Technological:
+      return "🔧"
+    case Category.Traditional:
+      return "🖼️"
+    default:
+      return ""
   }
 }
