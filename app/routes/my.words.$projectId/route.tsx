@@ -1,5 +1,5 @@
 import { Button, Chip, Spinner } from "@nextui-org/react"
-import { Image, ProjectStatus } from "@prisma/client"
+import { ProjectStatus } from "@prisma/client"
 import { LoaderFunctionArgs, defer, json, redirect } from "@remix-run/node"
 import {
   Await,
@@ -21,6 +21,10 @@ import { generateDalle3ImageQueue } from "~/modules/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
 import { getQueueEvents } from "~/utils/job.server"
 import { getIntendedUseLabel } from "~/utils/project"
+import {
+  calculateElementsPerColumn,
+  distributeElementsIntoColumns,
+} from "~/utils/ui"
 
 import Text from "./Text"
 
@@ -188,26 +192,8 @@ export function ErrorBoundary() {
 
 export default function Route() {
   const { pendingImage, project, text } = useLoaderData<typeof clientLoader>()
-  const groupSize = Math.floor(Math.sqrt(project.images.length))
-
-  const groupedImages = project.images.reduce(
-    (acc: Pick<Image, "id" | "publicUrl">[][], image, index) => {
-      if (index % groupSize === 0) {
-        acc.push([])
-      }
-
-      const arr = acc[acc.length - 1]
-
-      if (!arr) {
-        return acc
-      }
-
-      arr.push(image)
-
-      return acc
-    },
-    [],
-  )
+  const distribution = calculateElementsPerColumn(project.images.length, 4)
+  const columns = distributeElementsIntoColumns(project.images, distribution)
 
   return (
     <>
@@ -248,7 +234,7 @@ export default function Route() {
         </div>
 
         <div className="lg:pl-96">
-          <ul className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+          <ul className="grid grid-cols-4 gap-6">
             <Suspense
               fallback={
                 <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
@@ -269,7 +255,7 @@ export default function Route() {
               </Await>
             </Suspense>
 
-            {groupedImages.map((images, index) => (
+            {columns.map((images, index) => (
               <div className="flex flex-col gap-6" key={`group${index}`}>
                 {images.map(
                   (image) =>
