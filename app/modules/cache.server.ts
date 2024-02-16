@@ -1,0 +1,15 @@
+import { remember } from "@epic-web/remember"
+import Redis from "ioredis"
+
+import env from "~/config/env.server"
+
+const cache = remember(
+  "redis",
+  () =>
+    new Redis(env.REDIS_URL, {
+      enableReadyCheck: false,
+      maxRetriesPerRequest: null,
+    }),
+)
+
+export default cache
