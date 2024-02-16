@@ -17,8 +17,8 @@ import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import auth from "~/helpers/auth.server"
-import db from "~/helpers/db.server"
+import auth from "~/modules/auth.server"
+import db from "~/modules/db.server"
 import { notFound } from "~/utils/http.server"
 
 export async function loader({ params }: LoaderFunctionArgs) {

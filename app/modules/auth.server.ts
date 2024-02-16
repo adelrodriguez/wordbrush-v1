@@ -4,8 +4,8 @@ import { TOTPStrategy } from "remix-auth-totp"
 
 import { TRIAL_CREDITS } from "~/config/consts"
 import env from "~/config/env.server"
-import db from "~/helpers/db.server"
-import sessionStorage from "~/helpers/session.server"
+import db from "~/modules/db.server"
+import sessionStorage from "~/modules/session.server"
 import resend from "~/services/resend.server"
 
 const auth = new Authenticator<User>(sessionStorage)

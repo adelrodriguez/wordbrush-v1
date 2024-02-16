@@ -2,7 +2,7 @@ import { remember } from "@epic-web/remember"
 import type { Processor } from "bullmq"
 import { Queue, Worker } from "bullmq"
 
-import redis from "~/helpers/redis.server"
+import redis from "~/modules/redis.server"
 
 export type RegisteredQueue = {
   queue: Queue

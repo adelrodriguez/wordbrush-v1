@@ -2,7 +2,7 @@ import { LoaderFunctionArgs, MetaFunction, json } from "@remix-run/node"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { route } from "routes-gen"
 
-import auth from "~/helpers/auth.server"
+import auth from "~/modules/auth.server"
 
 export const meta: MetaFunction = () => [
   { title: "Create a new image | 🎨 Wordbrush" },

@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from "@remix-run/node"
 import { route } from "routes-gen"
 
-import auth from "~/helpers/auth.server"
+import auth from "~/modules/auth.server"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   await auth.authenticate("TOTP", request, {

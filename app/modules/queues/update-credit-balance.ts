@@ -1,7 +1,7 @@
 import { Processor } from "bullmq"
 
-import db from "~/helpers/db.server"
-import { createQueue } from "~/helpers/queue.server"
+import db from "~/modules/db.server"
+import { createQueue } from "~/modules/queue.server"
 
 type QueueData = {
   userId: string

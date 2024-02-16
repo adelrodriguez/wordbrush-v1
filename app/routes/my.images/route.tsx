@@ -2,8 +2,8 @@ import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 
 import { GeneratedImage } from "~/components/GeneratedImage"
-import auth from "~/helpers/auth.server"
-import db from "~/helpers/db.server"
+import auth from "~/modules/auth.server"
+import db from "~/modules/db.server"
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await auth.isAuthenticated(request, {

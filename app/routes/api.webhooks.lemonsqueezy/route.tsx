@@ -6,9 +6,9 @@ import { z } from "zod"
 
 import { TRIAL_CREDITS } from "~/config/consts"
 import env from "~/config/env.server"
-import db from "~/helpers/db.server"
-import { createPaidUserSubscriptionQueue } from "~/helpers/queues"
-import updateCreditBalance from "~/helpers/queues/update-credit-balance"
+import db from "~/modules/db.server"
+import { createPaidUserSubscriptionQueue } from "~/modules/queues"
+import updateCreditBalance from "~/modules/queues/update-credit-balance"
 import { badRequest, noContent, unauthorized } from "~/utils/http.server"
 
 const EventSchema = z.object({

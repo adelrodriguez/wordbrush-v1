@@ -21,7 +21,7 @@ import { Fragment, useState } from "react"
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit"
 import { route } from "routes-gen"
 
-import auth from "~/helpers/auth.server"
+import auth from "~/modules/auth.server"
 import { Match } from "~/utils/remix"
 
 export async function loader({ request }: LoaderFunctionArgs) {

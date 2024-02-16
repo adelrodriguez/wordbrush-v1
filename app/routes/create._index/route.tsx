@@ -19,8 +19,8 @@ import {
   IntendedUsePicker,
 } from "~/components/create"
 import { DRAFT_PROJECT_KEY, MAX_CHARACTER_LENGTH } from "~/config/consts"
-import auth from "~/helpers/auth.server"
-import db from "~/helpers/db.server"
+import auth from "~/modules/auth.server"
+import db from "~/modules/db.server"
 
 const schema = z.object({
   artStyleId: z.string().optional(),

@@ -12,8 +12,8 @@ import { route } from "routes-gen"
 import { z } from "zod"
 
 import Alert from "~/components/Alert"
-import auth from "~/helpers/auth.server"
-import { commitSession, getSession } from "~/helpers/session.server"
+import auth from "~/modules/auth.server"
+import { commitSession, getSession } from "~/modules/session.server"
 
 const schema = z.object({
   code: z.string().length(6),

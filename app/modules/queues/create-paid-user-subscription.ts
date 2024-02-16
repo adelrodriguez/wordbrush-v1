@@ -1,8 +1,8 @@
 import { Plan, SubscriptionProvider } from "@prisma/client"
 import { Processor } from "bullmq"
 
-import db from "~/helpers/db.server"
-import { createQueue } from "~/helpers/queue.server"
+import db from "~/modules/db.server"
+import { createQueue } from "~/modules/queue.server"
 
 import updateCreditBalance from "./update-credit-balance"
 

@@ -6,7 +6,7 @@ import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
 import { Form, useLoaderData, useNavigation } from "@remix-run/react"
 import { z } from "zod"
 
-import db from "~/helpers/db.server"
+import db from "~/modules/db.server"
 import { notFound } from "~/utils/http.server"
 
 const schema = z.object({

@@ -18,9 +18,9 @@ import { zx } from "zodix"
 
 import { DRAFT_PROJECT_KEY, MAX_CHARACTER_LENGTH } from "~/config/consts"
 import env from "~/config/env.server"
-import auth from "~/helpers/auth.server"
-import db from "~/helpers/db.server"
-import { generateDalle3ImageQueue } from "~/helpers/queues"
+import auth from "~/modules/auth.server"
+import db from "~/modules/db.server"
+import { generateDalle3ImageQueue } from "~/modules/queues"
 import { generatePrompt } from "~/utils/ai.server"
 import { notFound } from "~/utils/http.server"
 

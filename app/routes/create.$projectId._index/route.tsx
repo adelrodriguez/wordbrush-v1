@@ -26,8 +26,8 @@ import {
   WorkflowBreadcrumbs,
 } from "~/components/create"
 import { MAX_CHARACTER_LENGTH } from "~/config/consts"
-import auth from "~/helpers/auth.server"
-import db from "~/helpers/db.server"
+import auth from "~/modules/auth.server"
+import db from "~/modules/db.server"
 import { forbidden } from "~/utils/http.server"
 
 const schema = z.object({

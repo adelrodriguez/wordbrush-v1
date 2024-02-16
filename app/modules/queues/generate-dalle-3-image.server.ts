@@ -3,7 +3,7 @@ import { Buffer } from "node:buffer"
 
 import { CREDIT_COST_PER_IMAGE } from "~/config/consts"
 import env from "~/config/env.server"
-import db from "~/helpers/db.server"
+import db from "~/modules/db.server"
 import ai from "~/services/openai.server"
 import { getImageSize, getModeStyle } from "~/utils/ai"
 import { uploadBuffer } from "~/utils/upload.server"
