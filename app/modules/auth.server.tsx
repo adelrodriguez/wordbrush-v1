@@ -2,6 +2,7 @@ import { Plan, User } from "@prisma/client"
 import { Authenticator } from "remix-auth"
 import { TOTPStrategy } from "remix-auth-totp"
 
+import { MagicLink } from "~/components/email"
 import { TRIAL_CREDITS } from "~/config/consts"
 import env from "~/config/env.server"
 import db from "~/modules/db.server"
@@ -24,7 +25,8 @@ auth.use(
       sendTOTP: async ({ code, email, magicLink }) => {
         await resend.emails.send({
           from: "no-reply@wordbrush.art",
-          html: `<a href="${magicLink}">Click here to sign in</a>. Your code is: ${code}`,
+          html: "",
+          react: <MagicLink code={code} magicLink={magicLink} />,
           subject: "Sign in to Wordbrush 🎨",
           to: email,
         })
