@@ -14,6 +14,7 @@ export function GeneratedImage({
   return (
     <div className="group relative">
       <Link
+        preventScrollReset
         to={route("/my/words/:projectId/images/:imageId", {
           imageId: id,
           projectId,
