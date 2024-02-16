@@ -86,9 +86,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
       detail: image.template.detail,
       exclude: image.template.exclude,
       keyElements: image.template.keyElements,
+      mode: image.template.mode,
       mood: image.template.mood,
       projectId,
-      mode: image.template.mode,
     },
   })
 
@@ -196,9 +196,9 @@ export default function Route() {
                     <Form className="flex items-center" method="POST">
                       <Button
                         className="rounded-md bg-gray-600 p-2 hover:bg-gray-500"
+                        isIconOnly
                         title="Duplicate this image style"
                         type="submit"
-                        isIconOnly
                       >
                         <DocumentDuplicateIcon className="h-6 w-6 text-white" />
                       </Button>

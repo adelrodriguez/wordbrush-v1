@@ -38,7 +38,7 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <NextUIProvider navigate={navigate} className="h-full">
+        <NextUIProvider className="h-full" navigate={navigate}>
           <Outlet />
         </NextUIProvider>
         <ScrollRestoration />
