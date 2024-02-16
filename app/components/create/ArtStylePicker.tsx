@@ -51,7 +51,7 @@ export default function ArtStylePicker({
 
   return (
     <div className="w-full">
-      <Tab.Group defaultIndex={defaultTabIndex}>
+      <Tab.Group defaultIndex={defaultTabIndex === -1 ? 0 : defaultTabIndex}>
         <Tab.List className="flex flex-wrap  justify-center space-x-4">
           <Tab className="mb-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white">
             ✨ All

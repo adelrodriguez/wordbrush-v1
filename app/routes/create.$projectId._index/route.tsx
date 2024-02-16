@@ -15,7 +15,9 @@ import {
   Form,
   useActionData,
   useLoaderData,
+  useNavigation,
 } from "@remix-run/react"
+import { wait } from "remix-utils/timers"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -114,22 +116,23 @@ export async function action({ params, request }: ActionFunctionArgs) {
   })
 
   try {
-    await Promise.all([
-      db.project.update({
-        data: {
-          intendedUse: submission.value.intendedUse,
-          name: submission.value.name,
-        },
-        where: { id: projectId, userId: user.id },
-      }),
-      generateTextSummaryQueue.add(projectId, {
-        projectId,
-        text: submission.value.text,
-      }),
-    ])
+    await db.project.update({
+      data: {
+        intendedUse: submission.value.intendedUse,
+        name: submission.value.name,
+      },
+      where: { id: projectId, userId: user.id },
+    })
   } catch (error) {
     throw forbidden()
   }
+
+  await generateTextSummaryQueue.add(projectId, {
+    projectId,
+    text: submission.value.text,
+  })
+
+  await wait(3000, { signal: request.signal })
 
   let template = await db.template.findFirst({
     where: { projectId },
@@ -174,6 +177,8 @@ export default function Route() {
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
     shouldRevalidate: "onBlur",
   })
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state === "submitting"
 
   return (
     <>
@@ -234,11 +239,19 @@ export default function Route() {
           <Button
             className="rounded-2xl bg-gray-900 text-white hover:bg-gray-800"
             fullWidth
+            isDisabled={isSubmitting}
+            isLoading={isSubmitting}
             size="lg"
             type="submit"
           >
-            <PaintBrushIcon className="h-5 w-5" />
-            Now let&apos;s choose an art style
+            {isSubmitting ? (
+              "Saving project..."
+            ) : (
+              <>
+                <PaintBrushIcon className="h-5 w-5" />
+                Now let&apos;s choose an art style
+              </>
+            )}
           </Button>
         </div>
       </Form>

@@ -12,6 +12,7 @@ import {
   useSubmit,
 } from "@remix-run/react"
 import { useEffect, useRef } from "react"
+import { wait } from "remix-utils/timers"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -160,7 +161,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
   })
 
   // Artificial delay to give the user a chance to see the loading state
-  await new Promise((resolve) => setTimeout(resolve, 5000))
+  await wait(5000, { signal: request.signal })
 
   return redirect(route("/my/words/:projectId", { projectId }))
 }

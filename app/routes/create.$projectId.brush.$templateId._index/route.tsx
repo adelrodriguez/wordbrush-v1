@@ -11,6 +11,7 @@ import {
   redirect,
 } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
+import { wait } from "remix-utils/timers"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -30,10 +31,10 @@ import { forbidden, notFound } from "~/utils/http.server"
 const schema = z.object({
   artStyleId: z.string(),
   aspectRatio: z.nativeEnum(AspectRatio),
-  detail: z.number().optional(),
+  detail: z.number().min(1).max(100).default(50),
 })
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { templateId } = zx.parseParams(
     params,
     z.object({ templateId: z.string() }),
@@ -68,7 +69,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     artStyles,
     // We set a timeout to wait for the recommendations to be generated. This
     // might have to change if the recommendations take longer than expected.
-    recommendations: new Promise((resolve) => setTimeout(resolve, 3000))
+    recommendations: wait(3000, { signal: request.signal })
       .then(() => cache.get(`project:${template.projectId}:recommendations`))
       .then((value) => value?.split(", ") ?? []),
     template,
