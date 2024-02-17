@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix build",
+    "build": "remix build --sourcemap && sentry-upload-sourcemaps --org metaideas --project wordbrush --release $RAILWAY_GIT_COMMIT_SHA",
     "database:deploy": "prisma migrate deploy",
     "database:generate": "prisma generate",
     "database:migrate:create": "prisma migrate dev --name",
