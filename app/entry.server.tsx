@@ -3,14 +3,26 @@
  * You are free to delete this file if you'd like to, but if you ever want it revealed again, you can run `npx remix reveal` ✨
  * For more information, see https://remix.run/file-conventions/entry.server
  */
-import type { EntryContext } from "@remix-run/node"
+import type { EntryContext, HandleErrorFunction } from "@remix-run/node"
 import { createReadableStreamFromReadable } from "@remix-run/node"
 import { RemixServer } from "@remix-run/react"
+import { captureRemixServerException } from "@sentry/remix"
 import { isbot } from "isbot"
 import { PassThrough } from "node:stream"
 import { renderToPipeableStream } from "react-dom/server"
 
 import "~/config/env.server"
+import Sentry from "~/services/sentry"
+
+export const handleError: HandleErrorFunction = (error, { request }) => {
+  void captureRemixServerException(error, "remix.server", request)
+  console.error(error)
+}
+
+Sentry.init({
+  dsn: "https://385ee7290c910c82fa78d52249ce8737@o4506764137922560.ingest.sentry.io/4506764141789184",
+  tracesSampleRate: 1,
+})
 
 const ABORT_DELAY = 5_000
 

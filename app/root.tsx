@@ -11,7 +11,9 @@ import {
   json,
   useLoaderData,
   useNavigate,
+  useRouteError,
 } from "@remix-run/react"
+import { captureRemixErrorBoundaryError } from "@sentry/remix"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
 
 import honeypot from "~/modules/honeypot.server"
@@ -32,6 +34,14 @@ export const links: LinksFunction = () => [
 
 export function loader() {
   return json({ honeypot: honeypot.getInputProps() })
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+
+  captureRemixErrorBoundaryError(error)
+
+  return <div>Something went wrong</div>
 }
 
 export default function App() {

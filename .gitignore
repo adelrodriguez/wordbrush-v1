@@ -12,3 +12,6 @@ node_modules
 
 /postgres-data
 /redis-data
+
+# Sentry Config File
+.sentryclirc
