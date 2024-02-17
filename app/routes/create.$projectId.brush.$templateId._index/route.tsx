@@ -26,6 +26,7 @@ import {
 import auth from "~/modules/auth.server"
 import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
+import Sentry from "~/services/sentry"
 import { forbidden, notFound } from "~/utils/http.server"
 
 const schema = z.object({
@@ -130,6 +131,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
       },
     })
   } catch (error) {
+    console.log(error)
+    Sentry.captureException(error)
+
     throw forbidden()
   }
 

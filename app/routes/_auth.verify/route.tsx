@@ -17,6 +17,7 @@ import Alert from "~/components/Alert"
 import auth from "~/modules/auth.server"
 import honeypot from "~/modules/honeypot.server"
 import { commitSession, getSession } from "~/modules/session.server"
+import Sentry from "~/services/sentry"
 
 const schema = z.object({
   code: z.string().length(6),
@@ -49,6 +50,9 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     honeypot.check(formData)
   } catch (error) {
+    console.log(error)
+    Sentry.captureException(error)
+
     if (error instanceof SpamError) {
       // If they're a bot, send them to a Rick Astley video.
       return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")

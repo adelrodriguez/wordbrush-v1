@@ -3,6 +3,7 @@ import type { ConnectionOptions, Processor } from "bullmq"
 import { Queue, Worker } from "bullmq"
 
 import env from "~/config/env.server"
+import Sentry from "~/services/sentry"
 
 export type RegisteredQueue = {
   queue: Queue
@@ -41,9 +42,10 @@ export function createQueue<Payload>(
   // an important role in helping workers stay busy.
   const worker = new Worker<Payload>(name, handler, { connection })
 
-  // TODO(adelrodriguez): Handle job failures
   worker.on("failed", (job, err) => {
     console.error(`Job ${job?.id} failed: ${err.message}`)
+
+    Sentry.captureException(err)
   })
 
   registeredQueues[name] = { queue, worker }

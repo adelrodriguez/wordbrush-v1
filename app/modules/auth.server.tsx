@@ -8,6 +8,7 @@ import env from "~/config/env.server"
 import db from "~/modules/db.server"
 import sessionStorage from "~/modules/session.server"
 import resend from "~/services/resend.server"
+import Sentry from "~/services/sentry"
 
 const auth = new Authenticator<User>(sessionStorage)
 
@@ -65,7 +66,9 @@ auth.use(
 
         return user
       } catch (error) {
-        // TODO(adelrodriguez): Log the error
+        console.error(error)
+        Sentry.captureException(error)
+
         throw new Error(
           "There was an error creating the user. Please try again.",
         )

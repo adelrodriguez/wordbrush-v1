@@ -22,6 +22,7 @@ import env from "~/config/env.server"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 import { generateDalle3ImageQueue } from "~/modules/queues"
+import Sentry from "~/services/sentry"
 import { notFound } from "~/utils/http.server"
 
 const schema = z.object({
@@ -89,8 +90,12 @@ export async function action({ params, request }: ActionFunctionArgs) {
     schema,
   })
 
-  // TODO(adelrodriguez): Handle this error in the client
   if (submission.status !== "success") {
+    Sentry.captureMessage("Invalid form submission", {
+      extra: { submission },
+    })
+
+    // TODO(adelrodriguez): Handle this error in the client
     return json({ error: "Text not found", success: false })
   }
 
@@ -115,8 +120,12 @@ export async function action({ params, request }: ActionFunctionArgs) {
     throw notFound()
   }
 
-  // TODO(adelrodriguez): Handle this error in the client
   if (!template.artStyle) {
+    Sentry.captureMessage("Art style not found", {
+      extra: { template },
+    })
+
+    // TODO(adelrodriguez): Handle this error in the client
     return json({ error: "Art style not found", success: false } as const)
   }
 

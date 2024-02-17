@@ -31,6 +31,7 @@ import { MAX_CHARACTER_LENGTH } from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 import { generateTextSummaryQueue } from "~/modules/queues"
+import Sentry from "~/services/sentry"
 import { forbidden } from "~/utils/http.server"
 
 const schema = z.object({
@@ -124,6 +125,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
       where: { id: projectId, userId: user.id },
     })
   } catch (error) {
+    console.log(error)
+    Sentry.captureException(error)
+
     throw forbidden()
   }
 
