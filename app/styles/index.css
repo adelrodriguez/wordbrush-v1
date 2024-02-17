@@ -16,18 +16,8 @@ body {
 
 .background-animated {
   animation: animated-background 6s ease infinite reverse;
-  background: -webkit-linear-gradient(60deg, #680aca, #ff897e);
-  background: linear-gradient(
-    60deg,
-    #f9820b,
-    #e85235,
-    #ef4ebc,
-    #a166ab,
-    #5073b8,
-    #1098ad,
-    #07b39b,
-    #609c6f
-  );
+  background: -webkit-linear-gradient(60deg, #fe3032, #fe9125, #00b19c);
+  background: linear-gradient(60deg, #fe3032, #fe9125, #00b19c);
   background-position: 0% 0%;
   background-size: 240% 240%;
 }

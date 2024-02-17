@@ -115,12 +115,12 @@ export default function Route() {
                   </div>
                 </Transition.Child>
 
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
-                  <div className="flex h-16 shrink-0 items-center">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2 ring-1 ring-white/10">
+                  <div className="flex h-32 shrink-0 items-center">
                     <img
                       alt="Your Company"
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                      className="h-32 w-auto"
+                      src="/assets/images/logo.png"
                     />
                   </div>
                   <nav className="flex flex-1 flex-col">
@@ -133,7 +133,7 @@ export default function Route() {
                                 "group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6",
                                 isActive
                                   ? "bg-gray-800 text-white"
-                                  : "text-gray-400 hover:bg-gray-800 hover:text-white",
+                                  : "text-gray-800 hover:bg-gray-800 hover:text-white",
                               )
                             }
                             to={item.href}
@@ -160,8 +160,8 @@ export default function Route() {
         <div className="flex h-16 shrink-0 items-center justify-center">
           <img
             alt="Your Company"
-            className="h-8 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+            className="h-16 w-auto"
+            src="/assets/images/logo-white.png"
           />
         </div>
         <nav className="mt-8">

@@ -11,6 +11,8 @@ import {
   Text,
 } from "@react-email/components"
 
+import env from "~/config/env.server"
+
 export default function MagicLink({
   code,
   magicLink,
@@ -28,9 +30,8 @@ export default function MagicLink({
             <Container className="my-10">
               <Img
                 alt="Wordbrush's Logo"
-                height="32"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                width="32"
+                className="h-12 w-12"
+                src={`${env.RAILWAY_STATIC_URL}/assets/images/logo.png`}
               />
               <Heading className="text-2xl font-bold ">Login</Heading>
             </Container>

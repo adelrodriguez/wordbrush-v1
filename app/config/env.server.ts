@@ -16,6 +16,9 @@ const EnvSchema = z.object({
   OPENAI_API_KEY: z.string(),
   OPENAI_ORG_ID: z.string(),
 
+  // Railway
+  RAILWAY_STATIC_URL: z.string(),
+
   // Redis
   REDIS_HOST: z.string(),
   REDIS_PASSWORD: z.string(),

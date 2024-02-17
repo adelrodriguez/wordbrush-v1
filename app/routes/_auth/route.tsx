@@ -10,11 +10,11 @@ export default function Route() {
               <Link to="/">
                 <img
                   alt="Your Company"
-                  className="h-10 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  className="h-48 w-auto"
+                  src="/assets/images/logo.png"
                 />
               </Link>
-              <h2 className="mt-8 text-2xl font-black leading-9 tracking-tight text-gray-900">
+              <h2 className="mt-2 text-2xl font-black leading-9 tracking-tight text-gray-900">
                 Sign in to your account
               </h2>
             </div>
