@@ -16,10 +16,9 @@ const registeredQueues = remember<Record<string, RegisteredQueue>>(
 )
 
 export const connection: ConnectionOptions = {
-  host: env.REDIS_HOST,
-  password: env.REDIS_PASSWORD,
-  port: env.REDIS_PORT,
-  username: env.REDIS_USERNAME,
+  host: env.REDISHOST,
+  password: env.REDISPASSWORD,
+  port: env.REDISPORT,
 }
 
 export function createQueue<Payload>(

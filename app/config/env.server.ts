@@ -20,11 +20,10 @@ const EnvSchema = z.object({
   RAILWAY_STATIC_URL: z.string(),
 
   // Redis
-  REDIS_HOST: z.string(),
-  REDIS_PASSWORD: z.string(),
-  REDIS_PORT: z.coerce.number(),
+  REDISHOST: z.string(),
+  REDISPASSWORD: z.string(),
+  REDISPORT: z.coerce.number(),
   REDIS_URL: z.string(),
-  REDIS_USERNAME: z.string(),
 
   // Resend
   RESEND_API_KEY: z.string(),
