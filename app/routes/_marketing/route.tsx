@@ -21,13 +21,13 @@ export default function Route() {
           </div>
           <div className="flex gap-x-12">
             <Link
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-800"
               to={route("/pricing")}
             >
               Pricing
             </Link>
             <Link
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-800"
               to={route("/login")}
             >
               Log in <span aria-hidden="true">&rarr;</span>
@@ -35,7 +35,7 @@ export default function Route() {
           </div>
         </nav>
       </header>
-      <main className="h-full min-h-screen">
+      <main className="h-full min-h-screen bg-white">
         <Outlet />
       </main>
       <footer></footer>
