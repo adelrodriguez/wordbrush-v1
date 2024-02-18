@@ -8,7 +8,7 @@ import db from "~/modules/db.server"
 import { createQueue } from "~/modules/queue.server"
 import { updateCreditBalanceQueue } from "~/modules/queues"
 import ai from "~/services/openai.server"
-import { getImageSize, getModeStyle } from "~/utils/ai"
+import { getImageSize, getStyle } from "~/utils/ai"
 import { generatePrompt } from "~/utils/ai.server"
 import { uploadBuffer } from "~/utils/upload.server"
 
@@ -69,7 +69,7 @@ const processor: Processor<QueueData> = async (job) => {
     quality: "standard",
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
-    style: getModeStyle(template.mode),
+    style: getStyle(template.detail ?? 50),
     user: userId,
   })
 

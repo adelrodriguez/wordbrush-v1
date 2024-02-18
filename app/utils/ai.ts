@@ -1,4 +1,4 @@
-import { AspectRatio, Mode } from "@prisma/client"
+import { AspectRatio } from "@prisma/client"
 
 export function getImageSize(aspect?: AspectRatio | null) {
   switch (aspect) {
@@ -12,12 +12,10 @@ export function getImageSize(aspect?: AspectRatio | null) {
   }
 }
 
-export function getModeStyle(mode: Mode): "vivid" | "natural" {
-  switch (mode) {
-    case Mode.Vivid:
-      return "vivid"
-    case Mode.Natural:
-    default:
-      return "natural"
+export function getStyle(detail: number): "vivid" | "natural" {
+  if (detail <= 50) {
+    return "vivid"
   }
+
+  return "natural"
 }

@@ -7,7 +7,7 @@ export function generatePrompt(
   } & Pick<Template, "detail" | "exclude" | "keyElements" | "mood"> &
     Pick<Project, "intendedUse">,
 ) {
-  let prompt = `Your role is to help the user generate an image for DALL-E 3 from their provided text.
+  let prompt = `You will create an image from the above text. You will obey the following rules:
   1. The intended user of image will be is for ${options.intendedUse}; optimize it for this use case.
   2. The image WILL NOT include any text in it; DO NOT include text.
   3. You will respond with the image only, without any additional information.
@@ -19,7 +19,7 @@ export function generatePrompt(
   }
 
   if (options.detail) {
-    prompt += `6. On a scale of 1 being a simple, minimalist and abstract image, and 5 being an extremely intricate and detailed, this image has a detail level of ${options.detail}.`
+    prompt += `6. On a scale of 1 being the most simple, minimalist and abstract image, and 100 being an extremely intricate and detailed, this image has a detail level of ${options.detail}.`
   }
 
   if (options.exclude) {
@@ -30,7 +30,10 @@ export function generatePrompt(
     prompt += `8. The mood of the image should be: ${options.mood}.`
   }
 
-  return `Prompt: ${prompt}.
+  prompt +=
+    "Remember: DO NOT INCLUDE ANY TEXT. NO WORD OR NUMBERS on the image."
+
+  return `${text}.
   
-  Text: ${text}.`
+  ${prompt}`
 }
