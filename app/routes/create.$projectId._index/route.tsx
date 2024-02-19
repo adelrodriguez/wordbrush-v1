@@ -17,7 +17,6 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react"
-import { wait } from "remix-utils/timers"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -135,8 +134,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
     projectId,
     text: submission.value.text,
   })
-
-  await wait(3000, { signal: request.signal })
 
   let template = await db.template.findFirst({
     where: { projectId },

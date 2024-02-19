@@ -15,11 +15,14 @@ import {
   useRouteError,
 } from "@remix-run/react"
 import { captureRemixErrorBoundaryError } from "@sentry/remix"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
 
 import honeypot from "~/modules/honeypot.server"
 import stylesheet from "~/styles/index.css"
 import tailwind from "~/styles/tailwind.css"
+
+const queryClient = new QueryClient()
 
 export const links: LinksFunction = () => [
   ...(cssBundleHref ? [{ href: cssBundleHref, rel: "stylesheet" }] : []),
@@ -90,11 +93,13 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <NextUIProvider className="h-full" navigate={navigate}>
-          <HoneypotProvider {...honeypot}>
-            <Outlet />
-          </HoneypotProvider>
-        </NextUIProvider>
+        <QueryClientProvider client={queryClient}>
+          <NextUIProvider className="h-full" navigate={navigate}>
+            <HoneypotProvider {...honeypot}>
+              <Outlet />
+            </HoneypotProvider>
+          </NextUIProvider>
+        </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

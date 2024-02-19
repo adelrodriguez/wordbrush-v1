@@ -3,8 +3,9 @@ import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import { Spinner, Tooltip } from "@nextui-org/react"
 import { ArtStyle, Category } from "@prisma/client"
-import { Await } from "@remix-run/react"
-import { ComponentPropsWithoutRef, Suspense } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { ComponentPropsWithoutRef } from "react"
+import { route } from "routes-gen"
 
 import { getCategoryEmoji } from "~/utils/project"
 
@@ -36,12 +37,36 @@ export default function ArtStylePicker({
   id,
   name,
   options,
-  recommendations,
+  projectId,
 }: {
+  projectId?: string
   defaultValue?: string
   options: Option[]
-  recommendations?: Promise<string[]>
 } & ComponentPropsWithoutRef<"input">) {
+  const {
+    data: recommendations,
+    isError,
+    isPending,
+  } = useQuery({
+    enabled: !!projectId,
+    queryFn: async () => {
+      const response = await fetch(
+        route("/api/projects/:projectId/recommendations", {
+          projectId: projectId ?? "", // Won't be undefined because of the enabled flag
+        }),
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch recommendations")
+      }
+
+      const data = (await response.json()) as { recommendations: ArtStyle[] }
+
+      return data.recommendations
+    },
+    queryKey: ["project", projectId, "recommendations"],
+  })
+
   const groupedOptions = options.reduce<Record<Category, Option[]>>(
     (acc, artStyle) => {
       if (!artStyle.category) return acc
@@ -73,11 +98,15 @@ export default function ArtStylePicker({
           <Tab className="mb-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white">
             ✨ All
           </Tab>
-          <Tab className="mb-2 flex items-center rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white">
-            <Suspense fallback={<Spinner color="current" size="sm" />}>
-              <Await resolve={recommendations}>{() => "🤖 Recommended"}</Await>
-            </Suspense>
-          </Tab>
+          {!isError && (
+            <Tab className="mb-2 flex items-center rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white">
+              {isPending ? (
+                <Spinner color="current" size="sm" />
+              ) : (
+                "🤖 Recommended"
+              )}
+            </Tab>
+          )}
           {Object.keys(groupedOptions).map((category) => (
             <Tab
               className="mb-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white"
@@ -97,30 +126,24 @@ export default function ArtStylePicker({
               </div>
             </RadioGroup>
           </Tab.Panel>
-          <Suspense
-            fallback={
-              <Tab.Panel className="flex h-48 items-center justify-center gap-x-2 p-3">
-                <Spinner className="text-xs" color="current" />
-                <span>Calculating recommendations...</span>
-              </Tab.Panel>
-            }
-          >
-            <Await resolve={recommendations}>
-              {(resolved) => (
-                <Tab.Panel className="p-3">
-                  <RadioGroup defaultValue={defaultValue} id={id} name={name}>
-                    <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-                      {options
-                        .filter((option) => resolved?.includes(option.name))
-                        .map((option) => (
-                          <Option key={option.id} option={option} />
-                        ))}
-                    </div>
-                  </RadioGroup>
-                </Tab.Panel>
+          {!isError && (
+            <Tab.Panel className="p-3">
+              {isPending ? (
+                <div className="flex h-48 items-center justify-center gap-x-2">
+                  <Spinner className="text-xs" color="current" />
+                  <span>Calculating recommendations...</span>
+                </div>
+              ) : (
+                <RadioGroup defaultValue={defaultValue} id={id} name={name}>
+                  <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+                    {recommendations.map((option) => (
+                      <Option key={option.id} option={option} />
+                    ))}
+                  </div>
+                </RadioGroup>
               )}
-            </Await>
-          </Suspense>
+            </Tab.Panel>
+          )}
 
           {Object.values(groupedOptions).map((options, idx) => (
             <Tab.Panel className="p-3" key={idx}>

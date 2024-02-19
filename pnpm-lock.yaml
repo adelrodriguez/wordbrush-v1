@@ -53,6 +53,9 @@ dependencies:
   '@sentry/remix':
     specifier: 7.101.1
     version: 7.101.1(@remix-run/node@2.6.0)(@remix-run/react@2.6.0)(react@18.2.0)
+  '@tanstack/react-query':
+    specifier: 5.22.2
+    version: 5.22.2(react@18.2.0)
   bullmq:
     specifier: 5.1.9
     version: 5.1.9
@@ -6453,6 +6456,19 @@ packages:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.4.1
     dev: true
+
+  /@tanstack/query-core@5.22.2:
+    resolution: {integrity: sha512-z3PwKFUFACMUqe1eyesCIKg3Jv1mysSrYfrEW5ww5DCDUD4zlpTKBvUDaEjsfZzL3ULrFLDM9yVUxI/fega1Qg==}
+    dev: false
+
+  /@tanstack/react-query@5.22.2(react@18.2.0):
+    resolution: {integrity: sha512-TaxJDRzJ8/NWRT4lY2jguKCrNI6MRN+67dELzPjNUlvqzTxGANlMp68l7aC7hG8Bd1uHNxHl7ihv7MT50i/43A==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.22.2
+      react: 18.2.0
+    dev: false
 
   /@tanstack/react-virtual@3.0.4(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-tiqKW/e2MJVCr7/pRUXulpkyxllaOclkHNfhKTo4pmHjJIqnhMfwIjc1Q1R0Un3PI3kQywywu/791c8z9u0qeA==}

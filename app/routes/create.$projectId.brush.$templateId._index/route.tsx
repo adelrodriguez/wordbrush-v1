@@ -6,12 +6,10 @@ import { AspectRatio } from "@prisma/client"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
-  defer,
   json,
   redirect,
 } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
-import { wait } from "remix-utils/timers"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -24,7 +22,6 @@ import {
   WorkflowBreadcrumbs,
 } from "~/components/create"
 import auth from "~/modules/auth.server"
-import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
 import Sentry from "~/services/sentry"
 import { forbidden, notFound } from "~/utils/http.server"
@@ -35,7 +32,7 @@ const schema = z.object({
   detail: z.number().min(1).max(100).default(50),
 })
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { templateId } = zx.parseParams(
     params,
     z.object({ templateId: z.string() }),
@@ -66,13 +63,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     where: { show: true },
   })
 
-  return defer({
+  return json({
     artStyles,
-    // We set a timeout to wait for the recommendations to be generated. This
-    // might have to change if the recommendations take longer than expected.
-    recommendations: wait(3000, { signal: request.signal })
-      .then(() => cache.get(`project:${template.projectId}:recommendations`))
-      .then((value) => value?.split(", ") ?? []),
     template,
   })
 }
@@ -146,8 +138,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 }
 
 export default function Route() {
-  const { artStyles, recommendations, template } =
-    useLoaderData<typeof loader>()
+  const { artStyles, template } = useLoaderData<typeof loader>()
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     defaultValue: template,
@@ -183,7 +174,7 @@ export default function Route() {
           </FieldTitle>
           <ArtStylePicker
             options={artStyles}
-            recommendations={recommendations}
+            projectId={template.projectId}
             {...getInputProps(fields.artStyleId, { type: "text" })}
           />
         </div>
