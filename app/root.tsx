@@ -1,7 +1,8 @@
 import { NextUIProvider } from "@nextui-org/react"
 import { cssBundleHref } from "@remix-run/css-bundle"
-import type { LinksFunction } from "@remix-run/node"
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -36,12 +37,44 @@ export function loader() {
   return json({ honeypot: honeypot.getInputProps() })
 }
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "🎨 Wordbrush" },
+    { content: "Bring your words to life", name: "description" },
+  ]
+}
+
 export function ErrorBoundary() {
   const error = useRouteError()
 
   captureRemixErrorBoundaryError(error)
 
-  return <div>Something went wrong</div>
+  return (
+    <html className="h-full bg-white" lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <title>🎨 Wordbrush | We encountered an error</title>
+        <Links />
+      </head>
+      <body className="h-full">
+        <div className="flex h-full flex-col items-center justify-center gap-y-6">
+          <div className="text-center">
+            <h1 className="text-5xl font-black leading-6 text-gray-800">
+              We encountered an error
+            </h1>
+            <p className="mt-4 text-2xl font-light text-gray-400">
+              We&apos;re sorry, something went wrong. Please try again later.
+            </p>
+          </div>
+          <Link className="hover:underline" to="/">
+            Go back home
+          </Link>
+        </div>
+        <Scripts />
+      </body>
+    </html>
+  )
 }
 
 export default function App() {
