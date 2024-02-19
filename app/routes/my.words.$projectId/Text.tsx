@@ -7,7 +7,7 @@ export default function Text({ content }: { content: string | null }) {
     return (
       <div className="py-10 text-center text-red-500">
         No text available. This might happen if you have cleared your browser
-        storage.
+        storage, or if you are visiting this page from a different device.
       </div>
     )
   }

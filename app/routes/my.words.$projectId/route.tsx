@@ -223,13 +223,15 @@ export default function Route() {
               </Button>
             </Form>
           ) : (
-            <Button
-              className="w-full max-w-96 rounded-md bg-gray-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white hover:bg-gray-300 lg:w-full"
-              disabled
-              type="submit"
-            >
-              Can&apos;t create a new image without text
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                className="w-full max-w-96 rounded-md bg-gray-400 px-3.5 py-2.5 text-center text-sm font-semibold text-white hover:bg-gray-300 lg:w-full"
+                disabled
+                type="submit"
+              >
+                Can&apos;t create a new image without text
+              </Button>
+            </div>
           )}
         </div>
 

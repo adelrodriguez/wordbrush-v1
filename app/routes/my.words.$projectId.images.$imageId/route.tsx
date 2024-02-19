@@ -4,14 +4,20 @@ import {
   DocumentDuplicateIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline"
-import { Button } from "@nextui-org/react"
+import { Button, Tooltip } from "@nextui-org/react"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   json,
   redirect,
 } from "@remix-run/node"
-import { Form, Link, useLoaderData, useNavigate } from "@remix-run/react"
+import {
+  ClientLoaderFunctionArgs,
+  Form,
+  Link,
+  useLoaderData,
+  useNavigate,
+} from "@remix-run/react"
 import { Fragment, useState } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
@@ -50,6 +56,20 @@ export async function loader({ params }: LoaderFunctionArgs) {
   }
 
   return json({ image })
+}
+
+export async function clientLoader({
+  params,
+  serverLoader,
+}: ClientLoaderFunctionArgs) {
+  const serverData = await serverLoader<typeof loader>()
+  const { projectId } = zx.parseParams(
+    params,
+    z.object({ projectId: z.string() }),
+  )
+  const text = localStorage.getItem(projectId)
+
+  return { ...serverData, isTextAvailable: Boolean(text) }
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -101,7 +121,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
 export default function Route() {
   const [open, setOpen] = useState(true)
-  const { image } = useLoaderData<typeof loader>()
+  const { image, isTextAvailable } = useLoaderData<typeof clientLoader>()
   const navigate = useNavigate()
 
   function handleLeave() {
@@ -193,24 +213,35 @@ export default function Route() {
                   </div>
                   <div className="flex gap-x-4">
                     <Form className="flex items-center" method="POST">
-                      <Button
-                        className="rounded-md bg-gray-600 p-2 hover:bg-gray-500"
-                        isIconOnly
-                        title="Duplicate this image style"
-                        type="submit"
+                      <Tooltip
+                        content={
+                          isTextAvailable
+                            ? "Duplicate this image style"
+                            : "Can't duplicate style without original text"
+                        }
                       >
-                        <DocumentDuplicateIcon className="h-6 w-6 text-white" />
-                      </Button>
+                        <Button
+                          className="hover: rounded-md bg-gray-600 p-2 hover:bg-gray-500 disabled:bg-gray-300 disabled:hover:bg-gray-200"
+                          disabled={!isTextAvailable}
+                          isIconOnly
+                          title="Duplicate this image style"
+                          type="submit"
+                        >
+                          <DocumentDuplicateIcon className="h-6 w-6 text-white" />
+                        </Button>
+                      </Tooltip>
                     </Form>
-                    <Link
-                      className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
-                      download
-                      rel="noreferrer"
-                      target="_blank"
-                      to={image.publicUrl ?? "#"}
-                    >
-                      <ArrowDownTrayIcon className="h-6 w-6 text-white" />
-                    </Link>
+                    <Tooltip content="Download this image">
+                      <Link
+                        className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
+                        download
+                        rel="noreferrer"
+                        target="_blank"
+                        to={image.publicUrl ?? "#"}
+                      >
+                        <ArrowDownTrayIcon className="h-6 w-6 text-white" />
+                      </Link>
+                    </Tooltip>
                   </div>
                 </div>
               </Dialog.Panel>
