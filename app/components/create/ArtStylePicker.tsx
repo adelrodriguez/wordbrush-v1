@@ -65,6 +65,7 @@ export default function ArtStylePicker({
       return data.recommendations
     },
     queryKey: ["project", projectId, "recommendations"],
+    refetchInterval: 5000,
   })
 
   const groupedOptions = options.reduce<Record<Category, Option[]>>(
