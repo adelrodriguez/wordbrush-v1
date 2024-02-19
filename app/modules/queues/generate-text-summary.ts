@@ -3,6 +3,7 @@ import crypto from "node:crypto"
 
 import { ONE_MONTH } from "~/config/consts"
 import cache from "~/modules/cache.server"
+import db from "~/modules/db.server"
 import { createQueue } from "~/modules/queue.server"
 import { generateRecommendationsQueue } from "~/modules/queues"
 import ai from "~/services/openai.server"
@@ -26,11 +27,18 @@ const processor: Processor<QueueData> = async (job) => {
     return
   }
 
+  const project = await db.project.findUniqueOrThrow({
+    where: { id: projectId },
+  })
+
   const response = await ai.chat.completions.create({
     messages: [
       {
-        content:
-          "You will summarize the provided text into a 500 character summary.",
+        content: `The user will provide you with a text. Your role is to summarize the text.
+        
+        This text is intended for a ${project.intendedUse.toLowerCase()} project.
+        
+        The summary MUST BE LESS than 1000 characters.`,
         role: "system",
       },
       {

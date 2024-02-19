@@ -17,6 +17,7 @@ import {
   useLoaderData,
   useNavigation,
 } from "@remix-run/react"
+import { useState } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -168,6 +169,7 @@ export function HydrateFallback() {
 export default function Route() {
   const { project, template, text } = useLoaderData<typeof clientLoader>()
   const lastResult = useActionData<typeof action>()
+  const [characterCount, setCharacterCount] = useState(text?.length ?? 0)
   const [form, fields] = useForm({
     defaultValue: {
       intendedUse: project.intendedUse,
@@ -205,8 +207,16 @@ export default function Route() {
           <Textarea
             {...getInputProps(fields.text, { type: "text" })}
             className="w-full"
+            classNames={{
+              description: "text-right",
+            }}
+            description={`${characterCount}/${MAX_CHARACTER_LENGTH} characters`}
             errorMessage={fields.text.errors}
             isInvalid={!!fields.text.errors}
+            maxRows={20}
+            onChange={(event) => {
+              setCharacterCount(event.target.value.length)
+            }}
             placeholder="Enter your book, article, or story here"
             size="lg"
             variant="bordered"
