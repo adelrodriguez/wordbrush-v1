@@ -86,7 +86,6 @@ export async function action({ params, request }: ActionFunctionArgs) {
       detail: image.template.detail,
       exclude: image.template.exclude,
       keyElements: image.template.keyElements,
-      mode: image.template.mode,
       mood: image.template.mood,
       projectId,
     },
