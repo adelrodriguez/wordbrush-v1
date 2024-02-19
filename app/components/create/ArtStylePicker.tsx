@@ -13,6 +13,24 @@ type Option = Pick<
   "id" | "name" | "category" | "description" | "exampleUrl"
 >
 
+function getDefaultTabIndex(
+  groupedOptions: Record<Category, Option[]>,
+  defaultValue: string | undefined,
+) {
+  const defaultTabIndex = Object.values(groupedOptions).findIndex((options) =>
+    options.find((option) => option.id === defaultValue),
+  )
+
+  // If we can't find the default value, default to the first tab
+  if (defaultTabIndex === -1) {
+    return 0
+  }
+
+  // Since we have two additional tabs (All and Recommended), we need to add 2
+  // to the defaultTabIndex to account for them
+  return defaultTabIndex + 2
+}
+
 export default function ArtStylePicker({
   defaultValue,
   id,
@@ -20,6 +38,7 @@ export default function ArtStylePicker({
   options,
   recommendations,
 }: {
+  defaultValue?: string
   options: Option[]
   recommendations?: Promise<string[]>
 } & ComponentPropsWithoutRef<"input">) {
@@ -45,13 +64,11 @@ export default function ArtStylePicker({
       [Category.Traditional]: [],
     },
   )
-  const defaultTabIndex = Object.values(groupedOptions).findIndex((options) =>
-    options.find((option) => option.id === defaultValue),
-  )
+  const defaultTabIndex = getDefaultTabIndex(groupedOptions, defaultValue)
 
   return (
     <div className="w-full">
-      <Tab.Group defaultIndex={defaultTabIndex === -1 ? 0 : defaultTabIndex}>
+      <Tab.Group defaultIndex={defaultTabIndex}>
         <Tab.List className="flex flex-wrap  justify-center space-x-4">
           <Tab className="mb-2 rounded-md bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 ui-selected:bg-gray-500 ui-selected:text-white">
             ✨ All
