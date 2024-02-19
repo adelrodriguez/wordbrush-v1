@@ -1,5 +1,7 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
+import { Spinner } from "@nextui-org/react"
 import { Link } from "@remix-run/react"
+import { useQuery } from "@tanstack/react-query"
 import { route } from "routes-gen"
 
 export function GeneratedImage({
@@ -9,8 +11,64 @@ export function GeneratedImage({
 }: {
   id: string
   projectId: string
-  src: string
+  src: string | null
 }) {
+  const {
+    data: image,
+    isError,
+    isFetching,
+  } = useQuery({
+    enabled: !src,
+    queryFn: async () => {
+      const response = await fetch(
+        route("/api/project/:projectId/images/:imageId", {
+          imageId: id,
+          projectId,
+        }),
+      )
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok")
+      }
+
+      if (response.status === 202) {
+        throw new Error("The image is still being processed.")
+      }
+
+      const data = (await response.json()) as {
+        image: { publicUrl: string } | null
+      }
+
+      return data.image
+    },
+    queryKey: ["project", projectId, "image", id],
+    retry(failureCount, error) {
+      return (
+        error.message === "The image is still being processed." &&
+        failureCount < 10
+      )
+    },
+    retryDelay(attemptIndex) {
+      return Math.min(1000 * 2 ** attemptIndex, 30000)
+    },
+  })
+
+  if (isFetching) {
+    return (
+      <div className="flex h-full min-h-52 w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
+        <Spinner color="white" />
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-full min-h-52 w-full items-center justify-center rounded-md bg-red-100/50 text-sm text-red-500">
+        Error loading image
+      </div>
+    )
+  }
+
   return (
     <div className="group relative">
       <Link
@@ -23,7 +81,7 @@ export function GeneratedImage({
         <img
           alt=""
           className="h-auto max-w-full rounded-md shadow-inner transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-          src={src}
+          src={src ?? image?.publicUrl}
         />
       </Link>
       <Link
@@ -31,7 +89,7 @@ export function GeneratedImage({
         download
         rel="noreferrer"
         target="_blank"
-        to={src}
+        to={src ?? image?.publicUrl ?? "#"}
       >
         <ArrowDownTrayIcon className="h-6 w-6 text-white" />
       </Link>

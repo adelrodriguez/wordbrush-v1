@@ -1,6 +1,7 @@
 declare module "routes-gen" {
   export type RouteParams = {
     "/": Record<string, never>;
+    "/api/project/:projectId/images/:imageId": { "projectId": string, "imageId": string };
     "/api/projects/:projectId/recommendations": { "projectId": string };
     "/api/webhooks/lemonsqueezy": Record<string, never>;
     "/create": Record<string, never>;
@@ -25,6 +26,7 @@ declare module "routes-gen" {
   export function route<
     T extends
       | ["/"]
+      | ["/api/project/:projectId/images/:imageId", RouteParams["/api/project/:projectId/images/:imageId"]]
       | ["/api/projects/:projectId/recommendations", RouteParams["/api/projects/:projectId/recommendations"]]
       | ["/api/webhooks/lemonsqueezy"]
       | ["/create"]

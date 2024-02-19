@@ -41,17 +41,14 @@ export default function Route() {
     <ul className="grid grid-cols-4 gap-6">
       {columns.map((images, index) => (
         <div className="flex flex-col gap-6" key={`group${index}`}>
-          {images.map(
-            (image) =>
-              image.publicUrl && (
-                <GeneratedImage
-                  id={image.id}
-                  key={image.id}
-                  projectId={image.projectId}
-                  src={image.publicUrl}
-                />
-              ),
-          )}
+          {images.map((image) => (
+            <GeneratedImage
+              id={image.id}
+              key={image.id}
+              projectId={image.projectId}
+              src={image.publicUrl}
+            />
+          ))}
         </div>
       ))}
     </ul>

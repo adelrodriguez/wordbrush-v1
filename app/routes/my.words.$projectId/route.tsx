@@ -1,15 +1,13 @@
-import { Button, Chip, Spinner } from "@nextui-org/react"
+import { Button, Chip } from "@nextui-org/react"
 import { ProjectStatus } from "@prisma/client"
-import { LoaderFunctionArgs, defer, json, redirect } from "@remix-run/node"
+import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import {
-  Await,
   ClientLoaderFunctionArgs,
   Form,
   Outlet,
   useLoaderData,
 } from "@remix-run/react"
 import clsx from "clsx"
-import { Suspense } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -17,9 +15,7 @@ import { zx } from "zodix"
 import { GeneratedImage } from "~/components/GeneratedImage"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
-import { generateDalle3ImageQueue } from "~/modules/queues"
 import { forbidden, unauthorized } from "~/utils/http.server"
-import { getQueueEvents } from "~/utils/job.server"
 import { getIntendedUseLabel } from "~/utils/project"
 import {
   calculateElementsPerColumn,
@@ -47,10 +43,11 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
         orderBy: { createdAt: "desc" },
         select: {
           id: true,
+          jobId: true,
           publicUrl: true,
         },
         where: {
-          publicUrl: { not: null },
+          jobId: { not: null },
         },
       },
     },
@@ -64,45 +61,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return redirect(route("/create/:projectId", { projectId }))
   }
 
-  // Fetch the pending image. We only fetch the first image since it's unlikely
-  // that a user might have more than one image, since it will be created by AI
-  // before they can create another one. We might need to change this to fetch
-  // all pending images if we run into issues with this approach.
-  const pendingImage = await db.image.findFirst({
-    select: {
-      id: true,
-      jobId: true,
-    },
-    where: {
-      projectId,
-      publicUrl: null,
-    },
-  })
-
-  if (!pendingImage?.jobId) {
-    return json({ pendingImage: null, project })
-  }
-
-  const job = await generateDalle3ImageQueue.getJob(pendingImage.jobId)
-  const isCompleted = await job?.isCompleted()
-
-  if (!job?.id || isCompleted) {
-    return json({ pendingImage: null, project })
-  }
-
-  const pending = async () => {
-    const events = getQueueEvents(generateDalle3ImageQueue.name)
-    await job.waitUntilFinished(events)
-
-    const image = await db.image.findUniqueOrThrow({
-      select: { id: true, publicUrl: true },
-      where: { id: pendingImage.id },
-    })
-
-    return { image }
-  }
-
-  return defer({ pendingImage: pending(), project })
+  return json({ project })
 }
 
 export async function clientLoader({
@@ -182,16 +141,8 @@ export function HydrateFallback() {
   )
 }
 
-export function ErrorBoundary() {
-  return (
-    <div className="flex h-56 w-full items-center justify-center rounded-md bg-red-100/50 text-sm text-red-500">
-      Error loading images
-    </div>
-  )
-}
-
 export default function Route() {
-  const { pendingImage, project, text } = useLoaderData<typeof clientLoader>()
+  const { project, text } = useLoaderData<typeof clientLoader>()
   const distribution = calculateElementsPerColumn(project.images.length, 4)
   const columns = distributeElementsIntoColumns(project.images, distribution)
 
@@ -237,39 +188,16 @@ export default function Route() {
 
         <div className="lg:pl-96">
           <ul className="grid grid-cols-4 gap-6">
-            <Suspense
-              fallback={
-                <div className="flex h-56 max-w-full animate-pulse items-center justify-center rounded-md bg-gray-300 ">
-                  <Spinner color="white" />
-                </div>
-              }
-            >
-              <Await resolve={pendingImage}>
-                {(resolved) =>
-                  resolved?.image.publicUrl && (
-                    <GeneratedImage
-                      id={resolved.image.id}
-                      projectId={project.id}
-                      src={resolved.image.publicUrl}
-                    />
-                  )
-                }
-              </Await>
-            </Suspense>
-
             {columns.map((images, index) => (
               <div className="flex flex-col gap-6" key={`group${index}`}>
-                {images.map(
-                  (image) =>
-                    image.publicUrl && (
-                      <GeneratedImage
-                        id={image.id}
-                        key={image.id}
-                        projectId={project.id}
-                        src={image.publicUrl}
-                      />
-                    ),
-                )}
+                {images.map((image) => (
+                  <GeneratedImage
+                    id={image.id}
+                    key={image.id}
+                    projectId={project.id}
+                    src={image.publicUrl}
+                  />
+                ))}
               </div>
             ))}
           </ul>

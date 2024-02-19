@@ -2,6 +2,20 @@ import { json, redirect } from "@remix-run/node"
 import { ReasonPhrases, StatusCodes } from "http-status-codes"
 
 /**
+ * 202 Accepted
+ */
+export function accepted<T>({
+  message = "The request was accepted.",
+  title = "Accepted",
+  ...props
+}: { message?: string; title?: string } & T) {
+  return json(
+    { message, title, ...props },
+    { status: StatusCodes.ACCEPTED, statusText: ReasonPhrases.ACCEPTED },
+  )
+}
+
+/**
  * 204 No Content
  */
 export function noContent() {
