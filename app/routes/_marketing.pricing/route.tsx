@@ -61,7 +61,7 @@ export default function Route() {
           Start creating today
         </h2>
         <h3 className="mt-4 text-2xl font-light text-gray-600">
-          Start with free 5 credits — no credit card required. Then buy more as
+          Start with 3 free images — no credit card required. Then buy more as
           you go.
         </h3>
       </div>
