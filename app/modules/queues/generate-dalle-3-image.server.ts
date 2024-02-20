@@ -52,28 +52,52 @@ const processor: Processor<QueueData> = async (job) => {
 
   await job.log(`Using summary from cache: ${text}`)
 
-  const prompt = generatePrompt(text, {
-    artStyle: template.artStyle,
-    detail: template.detail,
-    exclude: template.exclude,
-    intendedUse: project.intendedUse,
-    keyElements: template.keyElements,
-    mood: template.mood,
+  const promptResponse = await ai.chat.completions.create({
+    messages: [
+      {
+        content: generatePrompt({
+          artStyle: template.artStyle,
+          detail: template.detail,
+          exclude: template.exclude,
+          intendedUse: project.intendedUse,
+          keyElements: template.keyElements,
+          mood: template.mood,
+        }),
+        role: "system",
+      },
+      {
+        content: text,
+        role: "user",
+      },
+    ],
+    model: "gpt-4-0125-preview",
   })
 
-  await job.log(`Generated prompt: ${prompt}`)
+  const prompt = promptResponse.choices[0]?.message.content
+  const promptTokens = promptResponse.usage?.prompt_tokens
+  const responseTokens = promptResponse.usage?.completion_tokens
+  const totalTokens = promptResponse.usage?.total_tokens
 
-  const response = await ai.images.generate({
+  if (!prompt) {
+    throw new Error("Failed to generate prompt")
+  }
+
+  await job.log(`Generated prompt: ${prompt}`)
+  await job.log(`Prompt tokens: ${promptTokens}`)
+  await job.log(`Response tokens: ${responseTokens}`)
+  await job.log(`Total tokens: ${totalTokens}`)
+
+  const imageResponse = await ai.images.generate({
     model: "dall-e-3",
     prompt,
     quality: "hd",
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
-    style: getStyle(template.detail ?? 50),
+    style: getStyle(template.artStyle.category),
     user: userId,
   })
 
-  const image = response.data[0]
+  const image = imageResponse.data[0]
 
   await job.log(`Generated image ${image?.url}`)
 

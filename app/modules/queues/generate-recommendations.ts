@@ -31,7 +31,7 @@ const processor: Processor<QueueData> = async (job) => {
         
         The available art styles are: ${artStyles.map((style) => style.name).join(", ")}.
         
-        Choose ONLY FROM THE AVAILABLE ART STYLES.
+        Choose ONLY FROM THE AVAILABLE ART STYLES. You will answer with the exact names provided, do not translate or modify the names.
         
         You will answer with the 3 art styles you recommend, separated by commas.`,
         role: "system",
@@ -41,7 +41,7 @@ const processor: Processor<QueueData> = async (job) => {
         role: "user",
       },
     ],
-    model: "gpt-3.5-turbo-0125",
+    model: "gpt-4-0125-preview",
   })
 
   const recommendations = response.choices[0]?.message.content
