@@ -646,5 +646,17 @@
     "description": "Capturing the changing seasons to showcase the dynamic nature of landscapes through the cycle of life, death, and rebirth, each bringing its own color palette and mood.",
     "keywords": ["Seasons", "Dynamic", "Cycle", "Color Palette", "Mood"],
     "name": "Seasonal Photography"
+  },
+  {
+    "category": "Illustrative",
+    "description": "Characterized by vibrant colors, dynamic character designs, and expressive scenes, this style is deeply rooted in Japanese culture, often featuring intricate backgrounds and a wide range of emotions. It's known for its ability to tell complex stories through detailed illustrations, blending traditional and digital techniques to create worlds that can be fantastical, futuristic, or grounded in everyday life.",
+    "keywords": [
+      "Anime",
+      "Character-driven",
+      "Vibrant colors",
+      "Dynamic poses",
+      "Storytelling"
+    ],
+    "name": "Anime"
   }
 ]
