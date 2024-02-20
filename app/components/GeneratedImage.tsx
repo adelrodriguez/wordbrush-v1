@@ -49,7 +49,7 @@ export function GeneratedImage({
       )
     },
     retryDelay(attemptIndex) {
-      return Math.min(1000 * 2 ** attemptIndex, 30000)
+      return 1000 * (attemptIndex + 1)
     },
   })
 
