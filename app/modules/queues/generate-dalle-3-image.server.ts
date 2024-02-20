@@ -66,7 +66,7 @@ const processor: Processor<QueueData> = async (job) => {
   const response = await ai.images.generate({
     model: "dall-e-3",
     prompt,
-    quality: "standard",
+    quality: "hd",
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
     style: getStyle(template.detail ?? 50),
