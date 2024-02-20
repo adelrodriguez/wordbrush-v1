@@ -1,6 +1,8 @@
 import { Category, PrismaClient } from "@prisma/client"
 import fs from "node:fs"
 
+import env from "~/config/env.server"
+
 const db = new PrismaClient()
 
 async function seed() {
@@ -27,6 +29,7 @@ async function createArtStyles() {
       }) => ({
         category: getCategory(style.category),
         description: style.description,
+        exampleUrl: `${env.CLOUDFLARE_R2_PUBLIC_URL}/examples/${encodeURIComponent(style.name.split(" ").join("-").toLowerCase()) + ".png"}`,
         keywords: style.keywords,
         name: style.name,
         prompt: style.name,
