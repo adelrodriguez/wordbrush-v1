@@ -1,0 +1,1 @@
+export const POSTHOG_API_KEY = "phc_CliVdSfaSrCbCyh4s1kKEFxecQsoE66ideKiF2A26Q"

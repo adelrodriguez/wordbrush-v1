@@ -5,10 +5,17 @@
  */
 import { RemixBrowser, useLocation, useMatches } from "@remix-run/react"
 import { browserTracingIntegration, replayIntegration } from "@sentry/remix"
+import { posthog } from "posthog-js"
 import { StrictMode, startTransition, useEffect } from "react"
 import { hydrateRoot } from "react-dom/client"
 
+import { POSTHOG_API_KEY } from "~/config/consts"
 import Sentry from "~/services/sentry"
+
+posthog.init(POSTHOG_API_KEY, {
+  api_host: "https://app.posthog.com",
+  capture_pageview: false,
+})
 
 Sentry.init({
   dsn: "https://385ee7290c910c82fa78d52249ce8737@o4506764137922560.ingest.sentry.io/4506764141789184",

@@ -18,6 +18,7 @@ import {
   useLoaderData,
   useNavigate,
 } from "@remix-run/react"
+import { posthog } from "posthog-js"
 import { Fragment, useState } from "react"
 import { route } from "routes-gen"
 import { z } from "zod"
@@ -224,6 +225,11 @@ export default function Route() {
                           className="hover: rounded-md bg-gray-600 p-2 hover:bg-gray-500 disabled:bg-gray-300 disabled:hover:bg-gray-200"
                           disabled={!isTextAvailable}
                           isIconOnly
+                          onClick={() => {
+                            posthog.capture("duplicate_image_style", {
+                              imageId: image.id,
+                            })
+                          }}
                           title="Duplicate this image style"
                           type="submit"
                         >
@@ -235,6 +241,11 @@ export default function Route() {
                       <Link
                         className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
                         download
+                        onClick={() => {
+                          posthog.capture("download_image", {
+                            imageId: image.id,
+                          })
+                        }}
                         rel="noreferrer"
                         target="_blank"
                         to={image.publicUrl ?? "#"}

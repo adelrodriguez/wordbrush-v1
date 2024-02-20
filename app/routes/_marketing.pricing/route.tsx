@@ -4,6 +4,7 @@ import { RadioGroup } from "@headlessui/react"
 import { Button } from "@nextui-org/react"
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node"
 import { Form, useLoaderData, useNavigation } from "@remix-run/react"
+import { posthog } from "posthog-js"
 import { z } from "zod"
 
 import db from "~/modules/db.server"
@@ -77,6 +78,9 @@ export default function Route() {
               <RadioGroup.Option
                 className="relative flex cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm focus:outline-none ui-active:border-gray-600 ui-active:ring-2 ui-active:ring-gray-600"
                 key={product.id}
+                onClick={() => {
+                  posthog.capture("select_product", { productId: product.id })
+                }}
                 value={product.id}
               >
                 <span className="flex items-center">

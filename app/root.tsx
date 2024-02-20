@@ -11,11 +11,14 @@ import {
   ScrollRestoration,
   json,
   useLoaderData,
+  useLocation,
   useNavigate,
   useRouteError,
 } from "@remix-run/react"
 import { captureRemixErrorBoundaryError } from "@sentry/remix"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { posthog } from "posthog-js"
+import { useEffect } from "react"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
 
 import honeypot from "~/modules/honeypot.server"
@@ -83,6 +86,11 @@ export function ErrorBoundary() {
 export default function App() {
   const { honeypot } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    posthog.capture("$pageview")
+  }, [location])
 
   return (
     <html className="h-full bg-white" lang="en">

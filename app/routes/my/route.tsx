@@ -17,7 +17,8 @@ import {
   useMatches,
 } from "@remix-run/react"
 import clsx from "clsx"
-import { Fragment, useState } from "react"
+import { posthog } from "posthog-js"
+import { Fragment, useEffect, useState } from "react"
 import { useDebounceSubmit } from "remix-utils/use-debounce-submit"
 import { route } from "routes-gen"
 
@@ -57,6 +58,11 @@ export default function Route() {
   const submit = useDebounceSubmit()
   const matches = useMatches() as Match[]
   const showSearch = !!matches[matches.length - 1]?.handle?.search
+
+  useEffect(() => {
+    console.log("Identifying user", user.id, user.email)
+    posthog.identify(user.id, { email: user.email })
+  }, [user.id, user.email])
 
   return (
     <div>
@@ -278,6 +284,9 @@ export default function Route() {
                       <Menu.Item key={item.name}>
                         <Link
                           className="block px-3 py-1 text-sm leading-6 text-gray-900 ui-active:bg-gray-50"
+                          onClick={() => {
+                            posthog.reset()
+                          }}
                           to={item.href}
                         >
                           {item.name}

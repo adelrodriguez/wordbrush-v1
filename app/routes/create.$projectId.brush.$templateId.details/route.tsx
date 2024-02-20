@@ -14,6 +14,7 @@ import {
   useLoaderData,
   useNavigate,
 } from "@remix-run/react"
+import { posthog } from "posthog-js"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -192,11 +193,16 @@ export default function Route() {
             fullWidth
             onClick={() => {
               if (hasEnoughCredits) return
+
+              posthog.capture("not_enough_credits")
+
               const confirmed = confirm(
                 "You don't have enough credits to generate this art. Purchase more?",
               )
 
               if (confirmed) {
+                posthog.capture("navigate_to_pricing")
+
                 navigate(route("/pricing"))
               }
             }}

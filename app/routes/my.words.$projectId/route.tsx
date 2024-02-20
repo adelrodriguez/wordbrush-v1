@@ -8,6 +8,7 @@ import {
   useLoaderData,
 } from "@remix-run/react"
 import clsx from "clsx"
+import { posthog } from "posthog-js"
 import { route } from "routes-gen"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -168,6 +169,9 @@ export default function Route() {
             <Form className="flex justify-center" method="POST">
               <Button
                 className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 lg:w-full"
+                onClick={() => {
+                  posthog.capture("create_new_image")
+                }}
                 type="submit"
               >
                 Create a new image ✨
