@@ -93,13 +93,13 @@ const processor: Processor<QueueData> = async (job) => {
     quality: "hd",
     response_format: "b64_json",
     size: getImageSize(template.aspectRatio),
-    style: getStyle(template.artStyle.category),
+    style: getStyle(template.artStyle.category, template.detail),
     user: userId,
   })
 
   const image = imageResponse.data[0]
 
-  await job.log(`Generated image ${image?.url}`)
+  await job.log(`Generated image ${image?.revised_prompt}`)
 
   const filename = Date.now() + ".png"
 

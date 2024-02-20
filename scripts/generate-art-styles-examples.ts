@@ -15,7 +15,7 @@ async function main() {
       quality: "hd",
       response_format: "b64_json",
       size: "1024x1024",
-      style: "natural",
+      style: "vivid",
     })
 
     const image = response.data[0]

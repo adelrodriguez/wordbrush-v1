@@ -41,7 +41,7 @@ const processor: Processor<QueueData> = async (job) => {
         role: "user",
       },
     ],
-    model: "gpt-4-0125-preview",
+    model: "gpt-3.5-turbo-1106",
   })
 
   const recommendations = response.choices[0]?.message.content

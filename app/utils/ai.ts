@@ -12,7 +12,16 @@ export function getImageSize(aspect?: AspectRatio | null) {
   }
 }
 
-export function getStyle(category: Category | null): "vivid" | "natural" {
+export function getStyle(
+  category: Category | null,
+  detail: number | null,
+): "vivid" | "natural" {
+  // If detail is set to >85, use natural style
+  if (detail && detail > 85) {
+    return "natural"
+  }
+
+  // Otherwise, use the category to determine the style
   switch (category) {
     case Category.Nature:
     case null:
