@@ -24,14 +24,16 @@ export default function Index() {
           />
         </div>
         <div className="z-10 m-auto w-4/5">
-          <div className="flex max-w-2xl flex-col gap-y-10 text-center md:text-left">
+          <div className="flex flex-col gap-y-10 text-center md:text-left">
             <div>
-              <h1 className="font-headline text-5xl text-white">
-                Bring your words to life
+              <h1 className="font-headline text-7xl leading-tight text-white">
+                Bring your
+                <br /> words to life
               </h1>
-              <p className="mt-4 text-lg font-light text-gray-200">
-                Transform your writing into beautiful visuals to publish
-                alongside your articles, newsletters, social media and more.
+              <p className="mt-4 max-w-xl text-lg font-light text-gray-200">
+                Elevate your content with stunning visuals created directly from
+                your writing. Create beautiful images for your blog, social
+                media, or novel in seconds.
               </p>
             </div>
             <div>

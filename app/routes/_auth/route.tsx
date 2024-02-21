@@ -1,4 +1,6 @@
-import { Link, Outlet } from "@remix-run/react"
+import { Link, MetaFunction, Outlet } from "@remix-run/react"
+
+export const meta: MetaFunction = () => [{ title: "Login | 🎨 Wordbrush" }]
 
 export default function Route() {
   return (

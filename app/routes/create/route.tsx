@@ -7,7 +7,6 @@ import auth from "~/modules/auth.server"
 
 export const meta: MetaFunction = () => [
   { title: "Create a new image | 🎨 Wordbrush" },
-  { content: "Bring your words to life", name: "description" },
 ]
 
 export async function loader({ request }: LoaderFunctionArgs) {

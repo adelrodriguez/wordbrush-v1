@@ -42,8 +42,50 @@ export function loader() {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "🎨 Wordbrush" },
-    { content: "Bring your words to life", name: "description" },
+    { title: "🎨 Wordbrush | Illustrate your ideas" },
+    {
+      content:
+        "Elevate your content with stunning visuals created directly from your writing. Create beautiful images for your blog, social media, or novel in seconds.",
+      name: "description",
+    },
+    {
+      content:
+        "Wordbrush, text to image converter, content visualization tool, blog post visualization, newsletter graphics creator, novel excerpt images, social media content enhancement, visual content creation, digital storytelling tools, creative content visuals, engaging visual content, visual storytelling application, article illustration tool, visual engagement for social media, text-based image generation, creative writing visuals, enhance digital content with visuals, image creation for bloggers, marketing content visuals, storytelling enhancement tool, visual content strategies, image generation from text, content creator tools, visual narrative development, online content beautification",
+      name: "keywords",
+    },
+    {
+      content: "text/html; charset=utf-8",
+      httpEquiv: "Content-Type",
+    },
+    {
+      content: "English",
+      name: "language",
+    },
+    { content: "https://wordbrush.art", property: "og:url" },
+    { content: "website", property: "og:type" },
+    { content: "🎨 Wordbrush | Illustrate your ideas", property: "og:title" },
+    {
+      content:
+        "Elevate your content with stunning visuals created directly from your writing. Create beautiful images for your blog, social media, or novel in seconds.",
+      property: "og:description",
+    },
+    {
+      content: "/assets/images/og.webp",
+      property: "og:image",
+    },
+    { content: "summary_large_image", name: "twitter:card" },
+    { content: "wordbrush.art", property: "twitter:domain" },
+    { content: "https://wordbrush.art", property: "twitter:url" },
+    { content: "🎨 Wordbrush | Illustrate your ideas", name: "twitter:title" },
+    {
+      content:
+        "Elevate your content with stunning visuals created directly from your writing. Create beautiful images for your blog, social media, or novel in seconds.",
+      name: "twitter:description",
+    },
+    {
+      content: "/assets/images/og.webp",
+      name: "twitter:image",
+    },
   ]
 }
 

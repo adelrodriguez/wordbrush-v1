@@ -17,7 +17,7 @@ export default function Route() {
             <Link className="-m-1.5 p-1.5" to={route("/")}>
               <span
                 className={clsx(
-                  "font-headline text-xl md:text-3xl",
+                  "font-headline text-lg md:text-xl",
                   isIndex ? "text-white" : "text-black",
                 )}
               >
@@ -28,7 +28,7 @@ export default function Route() {
           <div className="flex gap-x-12">
             <Link
               className={clsx(
-                "text-sm font-semibold leading-6",
+                "text-xs font-semibold leading-6 sm:text-sm",
                 isIndex ? "text-gray-200" : "text-black",
               )}
               to={route("/pricing")}
@@ -37,7 +37,7 @@ export default function Route() {
             </Link>
             <Link
               className={clsx(
-                "text-sm font-semibold leading-6",
+                "text-xs font-semibold leading-6 sm:text-sm",
                 isIndex ? "text-gray-200" : "text-black",
               )}
               to={route("/login")}

@@ -11,6 +11,7 @@ import { LoaderFunctionArgs, json } from "@remix-run/node"
 import {
   Form,
   Link,
+  MetaFunction,
   NavLink,
   Outlet,
   useLoaderData,
@@ -32,6 +33,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return json({ user })
 }
+
+export const meta: MetaFunction = () => [{ title: "Dashboard | 🎨 Wordbrush" }]
 
 const navigation = [
   { href: route("/my/words"), icon: FolderIcon, name: "Projects" },
