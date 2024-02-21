@@ -1,12 +1,7 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { Button, Input } from "@nextui-org/react"
-import {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  json,
-  redirect,
-} from "@remix-run/node"
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
 import { HoneypotInputs } from "remix-utils/honeypot/react"
 import { SpamError } from "remix-utils/honeypot/server"
@@ -54,8 +49,7 @@ export async function action({ request }: ActionFunctionArgs) {
     Sentry.captureException(error)
 
     if (error instanceof SpamError) {
-      // If they're a bot, send them to a Rick Astley video.
-      return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+      return null
     }
 
     throw error

@@ -54,8 +54,7 @@ export async function action({ request }: ActionFunctionArgs) {
     Sentry.captureException(error)
 
     if (error instanceof SpamError) {
-      // If they're a bot, send them to a Rick Astley video.
-      return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+      return null
     }
 
     throw error
