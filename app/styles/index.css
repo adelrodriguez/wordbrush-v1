@@ -14,12 +14,22 @@ body {
     sans-serif;
 }
 
+.font-headline {
+  font-family: "Abril Fatface", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .background-animated {
   animation: animated-background 6s ease infinite reverse;
   background: -webkit-linear-gradient(60deg, #fe3032, #fe9125, #00b19c);
   background: linear-gradient(60deg, #fe3032, #fe9125, #00b19c);
   background-position: 0% 0%;
   background-size: 240% 240%;
+}
+
+.background-animated:hover {
+  animation-duration: 2s;
 }
 
 @keyframes animated-background {
@@ -32,8 +42,4 @@ body {
   100% {
     background-position: 0% 50%;
   }
-}
-
-.background-animated:hover {
-  animation-duration: 2s;
 }

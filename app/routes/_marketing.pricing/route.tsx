@@ -57,10 +57,10 @@ export default function Route() {
   return (
     <div className="px-6 py-24 sm:py-32 lg:px-8">
       <div className="mx-auto mb-20 max-w-2xl text-center lg:max-w-4xl">
-        <h2 className="text-5xl font-black tracking-tight text-gray-900">
+        <h2 className="font-headline text-6xl text-gray-900">
           Start creating today
         </h2>
-        <h3 className="mt-4 text-2xl font-light text-gray-600">
+        <h3 className="mt-4 text-xl font-light text-gray-600">
           Start with 3 free images — no credit card required. Then buy more as
           you go.
         </h3>
