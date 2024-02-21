@@ -1,10 +1,8 @@
 import { NextUIProvider } from "@nextui-org/react"
-import { cssBundleHref } from "@remix-run/css-bundle"
 import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
   Link,
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -22,13 +20,12 @@ import { useEffect } from "react"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
 
 import honeypot from "~/modules/honeypot.server"
-import stylesheet from "~/styles/index.css"
-import tailwind from "~/styles/tailwind.css"
+import stylesheet from "~/styles/index.css?url"
+import tailwind from "~/styles/tailwind.css?url"
 
 const queryClient = new QueryClient()
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ href: cssBundleHref, rel: "stylesheet" }] : []),
   { href: tailwind, rel: "stylesheet" },
   { href: stylesheet, rel: "stylesheet" },
   { href: "https://fonts.googleapis.com", rel: "preconnect" },
@@ -110,7 +107,6 @@ export default function App() {
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )
