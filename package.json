@@ -18,7 +18,7 @@
     "dev:profile": "remix vite:dev --profile",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "postinstall": "run-p routes:generate database:generate",
+    "postinstall": "run-p database:generate",
     "routes:generate": "routes-gen -d @routes-gen/remix",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
