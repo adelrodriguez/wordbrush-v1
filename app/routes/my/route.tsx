@@ -63,7 +63,6 @@ export default function Route() {
   const showSearch = !!matches[matches.length - 1]?.handle?.search
 
   useEffect(() => {
-    console.log("Identifying user", user.id, user.email)
     posthog.identify(user.id, { email: user.email })
   }, [user.id, user.email])
 
