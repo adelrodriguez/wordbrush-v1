@@ -7,8 +7,10 @@ import { z } from "zod"
 import { TRIAL_CREDITS } from "~/config/consts"
 import env from "~/config/env.server"
 import db from "~/modules/db.server"
-import { createPaidUserSubscriptionQueue } from "~/modules/queues"
-import updateCreditBalance from "~/modules/queues/update-credit-balance"
+import {
+  createPaidUserSubscriptionQueue,
+  updateCreditBalanceQueue,
+} from "~/modules/queues.server"
 import { badRequest, noContent, unauthorized } from "~/utils/http.server"
 
 const EventSchema = z.object({
@@ -123,7 +125,7 @@ export async function action({ request }: ActionFunctionArgs) {
         })
       }
 
-      await updateCreditBalance.add(`Order ${order.data.id}`, {
+      await updateCreditBalanceQueue.add(`Order ${order.data.id}`, {
         amount: product.creditAmount,
         productId: product.id,
         reason: `Order ${order.data.id}`,
@@ -153,7 +155,7 @@ export async function action({ request }: ActionFunctionArgs) {
         throw badRequest({ message: "User not found", title: "Bad Request" })
       }
 
-      await updateCreditBalance.add(`Refund ${order.data.id}`, {
+      await updateCreditBalanceQueue.add(`Refund ${order.data.id}`, {
         amount: -product.creditAmount,
         reason: `Refund ${order.data.id}`,
         userId: user.id,

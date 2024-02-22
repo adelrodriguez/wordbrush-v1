@@ -29,7 +29,7 @@ import {
 import { MAX_CHARACTER_LENGTH, intendedUses } from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
-import { generateTextSummaryQueue } from "~/modules/queues"
+import { generateTextSummaryQueue } from "~/modules/queues.server"
 import Sentry from "~/services/sentry"
 import { forbidden } from "~/utils/http.server"
 

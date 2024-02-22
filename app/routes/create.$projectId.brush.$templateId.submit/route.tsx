@@ -20,7 +20,7 @@ import { DRAFT_PROJECT_KEY, MAX_CHARACTER_LENGTH } from "~/config/consts"
 import env from "~/config/env.server"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
-import { generateDalle3ImageQueue } from "~/modules/queues"
+import { generateDalle3ImageQueue } from "~/modules/queues.server"
 import Sentry from "~/services/sentry"
 import { notFound } from "~/utils/http.server"
 

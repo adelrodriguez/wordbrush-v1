@@ -5,7 +5,7 @@ import { ONE_MONTH } from "~/config/consts"
 import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
 import { createQueue } from "~/modules/queue.server"
-import { generateRecommendationsQueue } from "~/modules/queues"
+import { generateRecommendationsQueue } from "~/modules/queues.server"
 import ai from "~/services/openai.server"
 
 type QueueData = {
