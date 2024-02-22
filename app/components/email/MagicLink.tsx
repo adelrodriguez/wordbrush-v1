@@ -30,7 +30,7 @@ export default function MagicLink({
             <Container className="my-10">
               <Img
                 alt="Wordbrush's Logo"
-                className="h-12 w-12"
+                className="h-24 w-24"
                 src={`${env.RAILWAY_STATIC_URL}/assets/images/logo.png`}
               />
               <Heading className="text-2xl font-bold ">Login</Heading>
