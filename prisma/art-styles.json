@@ -534,12 +534,6 @@
     "name": "Symbolism"
   },
   {
-    "category": "Traditional",
-    "description": "A technique that uses realistic imagery to create an optical illusion that the depicted objects exist in three dimensions. The name is French for \"deceive the eye\".",
-    "keywords": ["Illusion", "Depth", "Realistic", "Deceptive", "3D"],
-    "name": "Trompe-l'œil"
-  },
-  {
     "category": "Modern",
     "description": "A modern digital art style that's a visual manifestation of the vaporwave music genre. It incorporates nostalgic images from the '80s and '90s, pastel colors, and often features Greek statues, old computer graphics, and glitch effects.",
     "keywords": ["Nostalgia", "'80s", "'90s", "Pastel", "Retro"],
