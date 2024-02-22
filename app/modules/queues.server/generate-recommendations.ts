@@ -33,7 +33,7 @@ const processor: Processor<QueueData> = async (job) => {
         
         Choose ONLY FROM THE AVAILABLE ART STYLES. You will answer with the exact names provided, do not translate or modify the names.
         
-        You will answer with the 3 art styles you recommend, separated by commas.`,
+        You will answer with at least 3 art styles and at most 5. You will provide the names, separated by commas.`,
         role: "system",
       },
       {
@@ -42,7 +42,6 @@ const processor: Processor<QueueData> = async (job) => {
       },
     ],
     model: "gpt-3.5-turbo-1106",
-    response_format: { type: "json_object" },
   })
 
   const recommendations = response.choices[0]?.message.content
