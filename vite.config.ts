@@ -10,4 +10,7 @@ export default defineConfig({
     sourcemap: true,
   },
   plugins: [remix(), tsconfigPaths()],
+  server: {
+    port: 3000,
+  },
 })

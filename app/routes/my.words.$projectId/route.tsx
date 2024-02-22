@@ -43,8 +43,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
         orderBy: { createdAt: "desc" },
         select: {
           id: true,
-          jobId: true,
           publicUrl: true,
+          thumbnailUrl: true,
         },
         where: {
           jobId: { not: null },
@@ -198,7 +198,8 @@ export default function Route() {
                     id={image.id}
                     key={image.id}
                     projectId={project.id}
-                    src={image.publicUrl}
+                    publicUrl={image.publicUrl}
+                    thumbnailUrl={image.thumbnailUrl}
                   />
                 ))}
               </div>

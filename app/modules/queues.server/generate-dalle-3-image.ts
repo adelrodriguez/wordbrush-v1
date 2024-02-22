@@ -1,5 +1,6 @@
 import { Processor } from "bullmq"
 import { Buffer } from "node:buffer"
+import sharp from "sharp"
 
 import { CREDIT_COST_PER_IMAGE } from "~/config/consts"
 import env from "~/config/env.server"
@@ -101,20 +102,40 @@ const processor: Processor<QueueData> = async (job) => {
 
   await job.log(`Generated image ${image?.revised_prompt}`)
 
-  const filename = Date.now() + ".png"
+  const now = Date.now()
+  const filename = now + ".png"
+  const thumbnailFilename = now + ".webp"
 
   if (!image?.b64_json) {
     throw new Error("Failed to generate image")
   }
 
   const buffer = Buffer.from(image.b64_json, "base64")
-  const url = await uploadBuffer(buffer, {
-    contentDisposition: "attachment; filename=" + filename,
-    contentType: "image/png",
-    key: `${userId}/${template.projectId}/${filename}`,
-  })
 
-  const publicUrl = `${env.CLOUDFLARE_R2_PUBLIC_URL}/${userId}/${template.projectId}/${filename}`
+  // Create a thumbnail
+  const thumbnailBuffer = await sharp(buffer)
+    .resize(500)
+    .toFormat("webp")
+    .toBuffer()
+
+  const imageKey = `${userId}/${template.projectId}/${filename}`
+  const thumbnailKey = `${userId}/${template.projectId}/${thumbnailFilename}`
+
+  const [storageUrl] = await Promise.all([
+    uploadBuffer(buffer, {
+      contentDisposition: "attachment; filename=" + filename,
+      contentType: "image/png",
+      key: imageKey,
+    }),
+    uploadBuffer(thumbnailBuffer, {
+      contentDisposition: "attachment; filename=" + thumbnailFilename,
+      contentType: "image/png",
+      key: thumbnailKey,
+    }),
+  ])
+
+  const publicUrl = `${env.CLOUDFLARE_R2_PUBLIC_URL}/${imageKey}`
+  const thumbnailUrl = `${env.CLOUDFLARE_R2_PUBLIC_URL}/${thumbnailKey}`
 
   await Promise.all([
     job.log(`Created image ${imageId}`),
@@ -122,7 +143,8 @@ const processor: Processor<QueueData> = async (job) => {
       data: {
         prompt: image.revised_prompt ?? prompt,
         publicUrl,
-        url,
+        thumbnailUrl,
+        url: storageUrl,
       },
       where: { id: imageId },
     }),

@@ -1,5 +1,6 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
 import { Spinner } from "@nextui-org/react"
+import type { Image } from "@prisma/client"
 import { Link } from "@remix-run/react"
 import { useQuery } from "@tanstack/react-query"
 import { route } from "routes-gen"
@@ -7,18 +8,15 @@ import { route } from "routes-gen"
 export function GeneratedImage({
   id,
   projectId,
-  src,
-}: {
-  id: string
-  projectId: string
-  src: string | null
-}) {
-  const {
-    data: image,
-    isError,
-    isFetching,
-  } = useQuery({
-    enabled: !src,
+  publicUrl,
+  thumbnailUrl,
+}: Pick<Image, "id" | "projectId" | "publicUrl" | "thumbnailUrl">) {
+  const { data, isError, isFetching } = useQuery({
+    enabled: !publicUrl || !thumbnailUrl,
+    initialData: {
+      publicUrl,
+      thumbnailUrl,
+    },
     queryFn: async () => {
       const response = await fetch(
         route("/api/project/:projectId/images/:imageId", {
@@ -36,7 +34,7 @@ export function GeneratedImage({
       }
 
       const data = (await response.json()) as {
-        image: { publicUrl: string } | null
+        image: Pick<Image, "publicUrl" | "thumbnailUrl"> | null
       }
 
       return data.image
@@ -69,6 +67,8 @@ export function GeneratedImage({
     )
   }
 
+  if (!data?.publicUrl || !data.thumbnailUrl) return null
+
   return (
     <div className="group relative">
       <Link
@@ -81,7 +81,7 @@ export function GeneratedImage({
         <img
           alt=""
           className="h-auto max-w-full rounded-md shadow-inner transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
-          src={src ?? image?.publicUrl}
+          src={data.thumbnailUrl}
         />
       </Link>
       <Link
@@ -89,7 +89,7 @@ export function GeneratedImage({
         download
         rel="noreferrer"
         target="_blank"
-        to={src ?? image?.publicUrl ?? "#"}
+        to={data.publicUrl}
       >
         <ArrowDownTrayIcon className="h-6 w-6 text-white" />
       </Link>

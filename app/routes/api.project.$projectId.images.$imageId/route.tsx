@@ -29,7 +29,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   }
 
   const image = await db.image.findFirst({
-    select: { id: true, jobId: true, publicUrl: true },
+    select: { id: true, jobId: true, publicUrl: true, thumbnailUrl: true },
     where: { id: imageId, projectId, publicUrl: { not: null } },
   })
 

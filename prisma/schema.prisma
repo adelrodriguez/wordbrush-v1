@@ -111,7 +111,8 @@ model Image {
   bucket  String
   url     String?        @unique // The URL of the image in the storage service
 
-  publicUrl String? @unique // The public URL of the image
+  publicUrl    String? @unique // The public URL of the image
+  thumbnailUrl String? @unique // The public URL of the thumbnail
 
   prompt String? // The prompt used to generate the image
 

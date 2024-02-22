@@ -20,6 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       id: true,
       projectId: true,
       publicUrl: true,
+      thumbnailUrl: true,
     },
     where: {
       project: {
@@ -46,7 +47,8 @@ export default function Route() {
               id={image.id}
               key={image.id}
               projectId={image.projectId}
-              src={image.publicUrl}
+              publicUrl={image.publicUrl}
+              thumbnailUrl={image.thumbnailUrl}
             />
           ))}
         </div>
