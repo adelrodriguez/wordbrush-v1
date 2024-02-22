@@ -42,6 +42,7 @@ const processor: Processor<QueueData> = async (job) => {
       },
     ],
     model: "gpt-3.5-turbo-1106",
+    response_format: { type: "json_object" },
   })
 
   const recommendations = response.choices[0]?.message.content
