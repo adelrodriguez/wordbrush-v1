@@ -2,7 +2,7 @@ import { RadioGroup, Tab } from "@headlessui/react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import { Spinner, Tooltip } from "@nextui-org/react"
-import { ArtStyle, Category } from "@prisma/client"
+import type { ArtStyle, Category } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { ComponentPropsWithoutRef } from "react"
 import { route } from "routes-gen"
@@ -77,17 +77,17 @@ export default function ArtStylePicker({
       return acc
     },
     {
-      [Category.Abstract]: [],
-      [Category.Digital]: [],
-      [Category.Fantasy]: [],
-      [Category.Geometric]: [],
-      [Category.Historical]: [],
-      [Category.Illustrative]: [],
-      [Category.Modern]: [],
-      [Category.Nature]: [],
-      [Category.SciFi]: [],
-      [Category.Technological]: [],
-      [Category.Traditional]: [],
+      Abstract: [],
+      Digital: [],
+      Fantasy: [],
+      Geometric: [],
+      Historical: [],
+      Illustrative: [],
+      Modern: [],
+      Nature: [],
+      SciFi: [],
+      Technological: [],
+      Traditional: [],
     },
   )
   const defaultTabIndex = getDefaultTabIndex(groupedOptions, defaultValue)

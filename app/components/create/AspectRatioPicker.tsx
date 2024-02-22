@@ -1,8 +1,8 @@
 import { RadioGroup } from "@headlessui/react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
-import { AspectRatio } from "@prisma/client"
 import { ComponentPropsWithoutRef } from "react"
 
+import { aspectRatios } from "~/config/consts"
 import { getImageSize } from "~/utils/ai"
 
 export default function AspectRatioPicker({
@@ -13,7 +13,7 @@ export default function AspectRatioPicker({
   return (
     <RadioGroup defaultValue={defaultValue} id={id} name={name}>
       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-        {Object.values(AspectRatio).map((aspectRatio) => (
+        {aspectRatios.map((aspectRatio) => (
           <RadioGroup.Option
             className="relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none ui-active:border-gray-600 ui-active:ring-2 ui-active:ring-gray-600"
             key={aspectRatio}

@@ -1,5 +1,4 @@
 import { Button, Chip } from "@nextui-org/react"
-import { ProjectStatus } from "@prisma/client"
 import { LoaderFunctionArgs, json, redirect } from "@remix-run/node"
 import {
   ClientLoaderFunctionArgs,
@@ -58,7 +57,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     },
   })
 
-  if (project.status === ProjectStatus.Draft) {
+  if (project.status === "Draft") {
     return redirect(route("/create/:projectId", { projectId }))
   }
 

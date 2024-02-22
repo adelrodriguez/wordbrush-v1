@@ -2,7 +2,6 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { PaintBrushIcon } from "@heroicons/react/24/outline"
 import { Button, Input, Textarea } from "@nextui-org/react"
-import { IntendedUse, ProjectStatus } from "@prisma/client"
 import {
   LoaderFunctionArgs,
   json,
@@ -27,7 +26,7 @@ import {
   IntendedUsePicker,
   WorkflowBreadcrumbs,
 } from "~/components/create"
-import { MAX_CHARACTER_LENGTH } from "~/config/consts"
+import { MAX_CHARACTER_LENGTH, intendedUses } from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 import { generateTextSummaryQueue } from "~/modules/queues"
@@ -35,7 +34,7 @@ import Sentry from "~/services/sentry"
 import { forbidden } from "~/utils/http.server"
 
 const schema = z.object({
-  intendedUse: z.nativeEnum(IntendedUse),
+  intendedUse: z.enum(intendedUses),
   name: z.string(),
   text: z.string().min(1).max(MAX_CHARACTER_LENGTH),
 })
@@ -57,7 +56,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return redirect(route("/my/words"))
   }
 
-  if (project.status !== ProjectStatus.Draft) {
+  if (project.status !== "Draft") {
     return redirect(route("/my/words/:projectId", { projectId: project.id }))
   }
 

@@ -1,22 +1,22 @@
-import { ArtStyle, IntendedUse, Project, Template } from "@prisma/client"
+import type { ArtStyle, IntendedUse, Project, Template } from "@prisma/client"
 
-function generateIntendedUsePromptElement(intendedUse: string): string {
+function generateIntendedUsePromptElement(intendedUse: IntendedUse): string {
   switch (intendedUse) {
-    case IntendedUse.PersonalBlog:
+    case "PersonalBlog":
       return "Optimize the image for a personal blog; this means that the image must capture emotion and personality. It should also tell a story or convey a message, and feel authentic and relatable."
-    case IntendedUse.CompanyBlog:
+    case "CompanyBlog":
       return "Optimize the image for a company blog; this means that the image must be professional and polished. It should also be on-brand and visually appealing, while also being industry-relevant."
-    case IntendedUse.Newsletter:
+    case "Newsletter":
       return "Optimize the image for a newsletter; this means that the image must be engaging and informative. It should be complementary to the content, enhancing the reader's understanding and experience."
-    case IntendedUse.SocialMedia:
+    case "SocialMedia":
       return "Optimize the image for social media; this means that the image must be eye-catching and shareable. It should be adaptable to different platforms and formats, and encourage engagement and interaction."
-    case IntendedUse.BookCover:
+    case "BookCover":
       return "Optimize the image for a book cover; this means that it should represent the genre and tone of the book. It should be visually striking and memorable, and entice the reader to pick up the book. It should set the mood and atmosphere of the book, using color, lighting, and composition to evoke specific emotions or settings."
-    case IntendedUse.BookInterior:
+    case "BookInterior":
       return "Optimize the image for a book interior; this means that it should enhance or complement the text, helping to visualize concepts, settings, or characters described in the passage."
-    case IntendedUse.PodcastCover:
+    case "PodcastCover":
       return "Optimize the image for a podcast cover; this means that it should develop an iconic image that represents the podcast’s theme or essence, making it recognizable at a glance. This image should be versatile enough to become synonymous with the podcast itself."
-    case IntendedUse.PodcastEpisode:
+    case "PodcastEpisode":
       return "Optimize the image for a podcast episode; this means that is should reflect the specific theme, topic, or guest featured in the episode. It provides a visual teaser that complements the episode's content."
     default:
       return ""

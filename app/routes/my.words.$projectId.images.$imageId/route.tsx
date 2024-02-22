@@ -73,6 +73,8 @@ export async function clientLoader({
   return { ...serverData, isTextAvailable: Boolean(text) }
 }
 
+clientLoader.hydrate = true
+
 export async function action({ params, request }: ActionFunctionArgs) {
   const { imageId, projectId } = zx.parseParams(
     params,
@@ -118,6 +120,10 @@ export async function action({ params, request }: ActionFunctionArgs) {
       templateId: template.id,
     }),
   )
+}
+
+export function HydrateFallback() {
+  return null
 }
 
 export default function Route() {

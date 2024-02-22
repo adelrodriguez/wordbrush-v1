@@ -1,7 +1,6 @@
 import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { Button, Input, Textarea } from "@nextui-org/react"
-import { IntendedUse } from "@prisma/client"
 import { LoaderFunctionArgs, redirect } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
@@ -18,13 +17,17 @@ import {
   FieldTitle,
   IntendedUsePicker,
 } from "~/components/create"
-import { DRAFT_PROJECT_KEY, MAX_CHARACTER_LENGTH } from "~/config/consts"
+import {
+  DRAFT_PROJECT_KEY,
+  MAX_CHARACTER_LENGTH,
+  intendedUses,
+} from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 
 const schema = z.object({
   artStyleId: z.string().optional(),
-  intendedUse: z.nativeEnum(IntendedUse).default(IntendedUse.PersonalBlog),
+  intendedUse: z.enum(intendedUses).default("PersonalBlog"),
   name: z.string().default("My First Project"),
   text: z
     .string()
@@ -39,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (user) {
     const project = await db.project.create({
       data: {
-        intendedUse: IntendedUse.PersonalBlog,
+        intendedUse: "PersonalBlog",
         name: "Untitled Project",
         userId: user.id,
       },

@@ -1,12 +1,12 @@
-import { AspectRatio, Category } from "@prisma/client"
+import type { AspectRatio, Category } from "@prisma/client"
 
 export function getImageSize(aspect?: AspectRatio | null) {
   switch (aspect) {
-    case AspectRatio.Landscape:
+    case "Landscape":
       return "1792x1024" as const
-    case AspectRatio.Portrait:
+    case "Portrait":
       return "1024x1792" as const
-    case AspectRatio.Square:
+    case "Square":
     default:
       return "1024x1024" as const
   }
@@ -23,7 +23,7 @@ export function getStyle(
 
   // Otherwise, use the category to determine the style
   switch (category) {
-    case Category.Nature:
+    case "Nature":
     case null:
       return "natural"
     default:

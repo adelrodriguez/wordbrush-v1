@@ -1,6 +1,5 @@
 import { parseWithZod } from "@conform-to/zod"
 import { Progress } from "@nextui-org/react"
-import { StorageService } from "@prisma/client"
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import {
   ClientActionFunctionArgs,
@@ -147,7 +146,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
     data: {
       bucket: env.STORAGE_BUCKET,
       projectId: project.id,
-      service: StorageService.R2,
+      service: "R2",
       templateId: template.id,
     },
   })

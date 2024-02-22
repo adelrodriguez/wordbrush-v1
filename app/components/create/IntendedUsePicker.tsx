@@ -1,22 +1,21 @@
 import { RadioGroup } from "@headlessui/react"
 import { CheckCircleIcon } from "@heroicons/react/20/solid"
-import { IntendedUse } from "@prisma/client"
+import type { IntendedUse } from "@prisma/client"
 import { ComponentPropsWithoutRef } from "react"
 
+import { intendedUses } from "~/config/consts"
 import { getIntendedUseIcon, getIntendedUseLabel } from "~/utils/project"
 
-const descriptions = {
-  [IntendedUse.PersonalBlog]: "Design a banner for your personal blog.",
-  [IntendedUse.CompanyBlog]:
-    "Publish your company blog and share posts with your customers.",
-  [IntendedUse.Newsletter]: "Send a newsletter to your subscribers.",
-  [IntendedUse.BookCover]: "Design a cover for your book.",
-  [IntendedUse.BookInterior]: "Design the interior of your book.",
-  [IntendedUse.SocialMedia]:
-    "Create graphics for your social media profiles and posts.",
-  [IntendedUse.PodcastCover]: "Design a cover for your podcast.",
-  [IntendedUse.PodcastEpisode]: "Design graphics for your podcast episodes.",
-  [IntendedUse.Other]: "Other intended use.",
+const descriptions: Record<IntendedUse, string> = {
+  BookCover: "Generate a cover for your book.",
+  BookInterior: "Generate a visual from an excerpt of your book.",
+  CompanyBlog: "Generate a banner for your company blog.",
+  Newsletter: "Generate a cover for your newsletter.",
+  Other: "Generate a visual for another use.",
+  PersonalBlog: "Generate a banner for your personal blog.",
+  PodcastCover: "Generate a cover for your podcast.",
+  PodcastEpisode: "Generate graphics for your podcast episodes.",
+  SocialMedia: "Generate a graphic for social media.",
 }
 
 export default function IntendedUsePicker({
@@ -27,7 +26,7 @@ export default function IntendedUsePicker({
   return (
     <RadioGroup defaultValue={defaultValue} id={id} name={name}>
       <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
-        {Object.values(IntendedUse).map((intendedUse) => (
+        {intendedUses.map((intendedUse) => (
           <RadioGroup.Option
             className="relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none ui-active:border-gray-600 ui-active:ring-2 ui-active:ring-gray-600"
             key={intendedUse}

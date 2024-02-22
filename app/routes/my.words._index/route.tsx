@@ -1,5 +1,4 @@
 import { PhotoIcon } from "@heroicons/react/24/outline"
-import { ProjectStatus } from "@prisma/client"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { route } from "routes-gen"
@@ -40,7 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     orderBy: { createdAt: "desc" },
     where: {
       name: { contains: search, mode: "insensitive" },
-      status: { not: ProjectStatus.Removed },
+      status: { not: "Removed" },
       user,
     },
   })
@@ -85,7 +84,7 @@ export default function Route() {
                 <div className="flex flex-col gap-y-1 px-4 py-3.5 text-left">
                   <div className="flex justify-between">
                     <div className="mb-0.5 font-semibold">{project.name}</div>
-                    {project.status === ProjectStatus.Draft && (
+                    {project.status === "Draft" && (
                       <div>
                         <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
                           Draft

@@ -2,7 +2,6 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react"
 import { parseWithZod } from "@conform-to/zod"
 import { AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline"
 import { Button } from "@nextui-org/react"
-import { AspectRatio } from "@prisma/client"
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -21,6 +20,7 @@ import {
   FieldTitle,
   WorkflowBreadcrumbs,
 } from "~/components/create"
+import { aspectRatios } from "~/config/consts"
 import auth from "~/modules/auth.server"
 import db from "~/modules/db.server"
 import Sentry from "~/services/sentry"
@@ -28,7 +28,7 @@ import { forbidden, notFound } from "~/utils/http.server"
 
 const schema = z.object({
   artStyleId: z.string(),
-  aspectRatio: z.nativeEnum(AspectRatio),
+  aspectRatio: z.enum(aspectRatios),
   detail: z.number().min(1).max(100).default(50),
 })
 

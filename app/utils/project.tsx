@@ -9,30 +9,30 @@ import {
   PhotoIcon,
   PlayIcon,
 } from "@heroicons/react/24/outline"
-import { Category, IntendedUse } from "@prisma/client"
+import type { Category, IntendedUse } from "@prisma/client"
 
 export function getIntendedUseIcon(
   intendedUse: IntendedUse,
   className?: string,
 ) {
   switch (intendedUse) {
-    case IntendedUse.PersonalBlog:
+    case "PersonalBlog":
       return <PencilIcon className={className} />
-    case IntendedUse.CompanyBlog:
+    case "CompanyBlog":
       return <BuildingOfficeIcon className={className} />
-    case IntendedUse.BookCover:
+    case "BookCover":
       return <BookOpenIcon className={className} />
-    case IntendedUse.BookInterior:
+    case "BookInterior":
       return <BookmarkIcon className={className} />
-    case IntendedUse.SocialMedia:
+    case "SocialMedia":
       return <HandThumbUpIcon className={className} />
-    case IntendedUse.Newsletter:
+    case "Newsletter":
       return <EnvelopeIcon className={className} />
-    case IntendedUse.PodcastCover:
+    case "PodcastCover":
       return <MicrophoneIcon className={className} />
-    case IntendedUse.PodcastEpisode:
+    case "PodcastEpisode":
       return <PlayIcon className={className} />
-    case IntendedUse.Other:
+    case "Other":
       return <PhotoIcon className={className} />
     default:
       return null
@@ -41,23 +41,23 @@ export function getIntendedUseIcon(
 
 export function getIntendedUseLabel(intendedUse: IntendedUse) {
   switch (intendedUse) {
-    case IntendedUse.PersonalBlog:
+    case "PersonalBlog":
       return "Personal Blog"
-    case IntendedUse.CompanyBlog:
+    case "CompanyBlog":
       return "Company Blog"
-    case IntendedUse.BookCover:
+    case "BookCover":
       return "Book Cover"
-    case IntendedUse.BookInterior:
+    case "BookInterior":
       return "Book Interior"
-    case IntendedUse.SocialMedia:
+    case "SocialMedia":
       return "Social Media"
-    case IntendedUse.Newsletter:
+    case "Newsletter":
       return "Newsletter"
-    case IntendedUse.PodcastCover:
+    case "PodcastCover":
       return "Podcast Cover"
-    case IntendedUse.PodcastEpisode:
+    case "PodcastEpisode":
       return "Podcast Episode"
-    case IntendedUse.Other:
+    case "Other":
       return "Other"
     default:
       return "Unknown"
@@ -66,27 +66,27 @@ export function getIntendedUseLabel(intendedUse: IntendedUse) {
 
 export function getCategoryEmoji(category: Category): string {
   switch (category) {
-    case Category.Abstract:
+    case "Abstract":
       return "🎨"
-    case Category.Digital:
+    case "Digital":
       return "🖥️"
-    case Category.Fantasy:
+    case "Fantasy":
       return "🐉"
-    case Category.Geometric:
+    case "Geometric":
       return "🔶"
-    case Category.Historical:
+    case "Historical":
       return "🏛️"
-    case Category.Illustrative:
+    case "Illustrative":
       return "🖌️"
-    case Category.Modern:
+    case "Modern":
       return "🏙️"
-    case Category.Nature:
+    case "Nature":
       return "🌿"
-    case Category.SciFi:
+    case "SciFi":
       return "🚀"
-    case Category.Technological:
+    case "Technological":
       return "🔧"
-    case Category.Traditional:
+    case "Traditional":
       return "🖼️"
     default:
       return ""
