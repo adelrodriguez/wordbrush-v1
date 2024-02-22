@@ -150,3 +150,19 @@ export function internalServerError({
     },
   )
 }
+
+/**
+ * 501 Not Implemented
+ */
+export function notImplemented({
+  message = "The request was not implemented.",
+  title = "Not Implemented",
+} = {}) {
+  return json(
+    { message, title },
+    {
+      status: StatusCodes.NOT_IMPLEMENTED,
+      statusText: ReasonPhrases.NOT_IMPLEMENTED,
+    },
+  )
+}
