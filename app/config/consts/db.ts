@@ -7,13 +7,13 @@ export const aspectRatios = [
 ] as const satisfies AspectRatio[]
 
 export const intendedUses = [
-  "BookCover",
-  "BookInterior",
+  "PersonalBlog",
   "CompanyBlog",
   "Newsletter",
-  "Other",
-  "PersonalBlog",
+  "SocialMedia",
+  "BookCover",
+  "BookInterior",
   "PodcastCover",
   "PodcastEpisode",
-  "SocialMedia",
+  "Other",
 ] as const satisfies IntendedUse[]
