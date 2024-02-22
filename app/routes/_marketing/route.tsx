@@ -2,6 +2,33 @@ import { Link, Outlet, useLocation } from "@remix-run/react"
 import clsx from "clsx"
 import { route } from "routes-gen"
 
+const navigationLinks = [
+  {
+    label: "Features",
+    to: "/#features",
+  },
+  {
+    label: "Styles",
+    to: "/#styles",
+  },
+  {
+    label: "How it works",
+    to: "/#how-it-works",
+  },
+  {
+    label: "Examples",
+    to: "/#examples",
+  },
+  {
+    label: "FAQ",
+    to: "/#faq",
+  },
+  {
+    label: "Pricing",
+    to: route("/pricing"),
+  },
+]
+
 export default function Route() {
   const location = useLocation()
   const isIndex = location.pathname === "/"
@@ -26,15 +53,19 @@ export default function Route() {
             </Link>
           </div>
           <div className="flex gap-x-12">
-            <Link
-              className={clsx(
-                "text-xs font-semibold leading-6 sm:text-sm",
-                isIndex ? "text-gray-200" : "text-black",
-              )}
-              to={route("/pricing")}
-            >
-              Pricing
-            </Link>
+            {navigationLinks.map((link, index) => (
+              <Link
+                className={clsx(
+                  "text-xs font-semibold leading-6 sm:text-sm",
+                  isIndex ? "text-gray-200" : "text-black",
+                  link.to !== route("/pricing") && "hidden lg:block",
+                )}
+                key={index}
+                to={link.to}
+              >
+                {link.label}
+              </Link>
+            ))}
             <Link
               className={clsx(
                 "text-xs font-semibold leading-6 sm:text-sm",
@@ -47,7 +78,12 @@ export default function Route() {
           </div>
         </nav>
       </header>
-      <main className="h-full min-h-screen bg-white">
+      <main
+        className={clsx(
+          "h-full min-h-screen",
+          isIndex ? "bg-[#185353]" : "bg-white",
+        )}
+      >
         <Outlet />
       </main>
       <footer></footer>

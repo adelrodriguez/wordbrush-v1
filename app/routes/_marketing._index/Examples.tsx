@@ -1,3 +1,3 @@
 export default function Examples() {
-  return <section>Examples</section>
+  return <section id="examples">Examples</section>
 }

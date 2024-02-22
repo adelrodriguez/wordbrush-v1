@@ -132,7 +132,7 @@ export default function App() {
   }, [location])
 
   return (
-    <html className="h-full bg-white" lang="en">
+    <html className="h-full scroll-smooth bg-white" lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />

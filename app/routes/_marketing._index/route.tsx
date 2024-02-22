@@ -8,7 +8,7 @@ import Examples from "./Examples"
 import FAQ from "./FAQ"
 import Features from "./Features"
 import Hero from "./Hero"
-import Process from "./Process"
+import HowItWorks from "./HowItWorks"
 import Showcase from "./Showcase"
 
 export async function loader() {
@@ -27,7 +27,7 @@ export default function Route() {
       <Hero />
       <Features />
       <Showcase artStyles={artStyles} />
-      <Process />
+      <HowItWorks />
       <Examples />
       <FAQ />
       <CTA />

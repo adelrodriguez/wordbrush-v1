@@ -29,7 +29,7 @@ export default function Showcase({
   )
 
   return (
-    <section className="py-24 sm:py-32">
+    <section className="py-24 sm:py-32" id="styles">
       <div className="mx-auto max-w-7xl px-6 md:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="mx-auto max-w-2xl lg:text-center">
