@@ -5,7 +5,7 @@ import { zx } from "zodix"
 import auth from "~/modules/auth.server"
 import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
-import { unauthorized } from "~/utils/http.server"
+import { accepted, unauthorized } from "~/utils/http.server"
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const { projectId } = zx.parseParams(
@@ -34,7 +34,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   )
 
   if (!recommendations) {
-    return json({ recommendations: [] })
+    throw accepted({
+      message: "The recommendations are still being processed.",
+    })
   }
 
   const artStyles = await db.artStyle.findMany({

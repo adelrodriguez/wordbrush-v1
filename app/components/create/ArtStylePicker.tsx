@@ -60,12 +60,24 @@ export default function ArtStylePicker({
         throw new Error("Failed to fetch recommendations")
       }
 
+      if (response.status === 202) {
+        throw new Error("The recommendations are still being processed.")
+      }
+
       const data = (await response.json()) as { recommendations: ArtStyle[] }
 
       return data.recommendations
     },
     queryKey: ["project", projectId, "recommendations"],
-    refetchInterval: 5000,
+    retry(failureCount, error) {
+      return (
+        error.message === "The recommendations are still being processed." &&
+        failureCount < 10
+      )
+    },
+    retryDelay(attemptIndex) {
+      return 1000 * (attemptIndex + 1)
+    },
   })
 
   const groupedOptions = options.reduce<Record<Category, Option[]>>(
