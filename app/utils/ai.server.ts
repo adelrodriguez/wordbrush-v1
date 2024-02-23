@@ -59,7 +59,7 @@ export function generatePrompt(
   
   We are ONLY depicting the image, not the physical object where it will be published. This means that the image can be printed and displayed for the intended use.
   
-  NO TEXT. NO WORD OR NUMBERS on the image.
+  DO NOT INCLUDE ANY TEXT in the image. An image containing text is UNACCEPTABLE.
 
   Again, you will respond with a single prompt that will be used to generate an image.
   `
