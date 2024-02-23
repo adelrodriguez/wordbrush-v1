@@ -194,14 +194,14 @@ export default function Route() {
             onClick={() => {
               if (hasEnoughCredits) return
 
-              posthog.capture("not_enough_credits")
+              posthog.capture("not_enough_credits_warning_shown")
 
               const confirmed = confirm(
                 "You don't have enough credits to generate this art. Purchase more?",
               )
 
               if (confirmed) {
-                posthog.capture("navigate_to_pricing")
+                posthog.capture("navigated_to_pricing")
 
                 navigate(route("/pricing"))
               }

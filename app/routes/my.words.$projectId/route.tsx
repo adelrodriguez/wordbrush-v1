@@ -169,7 +169,7 @@ export default function Route() {
               <Button
                 className="background-animated w-full max-w-96 rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600 lg:w-full"
                 onClick={() => {
-                  posthog.capture("create_new_image")
+                  posthog.capture("created_new_image")
                 }}
                 type="submit"
               >

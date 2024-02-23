@@ -157,7 +157,7 @@ export default function Route() {
                         className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
                         download
                         onClick={() => {
-                          posthog.capture("download_image", {
+                          posthog.capture("downloaded_image", {
                             imageId: image.id,
                           })
                         }}

@@ -22,7 +22,7 @@ export default function Route() {
       <Link
         className="absolute left-4 top-4 text-sm font-semibold leading-6 text-gray-900"
         onClick={() => {
-          posthog.capture("exit_create")
+          posthog.capture("exited_create")
         }}
         to={isAuthenticated ? route("/my/words") : route("/")}
       >

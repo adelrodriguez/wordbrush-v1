@@ -232,7 +232,7 @@ export default function Route() {
                           disabled={!isTextAvailable}
                           isIconOnly
                           onClick={() => {
-                            posthog.capture("duplicate_image_style", {
+                            posthog.capture("duplicated_image_style", {
                               imageId: image.id,
                             })
                           }}
@@ -248,7 +248,7 @@ export default function Route() {
                         className=" rounded-md bg-gray-600 p-2 hover:bg-gray-500"
                         download
                         onClick={() => {
-                          posthog.capture("download_image", {
+                          posthog.capture("downloaded_image", {
                             imageId: image.id,
                           })
                         }}
