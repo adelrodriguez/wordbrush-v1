@@ -5,6 +5,7 @@ import cache from "~/modules/cache.server"
 import db from "~/modules/db.server"
 import { createQueue } from "~/modules/queue.server"
 import ai from "~/services/openai.server"
+import { getIntendedUseLabel } from "~/utils/project"
 
 type QueueData = {
   projectId: string
@@ -20,6 +21,11 @@ const processor: Processor<QueueData> = async (job) => {
     throw new Error("Summary not found")
   }
 
+  const project = await db.project.findFirstOrThrow({
+    select: { intendedUse: true },
+    where: { id: projectId },
+  })
+
   const artStyles = await db.artStyle.findMany({
     select: { name: true },
   })
@@ -30,6 +36,8 @@ const processor: Processor<QueueData> = async (job) => {
         content: `You will provide 3 recommended art styles based on the provided summary.
         
         The available art styles are: ${artStyles.map((style) => style.name).join(", ")}.
+
+        Take into account the intended use of the project: ${getIntendedUseLabel(project.intendedUse)}.
         
         Choose ONLY FROM THE AVAILABLE ART STYLES. You will answer with the exact names provided, do not translate or modify the names.
         
