@@ -10,9 +10,18 @@ import { captureRemixServerException } from "@sentry/remix"
 import { isbot } from "isbot"
 import { PassThrough } from "node:stream"
 import { renderToPipeableStream } from "react-dom/server"
+import { createSitemapGenerator } from "remix-sitemap"
 
 import "~/config/env.server"
 import Sentry from "~/services/sentry"
+
+const { isSitemapUrl, sitemap } = createSitemapGenerator({
+  generateRobotsTxt: true,
+  headers: {
+    "Cache-Control": "max-age=3600",
+  },
+  siteUrl: "https://wordbrush.art",
+})
 
 export const handleError: HandleErrorFunction = (error, { request }) => {
   void captureRemixServerException(error, "remix.server", request)
@@ -32,6 +41,11 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
+  if (isSitemapUrl(request)) {
+    // @ts-expect-error - EntryContext type conflict
+    return await sitemap(request, remixContext)
+  }
+
   return isbot(request.headers.get("user-agent") ?? "")
     ? handleBotRequest(
         request,
