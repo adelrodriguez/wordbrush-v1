@@ -4,9 +4,9 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build:app:sentry": "./scripts/sentry-upload-sourcemaps.sh",
-    "build:app": "remix vite:build",
-    "build": "run-s build:app build:app:sentry database:deploy",
+    "upload-sentry-sourcemaps": "./scripts/sentry-upload-sourcemaps.sh",
+    "build": "remix vite:build",
+    "postbuild": "run-p upload-sentry-sourcemaps database:deploy",
     "database:deploy": "prisma migrate deploy",
     "database:generate": "prisma generate",
     "database:migrate:create": "prisma migrate dev --name",
