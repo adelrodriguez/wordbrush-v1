@@ -7,7 +7,7 @@ import {
 const features = [
   {
     description:
-      "Unlike other AI image generators, you don't need to think about prompts or styling; we just need your writing. We'll take care of the rest.",
+      "Unlike other AI image generators, you don't need to worry about complicated prompts; just give us your writing. We'll take care of the rest.",
     icon: LightBulbIcon,
     name: "Forget prompts",
   },
@@ -19,7 +19,7 @@ const features = [
   },
   {
     description:
-      "Create your own custom styles to match your brand. Use an existing image as a starting point or start from scratch.",
+      "Create your own custom styles to match your brand. Just give us an example image and tell us what you like about it.",
     icon: SparklesIcon,
     name: "Custom styles",
   },

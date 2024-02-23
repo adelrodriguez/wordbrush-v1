@@ -21,8 +21,10 @@ declare module "routes-gen" {
     "/my/words/:projectId": { "projectId": string };
     "/my/words/:projectId/images/:imageId": { "projectId": string, "imageId": string };
     "/pricing": Record<string, never>;
+    "/privacy": Record<string, never>;
     "/robots.txt": Record<string, never>;
     "/sitemap.xml": Record<string, never>;
+    "/terms": Record<string, never>;
     "/verify": Record<string, never>;
   };
 
@@ -49,8 +51,10 @@ declare module "routes-gen" {
       | ["/my/words/:projectId", RouteParams["/my/words/:projectId"]]
       | ["/my/words/:projectId/images/:imageId", RouteParams["/my/words/:projectId/images/:imageId"]]
       | ["/pricing"]
+      | ["/privacy"]
       | ["/robots.txt"]
       | ["/sitemap.xml"]
+      | ["/terms"]
       | ["/verify"]
   >(...args: T): typeof args[0];
 }

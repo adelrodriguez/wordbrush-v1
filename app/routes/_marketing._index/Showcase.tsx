@@ -50,7 +50,7 @@ export default function Showcase({
           <Carousel backwards={index % 2 === 0} key={index}>
             {group.map((artStyle) => (
               <div
-                className="relative mx-4 my-4 flex min-w-0 shrink-0 grow-0 basis-24 items-center md:my-8 md:basis-48"
+                className="group relative mx-4 my-4 flex min-w-0 shrink-0 grow-0 basis-24 items-center md:my-8 md:basis-48"
                 key={artStyle.id}
               >
                 <img
@@ -58,8 +58,8 @@ export default function Showcase({
                   className="h-full w-full rounded-xl object-cover shadow-lg"
                   src={artStyle.exampleUrl ?? ""}
                 />
-                <div className="absolute bottom-0 left-0 flex h-[100px] w-full items-end justify-center rounded-xl bg-gradient-to-b from-transparent to-black/90 px-2 pb-4 text-center"></div>
-                <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-center text-xs text-white">
+                <div className="absolute bottom-0 left-0 flex h-[100px] w-full items-end justify-center rounded-xl bg-gradient-to-b from-transparent to-black/70 px-2 pb-4 text-center opacity-0 transition-opacity duration-150 group-hover:opacity-100"></div>
+                <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-center text-xs text-white opacity-0 transition-opacity duration-150 group-hover:opacity-100">
                   {artStyle.name}
                 </p>
               </div>

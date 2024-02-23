@@ -29,6 +29,48 @@ const navigationLinks = [
   },
 ]
 
+const footerLinks = [
+  {
+    links: [
+      {
+        label: "Support",
+        to: "mailto:contact@wordbrush.art",
+      },
+      {
+        label: "Pricing",
+        to: route("/pricing"),
+      },
+      {
+        label: "Log in",
+        to: route("/login"),
+      },
+    ],
+    title: "WORDBRUSH",
+  },
+  {
+    links: [
+      {
+        label: "Privacy policy",
+        to: route("/privacy"),
+      },
+      {
+        label: "Terms of service",
+        to: route("/terms"),
+      },
+    ],
+    title: "LEGAL",
+  },
+  {
+    links: [
+      {
+        label: "Twitter",
+        to: "https://x.com/adelrodriguezv",
+      },
+    ],
+    title: "MORE",
+  },
+]
+
 export default function Route() {
   const location = useLocation()
   const isIndex = location.pathname === "/"
@@ -79,14 +121,38 @@ export default function Route() {
         </nav>
       </header>
       <main
-        className={clsx(
-          "h-full min-h-screen",
-          isIndex ? "bg-[#185353]" : "bg-white",
-        )}
+        className={clsx("min-h-screen", isIndex ? "bg-[#185353]" : "bg-white")}
       >
         <Outlet />
       </main>
-      <footer></footer>
+      <footer className="mx-auto grid space-y-12 bg-gray-900 px-12 py-8 md:grid-cols-4 md:space-y-0 md:p-16">
+        <div className="col-span-1 flex items-center">
+          <img
+            alt="Wordbrush"
+            className="h-24"
+            src="/assets/images/logo-white.png"
+          />
+        </div>
+        {footerLinks.map((section, index) => (
+          <div className="col-span-1 flex flex-col space-y-4" key={index}>
+            <h2 className="text-xs font-black leading-6 text-white">
+              {section.title}
+            </h2>
+            <ul className="space-y-2">
+              {section.links.map((link, index) => (
+                <li key={index}>
+                  <Link
+                    className="text-xs font-semibold leading-6 text-gray-200 hover:underline"
+                    to={link.to}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </footer>
     </>
   )
 }

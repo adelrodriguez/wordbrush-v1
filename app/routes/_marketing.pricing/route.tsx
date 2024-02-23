@@ -79,7 +79,7 @@ export default function Route() {
                 className="relative flex cursor-pointer items-center justify-between rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm focus:outline-none ui-active:border-gray-600 ui-active:ring-2 ui-active:ring-gray-600"
                 key={product.id}
                 onClick={() => {
-                  posthog.capture("select_product", { productId: product.id })
+                  posthog.capture("selected_product", { productId: product.id })
                 }}
                 value={product.id}
               >
