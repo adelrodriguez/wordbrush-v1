@@ -10,6 +10,7 @@ import { captureRemixServerException } from "@sentry/remix"
 import { isbot } from "isbot"
 import { PassThrough } from "node:stream"
 import { renderToPipeableStream } from "react-dom/server"
+import { createSitemapGenerator } from "remix-sitemap"
 
 import "~/config/env.server"
 import Sentry from "~/services/sentry"
@@ -19,6 +20,11 @@ export const handleError: HandleErrorFunction = (error, { request }) => {
   console.error(error)
 }
 
+const { isSitemapUrl, sitemap } = createSitemapGenerator({
+  generateRobotsTxt: true,
+  siteUrl: "https://wordbrush.art",
+})
+
 Sentry.init({
   dsn: "https://385ee7290c910c82fa78d52249ce8737@o4506764137922560.ingest.sentry.io/4506764141789184",
   tracesSampleRate: 1,
@@ -26,12 +32,17 @@ Sentry.init({
 
 const ABORT_DELAY = 5_000
 
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
+  if (isSitemapUrl(request)) {
+    // @ts-expect-error - seems remixContext is not the type expected by sitemap
+    return sitemap(request, remixContext)
+  }
+
   return isbot(request.headers.get("user-agent") ?? "")
     ? handleBotRequest(
         request,
