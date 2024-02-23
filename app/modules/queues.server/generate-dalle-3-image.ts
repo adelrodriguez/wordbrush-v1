@@ -104,7 +104,7 @@ const processor: Processor<QueueData> = async (job) => {
 
   const now = Date.now()
   const filename = now + ".png"
-  const thumbnailFilename = now + ".webp"
+  const thumbnailFilename = now + ".avif"
 
   if (!image?.b64_json) {
     throw new Error("Failed to generate image")
@@ -115,7 +115,7 @@ const processor: Processor<QueueData> = async (job) => {
   // Create a thumbnail
   const thumbnailBuffer = await sharp(buffer)
     .resize(500)
-    .toFormat("webp")
+    .toFormat("avif")
     .toBuffer()
 
   const imageKey = `${userId}/${template.projectId}/${filename}`
@@ -129,7 +129,7 @@ const processor: Processor<QueueData> = async (job) => {
     }),
     uploadBuffer(thumbnailBuffer, {
       contentDisposition: "attachment; filename=" + thumbnailFilename,
-      contentType: "image/png",
+      contentType: "image/avif",
       key: thumbnailKey,
     }),
   ])

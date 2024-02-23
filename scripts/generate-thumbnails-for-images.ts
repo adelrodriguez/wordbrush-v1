@@ -9,7 +9,7 @@ async function main() {
     include: {
       project: { select: { userId: true } },
     },
-    where: { thumbnailUrl: null },
+    where: { thumbnailUrl: { not: { endsWith: ".avif" } } },
   })
 
   for (const image of images) {
@@ -24,7 +24,7 @@ async function main() {
 
     const processedImageBuffer = await sharp(buffer)
       .resize(500)
-      .toFormat("webp")
+      .toFormat("avif")
       .toBuffer()
 
     const filename = image.publicUrl.split("/").pop()
@@ -34,12 +34,12 @@ async function main() {
       continue
     }
 
-    const thumbnailFilename = filename.replace(".png", "-thumbnail.png")
+    const thumbnailFilename = filename.replace(".png", "-thumbnail.avif")
     const key = `${image.project.userId}/${image.projectId}/${thumbnailFilename}`
 
     await uploadBuffer(processedImageBuffer, {
       contentDisposition: "attachment; filename=" + thumbnailFilename,
-      contentType: "image/png",
+      contentType: "image/avif",
       key,
     })
 

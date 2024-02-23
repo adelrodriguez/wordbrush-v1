@@ -5,9 +5,12 @@ import db from "~/modules/db.server"
 import { uploadBuffer } from "~/utils/upload.server"
 
 async function main() {
-  const artStyles = await db.artStyle.findMany()
+  const artStyles = await db.artStyle.findMany({
+    where: { exampleUrl: { not: { endsWith: ".avif" } } },
+  })
 
   for (const artStyle of artStyles) {
+    console.log("Processing art style", artStyle.id)
     if (!artStyle.exampleUrl) {
       console.log("No example url for artStyle", artStyle.id)
       continue
@@ -19,12 +22,12 @@ async function main() {
 
     const processedArtStyleBuffer = await sharp(buffer)
       .resize(512)
-      .toFormat("webp")
+      .toFormat("avif")
       .toBuffer()
 
     const filename =
       encodeURIComponent(artStyle.name.split(" ").join("-").toLowerCase()) +
-      ".webp"
+      ".avif"
 
     if (!filename) {
       console.log("No filename for artStyle", artStyle.id)
@@ -35,7 +38,7 @@ async function main() {
 
     await uploadBuffer(processedArtStyleBuffer, {
       contentDisposition: "attachment; filename=" + filename,
-      contentType: "artStyle/png",
+      contentType: "image/avif",
       key,
     })
 

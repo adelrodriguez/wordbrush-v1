@@ -32,7 +32,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       _count: { select: { images: true } },
       images: {
         orderBy: { createdAt: "desc" },
-        select: { publicUrl: true },
+        select: { thumbnailUrl: true },
         take: 1,
       },
     },
@@ -69,11 +69,11 @@ export default function Route() {
             <Link to={route("/my/words/:projectId", { projectId: project.id })}>
               <div className="flex h-full flex-col">
                 <div className="h-48">
-                  {project.images[0]?.publicUrl ? (
+                  {project.images[0]?.thumbnailUrl ? (
                     <img
                       alt={project.name}
                       className="h-full w-full rounded-t-lg object-cover"
-                      src={project.images[0]?.publicUrl}
+                      src={project.images[0]?.thumbnailUrl}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center rounded-t-lg bg-gray-100 text-gray-400">
