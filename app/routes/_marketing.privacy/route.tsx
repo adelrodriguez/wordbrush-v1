@@ -73,8 +73,8 @@ export default function Route() {
 
       <h2 className="mb-3 mt-6 text-2xl font-bold">Your Privacy Controls</h2>
       <p className="mb-4">
-        You have choices regarding the information we collect and how it's used.
-        This includes:
+        You have choices regarding the information we collect and how it&apos;s
+        used. This includes:
       </p>
       <ul className="mb-4 list-disc pl-6">
         <li>

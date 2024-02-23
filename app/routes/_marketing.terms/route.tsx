@@ -32,7 +32,7 @@ export default function Route() {
       <p>
         This license offers a flexible approach, allowing users to choose how
         much they want to engage with the service based on their needs without
-        the commitment to recurring fees or subscriptions. However, it's
+        the commitment to recurring fees or subscriptions. However, it&apos;s
         important to recognize that the licensor reserves the right to terminate
         the license at any time, without conditions. This provision ensures the
         licensor can manage software distribution and use effectively.
