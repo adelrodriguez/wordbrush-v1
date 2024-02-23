@@ -59,7 +59,6 @@
     "react-email": "2.0.0",
     "remix-auth": "3.6.0",
     "remix-auth-totp": "2.0.0",
-    "remix-sitemap": "^3.2.0",
     "remix-utils": "^7.5.0",
     "resend": "3.1.0",
     "routes-gen": "0.6.1",
