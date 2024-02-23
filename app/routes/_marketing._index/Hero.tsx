@@ -22,14 +22,14 @@ export default function Hero() {
           className="absolute inset-0 bg-gray-400 mix-blend-multiply transition-all md:bg-gray-200"
         />
       </div>
-      <div className="z-10 m-auto w-4/5">
+      <div className="z-10 m-auto sm:w-4/5">
         <div className="flex flex-col gap-y-10 text-center md:text-left">
           <div>
-            <h1 className="font-headline text-7xl leading-tight text-white">
+            <h1 className="font-headline text-5xl leading-tight text-white md:text-7xl">
               Bring your
               <br /> words to life
             </h1>
-            <p className="mt-4 max-w-xl text-lg font-light text-gray-200">
+            <p className="mt-4 text-base font-light text-gray-200 sm:max-w-xl md:text-lg">
               Elevate your content with stunning visuals created directly from
               your writing. Create beautiful images for your blog, social media,
               or novel in seconds.
