@@ -5,6 +5,7 @@ import {
   Cog6ToothIcon,
   FolderIcon,
   Squares2X2Icon,
+  SwatchIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline"
 import { LoaderFunctionArgs, json } from "@remix-run/node"
@@ -42,6 +43,11 @@ const navigation = [
     href: route("/my/images"),
     icon: Squares2X2Icon,
     name: "All Images",
+  },
+  {
+    href: route("/my/styles"),
+    icon: SwatchIcon,
+    name: "My Styles",
   },
   {
     href: route("/my/settings"),

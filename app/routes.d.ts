@@ -17,6 +17,7 @@ declare module "routes-gen" {
     "/my/images/:imageId": { "imageId": string };
     "/my/profile": Record<string, never>;
     "/my/settings": Record<string, never>;
+    "/my/styles": Record<string, never>;
     "/my/words": Record<string, never>;
     "/my/words/:projectId": { "projectId": string };
     "/my/words/:projectId/images/:imageId": { "projectId": string, "imageId": string };
@@ -47,6 +48,7 @@ declare module "routes-gen" {
       | ["/my/images/:imageId", RouteParams["/my/images/:imageId"]]
       | ["/my/profile"]
       | ["/my/settings"]
+      | ["/my/styles"]
       | ["/my/words"]
       | ["/my/words/:projectId", RouteParams["/my/words/:projectId"]]
       | ["/my/words/:projectId/images/:imageId", RouteParams["/my/words/:projectId/images/:imageId"]]
