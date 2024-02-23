@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Outlet, useLoaderData } from "@remix-run/react"
+import { route } from "routes-gen"
 
 import { GeneratedImage } from "~/components/GeneratedImage"
 import auth from "~/modules/auth.server"
@@ -39,20 +40,24 @@ export default function Route() {
   const columns = distributeElementsIntoColumns(images, distribution)
 
   return (
-    <ul className="grid grid-cols-4 gap-6">
-      {columns.map((images, index) => (
-        <div className="flex flex-col gap-6" key={`group${index}`}>
-          {images.map((image) => (
-            <GeneratedImage
-              id={image.id}
-              key={image.id}
-              projectId={image.projectId}
-              publicUrl={image.publicUrl}
-              thumbnailUrl={image.thumbnailUrl}
-            />
-          ))}
-        </div>
-      ))}
-    </ul>
+    <>
+      <ul className="grid grid-cols-4 gap-6">
+        {columns.map((images, index) => (
+          <div className="flex flex-col gap-6" key={`group${index}`}>
+            {images.map((image) => (
+              <GeneratedImage
+                id={image.id}
+                key={image.id}
+                projectId={image.projectId}
+                publicUrl={image.publicUrl}
+                thumbnailUrl={image.thumbnailUrl}
+                to={route("/my/images/:imageId", { imageId: image.id })}
+              />
+            ))}
+          </div>
+        ))}
+      </ul>
+      <Outlet />
+    </>
   )
 }

@@ -10,7 +10,10 @@ export function GeneratedImage({
   projectId,
   publicUrl,
   thumbnailUrl,
-}: Pick<Image, "id" | "projectId" | "publicUrl" | "thumbnailUrl">) {
+  to,
+}: Pick<Image, "id" | "projectId" | "publicUrl" | "thumbnailUrl"> & {
+  to: string
+}) {
   const { data, isError, isFetching } = useQuery({
     enabled: !publicUrl || !thumbnailUrl,
     initialData: {
@@ -71,13 +74,7 @@ export function GeneratedImage({
 
   return (
     <div className="group relative">
-      <Link
-        preventScrollReset
-        to={route("/my/words/:projectId/images/:imageId", {
-          imageId: id,
-          projectId,
-        })}
-      >
+      <Link preventScrollReset to={to}>
         <img
           alt=""
           className="h-auto max-w-full rounded-md shadow-inner transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"

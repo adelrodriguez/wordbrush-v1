@@ -200,6 +200,10 @@ export default function Route() {
                     projectId={project.id}
                     publicUrl={image.publicUrl}
                     thumbnailUrl={image.thumbnailUrl}
+                    to={route("/my/words/:projectId/images/:imageId", {
+                      imageId: image.id,
+                      projectId: project.id,
+                    })}
                   />
                 ))}
               </div>

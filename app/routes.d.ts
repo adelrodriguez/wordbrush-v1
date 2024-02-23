@@ -14,12 +14,15 @@ declare module "routes-gen" {
     "/magic-link": Record<string, never>;
     "/my": Record<string, never>;
     "/my/images": Record<string, never>;
+    "/my/images/:imageId": { "imageId": string };
     "/my/profile": Record<string, never>;
     "/my/settings": Record<string, never>;
     "/my/words": Record<string, never>;
     "/my/words/:projectId": { "projectId": string };
     "/my/words/:projectId/images/:imageId": { "projectId": string, "imageId": string };
     "/pricing": Record<string, never>;
+    "/robots.txt": Record<string, never>;
+    "/sitemap.xml": Record<string, never>;
     "/verify": Record<string, never>;
   };
 
@@ -39,12 +42,15 @@ declare module "routes-gen" {
       | ["/magic-link"]
       | ["/my"]
       | ["/my/images"]
+      | ["/my/images/:imageId", RouteParams["/my/images/:imageId"]]
       | ["/my/profile"]
       | ["/my/settings"]
       | ["/my/words"]
       | ["/my/words/:projectId", RouteParams["/my/words/:projectId"]]
       | ["/my/words/:projectId/images/:imageId", RouteParams["/my/words/:projectId/images/:imageId"]]
       | ["/pricing"]
+      | ["/robots.txt"]
+      | ["/sitemap.xml"]
       | ["/verify"]
   >(...args: T): typeof args[0];
 }
