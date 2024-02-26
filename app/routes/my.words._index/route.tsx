@@ -34,6 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         orderBy: { createdAt: "desc" },
         select: { thumbnailUrl: true },
         take: 1,
+        where: { thumbnailUrl: { not: null } },
       },
     },
     orderBy: { createdAt: "desc" },
