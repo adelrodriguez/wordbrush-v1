@@ -16,8 +16,8 @@ export function getStyle(
   category: Category | null,
   detail: number | null,
 ): "vivid" | "natural" {
-  // If detail is set to >85, use natural style
-  if (detail && detail > 85) {
+  // If detail is set to >95, use natural style
+  if (detail && detail > 95) {
     return "natural"
   }
 
