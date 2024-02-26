@@ -25,6 +25,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     },
     where: {
       project: {
+        status: { not: "Removed" },
         userId: user.id,
       },
       publicUrl: { not: null },
