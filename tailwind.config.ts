@@ -1,6 +1,7 @@
 import HeadlessUIPlugin from "@headlessui/tailwindcss"
 import { nextui } from "@nextui-org/react"
 import FormsPlugin from "@tailwindcss/forms"
+import TypographyPlugin from "@tailwindcss/typography"
 import type { Config } from "tailwindcss"
 
 export default {
@@ -10,6 +11,7 @@ export default {
   ],
   plugins: [
     FormsPlugin({ strategy: "class" }),
+    TypographyPlugin(),
     HeadlessUIPlugin({ prefix: "ui" }),
     nextui(),
   ],
