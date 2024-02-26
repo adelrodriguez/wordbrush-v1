@@ -21,7 +21,7 @@ const features = [
     description:
       "Create your own custom styles to match your brand. Just give us an example image and tell us what you like about it.",
     icon: SparklesIcon,
-    name: "Custom styles",
+    name: "Custom styles (coming soon!)",
   },
 ]
 
