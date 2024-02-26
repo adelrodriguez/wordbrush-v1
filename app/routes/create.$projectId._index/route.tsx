@@ -140,7 +140,9 @@ export async function action({ params, request }: ActionFunctionArgs) {
   })
 
   if (!template) {
-    template = await db.template.create({ data: { projectId } })
+    template = await db.template.create({
+      data: { aspectRatio: "Square", projectId },
+    })
   }
 
   return redirect(
