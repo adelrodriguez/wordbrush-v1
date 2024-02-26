@@ -19,6 +19,7 @@ export default function DetailSlider({
       maxValue={100}
       minValue={1}
       name={name}
+      showTooltip
       size="md"
       startContent={
         <div className="text-md font-light text-gray-700">Abstract</div>
