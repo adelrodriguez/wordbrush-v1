@@ -26,9 +26,8 @@ export default function Hero() {
       <div className="z-10 m-auto px-4 sm:w-4/5">
         <div className="flex flex-col gap-y-10 text-center md:text-left">
           <div>
-            <h1 className="font-headline text-5xl leading-tight text-white md:text-7xl">
-              Bring your
-              <br /> words to life
+            <h1 className="font-headline mx-auto max-w-sm text-5xl !leading-tight text-white md:mx-0 md:max-w-md md:text-7xl">
+              Bring your words to life
             </h1>
             <p className="mt-4 text-base font-light text-gray-200 sm:max-w-xl md:text-lg">
               Elevate your content with stunning visuals created directly from
