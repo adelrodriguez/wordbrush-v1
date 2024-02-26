@@ -51,8 +51,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Route() {
   const { projects } = useLoaderData<typeof loader>()
 
+  if (projects.length === 0) {
+    return (
+      <div className="flex flex-col gap-y-4 py-32 text-center">
+        <p className="text-xl font-light text-gray-500">
+          You don&apos;t have any projects yet.
+        </p>
+        <div>
+          <Link
+            className="background-animated rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
+            to={route("/create")}
+          >
+            Create my first project ✨
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <>
       <div className="flex justify-end pb-5">
         <Link
           className="background-animated rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-xl transition-all duration-500 hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
@@ -120,6 +138,6 @@ export default function Route() {
           </li>
         ))}
       </ul>
-    </div>
+    </>
   )
 }
