@@ -5,7 +5,7 @@ import clsx from "clsx"
 const faqs: { answer: string; question: string }[] = [
   {
     answer: `You can use Wordbrush to generate images for all types of written work: 
-    personal blog articles, your company's blog, your newsletter, or your book (covers and illutsrations).
+    personal blog articles, your company's blog, your newsletter, or your book (covers and illustrations).
     You can also generate images to use for your podcast, such as the cover or specific episode covers.`,
     question: "What can I use Wordbrush for?",
   },
