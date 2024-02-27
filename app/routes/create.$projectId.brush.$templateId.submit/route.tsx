@@ -171,7 +171,11 @@ export async function action({ params, request }: ActionFunctionArgs) {
   // Artificial delay to give the user a chance to see the loading state
   await wait(5000, { signal: request.signal })
 
-  return redirect(route("/my/words/:projectId", { projectId }))
+  return redirect(
+    route("/my/words/:projectId", {
+      projectId,
+    }) + "?submitted=true",
+  )
 }
 
 export function clientAction({ serverAction }: ClientActionFunctionArgs) {

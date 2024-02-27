@@ -90,8 +90,8 @@ dependencies:
     specifier: 4.28.0
     version: 4.28.0
   posthog-js:
-    specifier: ^1.106.3
-    version: 1.106.3
+    specifier: ^1.108.4
+    version: 1.108.4
   posthog-node:
     specifier: 3.6.3
     version: 3.6.3
@@ -12367,8 +12367,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /posthog-js@1.106.3:
-    resolution: {integrity: sha512-1i/6XSYVYFktXKG7G5Y8xviyl+7w8/pfHv6clLKlvnXuR4BNd9x+sGSK5rJemWiXT8df5gpkeWKg+HZ/Jj9w1w==}
+  /posthog-js@1.108.4:
+    resolution: {integrity: sha512-dlpx9VXBVv6zT5p1T33JNOqklE3A/5umqTkPH5L1eZkCIhVu4GU6QGKXGaUS7T0teOZxFJX/jqq2kImb2mLWZQ==}
     dependencies:
       fflate: 0.4.8
       preact: 10.19.5
