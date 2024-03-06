@@ -63,8 +63,8 @@ const footerLinks = [
   {
     links: [
       {
-        label: "Twitter",
-        to: "https://x.com/adelrodriguezv",
+        label: "X (formerly Twitter)",
+        to: "https://x.com/adeldotdo",
       },
     ],
     title: "MORE",
