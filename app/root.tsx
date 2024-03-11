@@ -16,7 +16,7 @@ import {
 import { captureRemixErrorBoundaryError } from "@sentry/remix"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { posthog } from "posthog-js"
-import { useEffect } from "react"
+import { ReactNode, useEffect } from "react"
 import { HoneypotProvider } from "remix-utils/honeypot/react"
 
 import honeypot from "~/modules/honeypot.server"
@@ -89,48 +89,7 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  captureRemixErrorBoundaryError(error)
-
-  return (
-    <html className="h-full bg-white" lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
-        <title>🎨 Wordbrush | We encountered an error</title>
-        <Links />
-      </head>
-      <body className="h-full">
-        <div className="flex h-full flex-col items-center justify-center gap-y-6">
-          <div className="text-center">
-            <h1 className="text-5xl font-black leading-6 text-gray-800">
-              We encountered an error
-            </h1>
-            <p className="mt-4 text-2xl font-light text-gray-400">
-              We&apos;re sorry, something went wrong. Please try again later.
-            </p>
-          </div>
-          <Link className="hover:underline" to="/">
-            Go back home
-          </Link>
-        </div>
-        <Scripts />
-      </body>
-    </html>
-  )
-}
-
-export default function App() {
-  const { honeypot } = useLoaderData<typeof loader>()
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  useEffect(() => {
-    posthog.capture("$pageview")
-  }, [location])
-
+export function Layout({ children }: { children: ReactNode }) {
   return (
     <html className="h-full scroll-smooth bg-white" lang="en">
       <head>
@@ -145,16 +104,52 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
-        <QueryClientProvider client={queryClient}>
-          <NextUIProvider className="h-full" navigate={navigate}>
-            <HoneypotProvider {...honeypot}>
-              <Outlet />
-            </HoneypotProvider>
-          </NextUIProvider>
-        </QueryClientProvider>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+
+  captureRemixErrorBoundaryError(error)
+
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-y-6 bg-[#185353]">
+      <div className="text-center">
+        <h1 className="font-headline text-5xl font-black text-white">
+          We encountered an error
+        </h1>
+        <p className="mt-4 text-xl font-light text-gray-200">
+          We&apos;re sorry, something went wrong. Please try again later.
+        </p>
+      </div>
+      <Link className="text-gray-200 hover:underline" to="/">
+        Go back home
+      </Link>
+    </div>
+  )
+}
+
+export default function App() {
+  const { honeypot } = useLoaderData<typeof loader>()
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  useEffect(() => {
+    posthog.capture("$pageview")
+  }, [location])
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <NextUIProvider className="h-full" navigate={navigate}>
+        <HoneypotProvider {...honeypot}>
+          <Outlet />
+        </HoneypotProvider>
+      </NextUIProvider>
+    </QueryClientProvider>
   )
 }
