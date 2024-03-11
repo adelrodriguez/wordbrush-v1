@@ -136,6 +136,11 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <script
+          data-domain="wordbrush.art"
+          defer
+          src="https://plausible.io/js/script.js"
+        />
         <Meta />
         <Links />
       </head>
