@@ -3,16 +3,12 @@ import { parseWithZod } from "@conform-to/zod"
 import { Button, Input } from "@nextui-org/react"
 import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
-import { HoneypotInputs } from "remix-utils/honeypot/react"
-import { SpamError } from "remix-utils/honeypot/server"
 import { route } from "routes-gen"
 import { z } from "zod"
 
 import Alert from "~/components/Alert"
 import auth from "~/modules/auth.server"
-import honeypot from "~/modules/honeypot.server"
 import { commitSession, getSession } from "~/modules/session.server"
-import Sentry from "~/services/sentry"
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -41,19 +37,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.clone().formData()
-
-  try {
-    honeypot.check(formData)
-  } catch (error) {
-    console.log(error)
-    Sentry.captureException(error)
-
-    if (error instanceof SpamError) {
-      return null
-    }
-
-    throw error
-  }
 
   const submission = parseWithZod(formData, {
     schema,
@@ -88,7 +71,6 @@ export default function Route() {
         </Alert>
       )}
       <Form {...getFormProps(form)} className="space-y-6" method="POST">
-        <HoneypotInputs label="Please leave this field blank" />
         <div className="mt-2">
           <Input
             {...getInputProps(fields.email, { type: "email" })}

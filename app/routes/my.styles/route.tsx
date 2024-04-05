@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react"
 import { useLoaderData, useRevalidator } from "@remix-run/react"
-import posthog from "posthog-js"
+import { posthog } from "posthog-js"
 
 export function clientLoader() {
   const hasAlreadyVoted = localStorage.getItem("custom-style-vote")

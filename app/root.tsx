@@ -7,8 +7,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  json,
-  useLoaderData,
   useLocation,
   useNavigate,
   useRouteError,
@@ -17,9 +15,7 @@ import { captureRemixErrorBoundaryError } from "@sentry/remix"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { posthog } from "posthog-js"
 import { ReactNode, useEffect } from "react"
-import { HoneypotProvider } from "remix-utils/honeypot/react"
 
-import honeypot from "~/modules/honeypot.server"
 import stylesheet from "~/styles/index.css?url"
 import tailwind from "~/styles/tailwind.css?url"
 
@@ -35,10 +31,6 @@ export const links: LinksFunction = () => [
     rel: "stylesheet",
   },
 ]
-
-export function loader() {
-  return json({ honeypot: honeypot.getInputProps() })
-}
 
 export const meta: MetaFunction = () => {
   return [
@@ -135,7 +127,6 @@ export function ErrorBoundary() {
 }
 
 export default function App() {
-  const { honeypot } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -146,9 +137,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <NextUIProvider className="h-full" navigate={navigate}>
-        <HoneypotProvider {...honeypot}>
-          <Outlet />
-        </HoneypotProvider>
+        <Outlet />
       </NextUIProvider>
     </QueryClientProvider>
   )

@@ -8,16 +8,12 @@ import {
   type LoaderFunctionArgs,
 } from "@remix-run/node"
 import { Form, useActionData, useLoaderData } from "@remix-run/react"
-import { HoneypotInputs } from "remix-utils/honeypot/react"
-import { SpamError } from "remix-utils/honeypot/server"
 import { route } from "routes-gen"
 import { z } from "zod"
 
 import Alert from "~/components/Alert"
 import auth from "~/modules/auth.server"
-import honeypot from "~/modules/honeypot.server"
 import { commitSession, getSession } from "~/modules/session.server"
-import Sentry from "~/services/sentry"
 
 const schema = z.object({
   code: z.string().length(6),
@@ -45,26 +41,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: ActionFunctionArgs) {
   const url = new URL(request.url)
-  const formData = await request.clone().formData()
-
-  try {
-    honeypot.check(formData)
-  } catch (error) {
-    console.log(error)
-    Sentry.captureException(error)
-
-    if (error instanceof SpamError) {
-      return null
-    }
-
-    throw error
-  }
-
-  const currentPath = url.pathname
 
   await auth.authenticate("TOTP", request, {
-    failureRedirect: currentPath,
-    successRedirect: currentPath,
+    failureRedirect: url.pathname,
+    successRedirect: url.pathname,
   })
 
   return null
@@ -96,7 +76,6 @@ export default function Route() {
         className="space-y-6"
         method="POST"
       >
-        <HoneypotInputs label="Please leave this field blank" />
         <Input
           {...getInputProps(fields.code, { type: "text" })}
           autoComplete="one-time-code"
@@ -122,7 +101,6 @@ export default function Route() {
         className="flex w-full flex-col gap-2"
         method="POST"
       >
-        <HoneypotInputs label="Please leave this field blank" />
         <Button
           className="bg-gray-200 hover:bg-gray-300"
           fullWidth
